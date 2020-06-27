@@ -264,10 +264,17 @@ open class W3wTextField: UITextField {
         setupUI()
         self.delegate = self
     }
+  
     // set up API key
     public func setAPIKey(APIKey: String) {
         W3wGeocoder.setup(with: APIKey)
     }
+  
+    // set up API key
+    public func setAPIKey(APIKey: String, apiUrl: String) {
+      W3wGeocoder.setup(with: APIKey, apiUrl: apiUrl)
+    }
+
     
     // text handler
     internal lazy var textHandler : String = {
