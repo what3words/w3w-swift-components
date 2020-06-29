@@ -12,6 +12,9 @@ import CoreLocation
 #if !os(macOS)
 import UIKit
 #endif
+#if os(watchOS)
+import WatchKit
+#endif
 
 
 public struct W3wError: Error {
@@ -34,15 +37,16 @@ public class W3wGeocoder {
   private static var instance: W3wGeocoder?
   private var apiKey: String!
   
-  private init(apiKey: String) {
+  private init(apiKey: String, apiUrl: String) {
     self.apiKey = apiKey
+    W3wGeocoder.kApiUrl = apiUrl
   }
   
   private var version_header = "what3words-Swift/x.x.x (Swift x.x.x; iOS x.x.x)"
   private var bundle_header  = ""
   
   private init() {
-    }
+  }
   
   public static var shared: W3wGeocoder {
     get {
@@ -59,7 +63,17 @@ public class W3wGeocoder {
    - parameter apiKey: What3Words api key
    */
   public static func setup(with apiKey: String) {
-    self.instance = W3wGeocoder(apiKey: apiKey)
+    self.instance = W3wGeocoder(apiKey: apiKey, apiUrl: kApiUrl)
+    self.instance?.figureOutVersions()
+  }
+  
+  /**
+   You'll need to register for a what3words API key to access the API.
+   Setup W3wGeocoder with your own apiKey.
+   - parameter apiKey: What3Words api key
+   */
+  public static func setup(with apiKey: String, apiUrl: String) {
+    self.instance = W3wGeocoder(apiKey: apiKey, apiUrl: apiUrl)
     self.instance?.figureOutVersions()
   }
   
@@ -102,7 +116,7 @@ public class W3wGeocoder {
    Returns a list of 3 word addresses based on user input and other parameters.
    - parameter input: The full or partial 3 word address to obtain suggestions for. At minimum this must be the first two complete words plus at least one character from the third word.
    - options are provided by instantiating AutoSuggestOption objects in the varidic length parameter list.  Eg:
-        -  autosuggest(input: "filled.count.soap", options: FallbackLanguage("en"), BoundingCircle(51.4243877, -0.3474524, 4.0), NumberResults(5), completion_handler)
+   -  autosuggest(input: "filled.count.soap", options: FallbackLanguage("en"), BoundingCircle(51.4243877, -0.3474524, 4.0), NumberResults(5), completion_handler)
    
    - option NumberResults(numberOfResults:String): The number of AutoSuggest results to return. A maximum of 100 results can be specified, if a number greater than this is requested, this will be truncated to the maximum. The default is 3
    - option Focus(focus:CLLocationCoordinate2D): This is a location, specified as a latitude (often where the user making the query is). If specified, the results will be weighted to give preference to those near the focus. For convenience, longitude is allowed to wrap around the 180 line, so 361 is equivalent to 1.
@@ -120,7 +134,7 @@ public class W3wGeocoder {
     for option in options {
       params[option.key()] = option.value()
     }
-
+    
     self.performRequest(path: "/autosuggest", params: params) { (result, error) in
       if let suggestions = result {
         completion(W3wSuggestions(result: suggestions).suggestions, error)
@@ -129,18 +143,18 @@ public class W3wGeocoder {
       }
     }
   }
-
-
+  
+  
   /**
    Convenience function to allow use of option list without array
    */
   public func autosuggest(input: String, options: AutoSuggestOption..., completion: @escaping W3wResponseSuggestions) {
     autosuggest(input: input, options: options, completion: completion)
-    }
+  }
   
   
-
- 
+  
+  
   /**
    Returns a section of the 3m x 3m what3words grid for a given area.
    - parameter bounding-box: Bounding box, as a lat,lng,lat,lng, for which the grid should be returned. The requested box must not exceed 4km from corner to corner, or a BadBoundingBoxTooBig error will be returned. Latitudes must be >= -90 and <= 90, but longitudes are allowed to wrap around 180. To specify a bounding-box that crosses the anti-meridian, use longitude greater than 180. Example value: "50.0,179.995,50.01,180.0005" .
@@ -149,7 +163,7 @@ public class W3wGeocoder {
    */
   public func gridSection(south_lat:Double, west_lng:Double, north_lat:Double, east_lng:Double, format: Format = .json, completion: @escaping W3wResponseGrid) {
     let params: [String: String] = ["bounding-box": "\(south_lat),\(west_lng),\(north_lat),\(east_lng)", "format": format.rawValue]
-
+    
     self.performRequest(path: "/grid-section", params: params) { (result, error) in
       if let lines = result {
         completion(W3wLines(result: lines).lines, error)
@@ -158,7 +172,7 @@ public class W3wGeocoder {
       }
     }
   }
-
+  
   /**
    Returns a section of the 3m x 3m what3words grid for a given area.
    - parameter southWest: The southwest corner of the box
@@ -169,8 +183,8 @@ public class W3wGeocoder {
   public func gridSection(southWest:CLLocationCoordinate2D, northEast:CLLocationCoordinate2D, format: Format = .json, completion: @escaping W3wResponseGrid) {
     self.gridSection(south_lat: southWest.latitude, west_lng: southWest.longitude, north_lat: northEast.latitude, east_lng: northEast.longitude, completion: completion)
   }
-
-
+  
+  
   /**
    Retrieves a list of the currently loaded and available 3 word address languages.
    - parameter completion: A W3wGeocodeResponseHandler completion handler
@@ -184,13 +198,13 @@ public class W3wGeocoder {
       }
     }
   }
-
+  
   // MARK: API Request
   
   private func performRequest(path: String, params: [String: String], completion: @escaping W3wGeocodeResponseHandler) {
     
     var urlComponents = URLComponents(string: W3wGeocoder.kApiUrl + path)!
-
+    
     var queryItems: [URLQueryItem] = [URLQueryItem(name: "key", value: apiKey)]
     for (name, value) in params {
       let item = URLQueryItem(name: name, value: value)
@@ -205,10 +219,10 @@ public class W3wGeocoder {
     }
     
     var request = URLRequest(url: url)
-
+    
     request.setValue(version_header, forHTTPHeaderField: "X-W3W-Wrapper")
     request.setValue(bundle_header, forHTTPHeaderField: "X-Ios-Bundle-Identifier")
-  
+    
     let task = URLSession.shared.dataTask(with: request) { (data, _, error) in
       guard let data = data else {
         completion(nil, W3wError(code: "BadConnection", message: error?.localizedDescription ?? "Unknown Cause"))
@@ -224,12 +238,12 @@ public class W3wGeocoder {
         completion(nil, W3wError(code: "BadData", message: "Malformed JSON data returned"))
         return
       }
-
+      
       guard let json = jsonData else {
         completion(nil, W3wError(code: "Invalid", message: "Invalid response"))
         return
       }
-
+      
       if let error = json["error"] as? [String: Any], let code = error["code"] as? String, let message = error["message"] as? String {
         completion(nil, W3wError(code: code, message: message))
         return
@@ -239,53 +253,55 @@ public class W3wGeocoder {
     }
     task.resume()
   }
-
+  
   // Establish the various version numbers in order to set an HTTP header for the URL session
   // ugly, but haven't found a better, way, if anyone knows a better way to get the swift version at runtime, let us know...
   private func figureOutVersions() {
     #if os(macOS)
     let os_name        = "Mac"
+    #elseif os(watchOS)
+    let os_name        = WKInterfaceDevice.current().systemName
     #else
     let os_name        = UIDevice.current.systemName
     #endif
     let os_version     = ProcessInfo().operatingSystemVersion
     var swift_version  = "x.x"
     var api_version    = "x.x.x"
-
+    
     #if swift(>=7)
-      swift_version = "7.x"
+    swift_version = "7.x"
     #elseif swift(>=6)
-      swift_version = "6.x"
+    swift_version = "6.x"
     #elseif swift(>=5)
-      swift_version = "5.x"
+    swift_version = "5.x"
     #elseif swift(>=4)
-      swift_version = "4.x"
+    swift_version = "4.x"
     #elseif swift(>=3)
-      swift_version = "3.x"
+    swift_version = "3.x"
     #elseif swift(>=2)
-      swift_version = "2.x"
+    swift_version = "2.x"
     #else
-      swift_version = "1.x"
+    swift_version = "1.x"
     #endif
     
     if let shortVersion = Bundle(for: W3wGeocoder.self).infoDictionary?["CFBundleShortVersionString"] as? String {
       api_version = shortVersion
     }
-
+    
     version_header  = "what3words-Swift/" + api_version + " (Swift " + swift_version + "; " + os_name + " "  + String(os_version.majorVersion) + "."  + String(os_version.minorVersion) + "."  + String(os_version.patchVersion) + ")"
     bundle_header   = Bundle.main.bundleIdentifier ?? ""
   }
-
+  
 }
 
-  // MARK: AutoSuggest Options
+// MARK: AutoSuggest Options
 
 
 public class AutoSuggestOption {
-    var k = ""
-    var v = ""
-    func key() -> String { return k }
-    func value() -> String { return v }
+  var k = ""
+  var v = ""
+  func key() -> String { return k }
+  func value() -> String { return v }
 }
 
 
@@ -368,7 +384,7 @@ public class BoundingCircle : AutoSuggestOption {
     k = "clip-to-circle";
     v = "\(lat),\(lng),\(kilometers)"
   }
-
+  
   /// Restrict results to a circle
   public init(centre:CLLocationCoordinate2D, kilometers:Double) {
     super.init();
@@ -383,28 +399,28 @@ public class BoundingBox : AutoSuggestOption {
     super.init()
     k = "clip-to-bounding-box"
     v = "\(south_lat),\(west_lng),\(north_lat),\(east_lng)"
-    }
+  }
   
   /// Restrict autosuggest results to a bounding box, specified by coordinates. Where south_lat <= north_lat and west_lng <= east_lng
   public init(southWest:CLLocationCoordinate2D, northEast:CLLocationCoordinate2D) {
     super.init()
     k = "clip-to-bounding-box"
     v = "\(southWest.latitude),\(southWest.longitude),\(northEast.latitude),\(northEast.longitude)"
-    }
   }
+}
 
 public class BoundingPolygon : AutoSuggestOption {
   /// Restrict autosuggest results to a polygon, specified by a comma-separated list of lat,lng pairs. The polygon should be closed, i.e. the first element should be repeated as the last element; also the list should contain at least 4 entries. The API is currently limited to accepting up to 25 pairs.
   public init(polygon:[CLLocationCoordinate2D])
-      {
-      super.init()
-
-      k = "clip-to-polygon"
-      for point in polygon {
-          v += "\(point.latitude),\(point.longitude),"
-      }
-      v.removeLast() // drop the last ','
-      }
+  {
+    super.init()
+    
+    k = "clip-to-polygon"
+    for point in polygon {
+      v += "\(point.latitude),\(point.longitude),"
+    }
+    v.removeLast() // drop the last ','
+  }
 }
 
 public enum InputTypeEnum : String {
@@ -429,7 +445,7 @@ public struct W3wPlace {
   public var words:String
   public var language:String
   public var map:String
-
+  
   public init(result:[String: Any]?) {
     country      = result?["country"] as? String ?? ""
     nearestPlace = result?["nearestPlace"] as? String ?? ""
@@ -439,16 +455,16 @@ public struct W3wPlace {
     northEast    = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
     southWest    = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
     coordinates  = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
-
+    
     if let square = result?["square"] as? Dictionary<String, Any?>? {
       if let ne = square?["northeast"] as? Dictionary<String, Any?>? {
         northEast = CLLocationCoordinate2D(latitude: ne!["lat"] as! CLLocationDegrees, longitude: ne!["lng"] as! CLLocationDegrees)
-        }
+      }
       
       if let sw = square?["southwest"] as? Dictionary<String, Any?>? {
         southWest = CLLocationCoordinate2D(latitude: sw!["lat"] as! CLLocationDegrees, longitude: sw!["lng"] as! CLLocationDegrees)
-        }
       }
+    }
     
     if let coord = result?["coordinates"] as? Dictionary<String, Any?>? {
       if let c = coord {
@@ -462,11 +478,11 @@ public struct W3wPlace {
 public struct W3wLine {
   public let start:CLLocationCoordinate2D
   public let end:CLLocationCoordinate2D
-  }
+}
 
 public struct W3wLines {
   var lines:[W3wLine] = []
-
+  
   init(result:[String: Any]?) {
     if let r = result {
       if let lineArray = r["lines"] as? Array<Any?>? {
@@ -521,7 +537,7 @@ public struct W3wSuggestion {
 
 public struct W3wSuggestions {
   var suggestions:[W3wSuggestion] = []
-
+  
   init(result:[String: Any]?) {
     if let s = result {
       if let list = s["suggestions"] as? Array<Any?>? {
@@ -535,5 +551,6 @@ public struct W3wSuggestions {
     }
   }
 }
+
 
 
