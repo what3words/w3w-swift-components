@@ -64,6 +64,11 @@ Initialize the API by placing the following code into the `-viewDidLoad` method
 ```swift
 suggestionField!.setAPIKey(APIKey: "<Secret API Key>")
 ```
+If you run our Enterprise Suite API Server yourself, you may specifty the URL to your own server like so:
+
+```swift
+suggestionField!.setAPIKey(APIKey: "<Secret API Key>", apiUrl: "https://api.yourserver.com")
+```
 
 #### Authentication
 
