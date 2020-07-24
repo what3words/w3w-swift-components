@@ -270,9 +270,14 @@ open class W3wTextField: UITextField {
         W3wGeocoder.setup(with: APIKey)
     }
   
-    // set up API key
+    // set up API key, and use a custom endpoint
     public func setAPIKey(APIKey: String, apiUrl: String) {
       W3wGeocoder.setup(with: APIKey, apiUrl: apiUrl)
+    }
+  
+    // set up API key, and use a custom endpoint, and set custom HTTP headers to be added to each request
+    public func setAPIKey(APIKey: String, apiUrl: String, customHeaders: [String: String]) {
+      W3wGeocoder.setup(with: APIKey, apiUrl: apiUrl, customHeaders: customHeaders)
     }
 
     
