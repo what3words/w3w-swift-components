@@ -70,6 +70,12 @@ If you run our Enterprise Suite API Server yourself, you may specify the URL to 
 suggestionField!.setAPIKey(APIKey: "<Secret API Key>", apiUrl: "https://api.yourserver.com")
 ```
 
+Additionally, if you run the Enterprise Suite API Server there is another optional parameter: `customHeaders`.  Use this if you need to send custom headers to your own server:
+
+```swift
+suggestionField!.setAPIKey(APIKey: "<Secret API Key>", apiUrl: "https://api.yourserver.com", customHeaders: ["x-header-1":"value-1", "x-header-2":"value-2"])
+```
+
 #### Authentication
 
 To use this library you’ll need a what3words API key, which can be signed up for [here](https://accounts.what3words.com/register?dev=true).
