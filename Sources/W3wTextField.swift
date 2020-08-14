@@ -583,6 +583,7 @@ extension W3wTextField: UITableViewDelegate {
             touchAction()
             self.endEditing(true)
         }
+        checkMarkView.isHidden = false
         didSelectCompletion(selectedText.words )
     }
 }
