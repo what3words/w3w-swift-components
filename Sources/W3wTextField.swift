@@ -308,6 +308,7 @@ open class W3wTextField: UITextField {
     fileprivate var TableDidAppearCompletion: () -> () = { }
     fileprivate var TableWillDisappearCompletion: () -> () = { }
     fileprivate var TableDidDisappearCompletion: () -> () = { }
+    fileprivate var checkMarkViewUpdatedCompletion: (Bool) -> () = {isHidden in }
     
     func setupUI () {
         /* Textfield */
@@ -468,6 +469,10 @@ open class W3wTextField: UITextField {
     public func listDidDisappear(completion: @escaping () -> ()) {
         TableDidDisappearCompletion = completion
     }
+    
+    public func checkMarkViewUpdated(completion: @escaping (_ isHidden: Bool) -> ()) {
+        checkMarkViewUpdatedCompletion = completion
+    }
 
 }
 
@@ -511,12 +516,13 @@ extension W3wTextField : UITextFieldDelegate {
             if (( place?.coordinates ) != nil)
             {
                 DispatchQueue.main.async {
-                    
                     self.checkMarkView.isHidden = false
+                    self.checkMarkViewUpdatedCompletion(false)
                 }
             } else {
                 DispatchQueue.main.async {
                     self.checkMarkView.isHidden = true
+                    self.checkMarkViewUpdatedCompletion(true)
                 }
             }
         }
