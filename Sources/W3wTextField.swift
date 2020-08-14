@@ -236,11 +236,10 @@ open class W3wTextField: UITextField {
                 for suggestion in suggestions ?? [] {
                     self?.optionArray.append(suggestion)
                     self?.dataArray = self!.optionArray
-                    DispatchQueue.main.async {
-                        if (self?.dataArray.count)! > 0 {
-                            self!.table.reloadData()
-                        }
-                    }
+                }
+                    
+                DispatchQueue.main.async {
+                        self!.table.reloadData()
                 }
             }
         }
