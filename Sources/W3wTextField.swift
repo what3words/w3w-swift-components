@@ -515,17 +515,25 @@ extension W3wTextField : UITextFieldDelegate {
             if (( place?.coordinates ) != nil)
             {
                 DispatchQueue.main.async {
-                    self.checkMarkView.isHidden = false
-                    self.checkMarkViewUpdatedCompletion(false)
+                    self.showCheckMarkView()
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.checkMarkView.isHidden = true
-                    self.checkMarkViewUpdatedCompletion(true)
+                    self.hideCheckMarkView()
                 }
             }
         }
         return true;
+    }
+    
+    private func hideCheckMarkView() {
+        self.checkMarkView.isHidden = true
+        self.checkMarkViewUpdatedCompletion(true)
+    }
+    
+    private func showCheckMarkView() {
+        self.checkMarkView.isHidden = false
+        self.checkMarkViewUpdatedCompletion(false)
     }
 }
 
@@ -588,7 +596,7 @@ extension W3wTextField: UITableViewDelegate {
             touchAction()
             self.endEditing(true)
         }
-        checkMarkView.isHidden = false
+        showCheckMarkView()
         didSelectCompletion(selectedText.words )
     }
 }
