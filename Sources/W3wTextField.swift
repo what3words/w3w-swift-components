@@ -236,11 +236,10 @@ open class W3wTextField: UITextField {
                 for suggestion in suggestions ?? [] {
                     self?.optionArray.append(suggestion)
                     self?.dataArray = self!.optionArray
-                    DispatchQueue.main.async {
-                        if (self?.dataArray.count)! > 0 {
-                            self!.table.reloadData()
-                        }
-                    }
+                }
+                    
+                DispatchQueue.main.async {
+                        self!.table.reloadData()
                 }
             }
         }
@@ -308,6 +307,7 @@ open class W3wTextField: UITextField {
     fileprivate var TableDidAppearCompletion: () -> () = { }
     fileprivate var TableWillDisappearCompletion: () -> () = { }
     fileprivate var TableDidDisappearCompletion: () -> () = { }
+    fileprivate var checkMarkViewUpdatedCompletion: (Bool) -> () = {isHidden in }
     
     func setupUI () {
         /* Textfield */
@@ -468,6 +468,10 @@ open class W3wTextField: UITextField {
     public func listDidDisappear(completion: @escaping () -> ()) {
         TableDidDisappearCompletion = completion
     }
+    
+    public func checkMarkViewUpdated(completion: @escaping (_ isHidden: Bool) -> ()) {
+        checkMarkViewUpdatedCompletion = completion
+    }
 
 }
 
@@ -511,16 +515,25 @@ extension W3wTextField : UITextFieldDelegate {
             if (( place?.coordinates ) != nil)
             {
                 DispatchQueue.main.async {
-                    
-                    self.checkMarkView.isHidden = false
+                    self.showCheckMarkView()
                 }
             } else {
                 DispatchQueue.main.async {
-                    self.checkMarkView.isHidden = true
+                    self.hideCheckMarkView()
                 }
             }
         }
         return true;
+    }
+    
+    private func hideCheckMarkView() {
+        self.checkMarkView.isHidden = true
+        self.checkMarkViewUpdatedCompletion(true)
+    }
+    
+    private func showCheckMarkView() {
+        self.checkMarkView.isHidden = false
+        self.checkMarkViewUpdatedCompletion(false)
     }
 }
 
@@ -583,6 +596,7 @@ extension W3wTextField: UITableViewDelegate {
             touchAction()
             self.endEditing(true)
         }
+        showCheckMarkView()
         didSelectCompletion(selectedText.words )
     }
 }
