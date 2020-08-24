@@ -438,7 +438,8 @@ open class W3wTextField: UITextField {
       parentController?.view.addSubview(suggestionsTable)
       suggestionsTable.register(SuggestionTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
 
-    suggestionsTable.rowHeight = suggestionsTable.bounds.height
+      suggestionsTable.rowHeight = suggestionsTable.bounds.height
+      
       let height = (self.parentController?.view.frame.height ?? 0) - (self.pointToParent.y + self.frame.height + 5)
       
       
@@ -476,7 +477,19 @@ open class W3wTextField: UITextField {
         }else{
             self.tableheightX = listHeight
         }
-        let y = self.pointToParent.y+self.frame.size.height + 5
+        
+        let height = (self.parentController?.view.frame.height ?? 0) - (self.pointToParent.y + self.frame.height + 5)
+        
+        var y = self.pointToParent.y+self.frame.size.height + 5
+        
+        if height < (keyboardHeight+tableheightX) {
+            y = self.pointToParent.y - tableheightX
+        }
+      
+        if y < 0 {
+            y = self.pointToParent.y+self.frame.height + 5
+        }
+        
         UIView.animate(withDuration: 0.2, delay: 0.1, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
           self.suggestionsTable.frame = CGRect(x: self.pointToParent.x, y: y, width: self.frame.width, height: self.tableheightX)
         }, completion: { (didFinish) -> Void in
