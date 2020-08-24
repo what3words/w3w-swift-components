@@ -440,10 +440,18 @@ open class W3wTextField: UITextField {
 
     suggestionsTable.rowHeight = suggestionsTable.bounds.height
       let height = (self.parentController?.view.frame.height ?? 0) - (self.pointToParent.y + self.frame.height + 5)
+      
+      
       var y = self.pointToParent.y+self.frame.height + 5
+      
       if height < (keyboardHeight+tableheightX) {
           y = self.pointToParent.y - tableheightX
       }
+      
+      if y < 0 {
+        y = self.pointToParent.y+self.frame.height + 5
+      }
+      
       UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
           self.suggestionsTable.frame = CGRect(x: self.pointToParent.x, y: y, width: self.frame.width, height: self.tableheightX)
           self.suggestionsTable.alpha = 1
