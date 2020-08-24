@@ -88,6 +88,10 @@ open class W3wTextField: UITextField {
     fileprivate var options = [AutoSuggestOption]()
     // Debug mode
     fileprivate var isDebugMode : Bool = false
+    // keep track of if the suggestions are showing or not
+    private var showingSuggestions = false
+
+  
     // set corner radius
     @IBInspectable public var cornerRadius: CGFloat = 0.0 {
         didSet {
@@ -174,7 +178,8 @@ open class W3wTextField: UITextField {
         }
     }
     
-    var table : UITableView!
+  var suggestionsTable = UITableView(frame: CGRect.zero)
+
     public  var selectedIndex: Int?
     
     let countries = ["ad", "ae", "af", "ag", "ai", "al", "am", "ao", "aq", "ar", "as", "at", "au", "aw", "ax", "az", "ba", "bb", "bd", "be", "bf", "bg", "bh", "bi", "bj", "bl", "bm", "bn", "bo", "bq", "br", "bs", "bt", "bv", "bw", "by", "bz", "ca", "cc", "cd", "cf", "cg", "ch", "ci", "ck", "cl", "cm", "cn", "co", "cr", "cu", "cv", "cw", "cx", "cy", "cz", "de", "dj", "dk", "dm", "do", "dz", "ec", "ee", "eg", "eh", "er", "es", "et", "eu", "fi", "fj", "fk", "fm", "fo", "fr", "ga", "gb-eng", "gb-nir", "gb-sct", "gb-wls", "gb", "gd", "ge", "gf", "gg", "gh", "gi", "gl", "gm", "gn", "gp", "gq", "gr", "gs", "gt", "gu", "gw", "gy", "hk", "hm", "hn", "hr", "ht", "hu", "id", "ie", "il", "im", "in", "io", "iq", "ir", "is", "it", "je", "jm", "jo", "jp", "ke", "kg", "kh", "ki", "km", "kn", "kp", "kr", "kw", "ky", "kz", "la", "lb", "lc", "li", "lk", "lr", "ls", "lt", "lu", "lv", "ly", "ma", "mc", "md", "me", "mf", "mg", "mh", "mk", "ml", "mm", "mn", "mo", "mp", "mq", "mr", "ms", "mt", "mu", "mv", "mw", "mx", "my", "mz", "na", "nc", "ne", "nf", "ng", "ni", "nl", "no", "np", "nr", "nu", "nz", "om", "pa", "pe", "pf", "pg", "ph", "pk", "pl", "pm", "pn", "pr", "ps", "pt", "pw", "py", "qa", "re", "ro", "rs", "ru", "rw", "sa", "sb", "sc", "sd", "se", "sg", "sh", "si", "sj", "sk", "sl", "sm", "sn", "so", "sr", "ss", "st", "sv", "sx", "sy", "sz", "tc", "td", "tf", "tg", "th", "tj", "tk", "tl", "tm", "tn", "to", "tr", "tt", "tv", "tw", "tz", "ua", "ug", "um", "un", "us", "uy", "uz", "va", "vc", "ve", "vg", "vi", "vn", "vu", "wf", "ws", "ye", "yt", "za", "zm", "zw", "zz"]
@@ -206,12 +211,7 @@ open class W3wTextField: UITextField {
     fileprivate var keyboardHeight:CGFloat = 0
     // left margin
     fileprivate let leftMargin: CGFloat = 15.0
-    // set option array to collect suggestions
-    public var optionArray = [W3wSuggestion]() {
-        didSet{
-            self.dataArray = self.optionArray
-        }
-    }
+
     // Debouncer
     fileprivate var debouncer  = Debouncer(interval: 0.2)
     
@@ -222,35 +222,47 @@ open class W3wTextField: UITextField {
                 return
             }
             
-            self.debouncer.call { [weak self] in
-                W3wGeocoder.shared.autosuggest(input: self!.searchText, options: (self?.options)! ) { (suggestions, error) in
-                if let e = error {
-                    self!.isDebugMode ? assertionFailure(e.message) : print(e.message)
-                }
-                
-                guard suggestions?.count != nil else {
-                    return
-                }
-                    self?.optionArray.removeAll()
-                self?.dataArray.removeAll()
-                for suggestion in suggestions ?? [] {
-                    self?.optionArray.append(suggestion)
-                    self?.dataArray = self!.optionArray
-                }
-                    
-                DispatchQueue.main.async {
-                        self!.table.reloadData()
-                }
+          if is3WordAddress(text: self.searchText) {
+            self.debouncer.call {
+              self.autosuggestCall(searchText: self.searchText, options: self.options)
             }
-        }
-        reSizeTable()
+          } else {
+            self.update(suggestions: [])
+          }
+          
         selectedIndex = nil
-            if self.dataArray.count > 0 {
-                self.table.reloadData()
-            }
         }
     }
     
+  
+  func autosuggestCall(searchText: String, options: [AutoSuggestOption]) {
+    
+    W3wGeocoder.shared.autosuggest(input: searchText, options: options ) { (suggestions, error) in
+      if let e = error {
+        self.isDebugMode ? assertionFailure(e.message) : print(e.message)
+      }
+      
+      guard suggestions?.count != nil else {
+        return
+      }
+
+      self.update(suggestions: suggestions ?? [])
+    }
+  }
+  
+  
+  func update(suggestions: [W3wSuggestion]) {
+    DispatchQueue.main.async {
+      self.dataArray = suggestions
+      
+      self.touchAction()
+      self.suggestionsTable.reloadData()
+      self.reSizeTable()
+    }
+  }
+  
+  
+  
     // Init
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -301,6 +313,25 @@ open class W3wTextField: UITextField {
         return iconContainerView
     }()
     
+  
+  
+  func is3WordAddress(text: String?) -> Bool {
+    var found = false
+    
+    if let t = text {
+      let regex_string = "^/*[^0-9`~!@#$%^&*()+\\-_=\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}[・.。][^0-9`~!@#$%^&*()+\\-_=\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}[・.。][^0-9`~!@#$%^&*()+\\-_=\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}$"
+      let regex = try! NSRegularExpression(pattern:regex_string, options: [])
+      
+      let count = regex.numberOfMatches(in: t, options: [], range: NSRange(t.startIndex..<t.endIndex, in:t))
+      if (count > 0) {
+        found = true
+      }
+    }
+    
+    return found
+  }
+
+  
     //MARK: Closures
     fileprivate var didSelectCompletion: (String) -> () = {selectedText in }
     fileprivate var TableWillAppearCompletion: () -> () = { }
@@ -333,7 +364,6 @@ open class W3wTextField: UITextField {
         self.rightView = checkMarkView
         self.rightViewMode = .always
         
-        self.backgroundView.backgroundColor = .clear
         self.checkMarkView.isHidden = true
 
         if isSearchEnable {
@@ -360,7 +390,10 @@ open class W3wTextField: UITextField {
     // touch action
     @objc public func touchAction() {
 
-        isSelected ?  hideList() : showList()
+      DispatchQueue.main.async {
+        self.isSelected ?  self.hideList() : self.showList()
+      }
+      
     }
     
     func getConvertedPoint(_ targetView: UIView, baseView: UIView?)->CGPoint{
@@ -381,58 +414,52 @@ open class W3wTextField: UITextField {
     }
     //MARK: Actions Methods
     public func showList() {
-        if parentController == nil {
-            parentController = self.parentViewController
-            backgroundView.frame = parentController?.view.frame ?? backgroundView.frame
-            pointToParent = getConvertedPoint(self, baseView: parentController?.view)
-        }
-        
-        parentController?.view.insertSubview(backgroundView, aboveSubview: self)
-        
-        TableWillAppearCompletion()
-        
-        if listHeight > rowHeight * CGFloat( dataArray.count) {
-            self.tableheightX = rowHeight * CGFloat(dataArray.count)
-        }else{
-            self.tableheightX = listHeight
-        }
-        table = UITableView(frame: CGRect(x: pointToParent.x ,y: pointToParent.y + self.frame.height, width: self.frame.width, height: self.frame.height))
-        table.dataSource = self
-        table.delegate = self
-        table.alpha = 0
-        table.separatorStyle = .none
-        table.layer.cornerRadius = 10
-        table.rowHeight = table.bounds.height
-        table.layer.cornerRadius = 0.0
-        table.backgroundColor = .clear
-        parentController?.view.addSubview(table)
-        self.table.register(SuggestionTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        self.isSelected = true
-        let height = (self.parentController?.view.frame.height ?? 0) - (self.pointToParent.y + self.frame.height + 5)
-        var y = self.pointToParent.y+self.frame.height + 5
-        if height < (keyboardHeight+tableheightX) {
-            y = self.pointToParent.y - tableheightX
-        }
-        UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
-            self.table.frame = CGRect(x: self.pointToParent.x, y: y, width: self.frame.width, height: self.tableheightX)
-            self.table.alpha = 1
-        }, completion: { (finish) -> Void in
-            self.layoutIfNeeded()
-        })
+      if parentController == nil {
+          parentController = self.parentViewController
+          pointToParent = getConvertedPoint(self, baseView: parentController?.view)
+      }
+      
+      parentController?.view.insertSubview(backgroundView, aboveSubview: self)
+      
+      TableWillAppearCompletion()
+      
+      if listHeight > rowHeight * CGFloat( dataArray.count) {
+          self.tableheightX = rowHeight * CGFloat(dataArray.count)
+      }else{
+          self.tableheightX = listHeight
+      }
+
+      suggestionsTable.dataSource = self
+      suggestionsTable.delegate = self
+      suggestionsTable.alpha = 1
+      suggestionsTable.separatorStyle = .none
+      suggestionsTable.layer.cornerRadius = 10
+      suggestionsTable.layer.cornerRadius = 0.0
+      parentController?.view.addSubview(suggestionsTable)
+      suggestionsTable.register(SuggestionTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+
+    suggestionsTable.rowHeight = suggestionsTable.bounds.height
+      let height = (self.parentController?.view.frame.height ?? 0) - (self.pointToParent.y + self.frame.height + 5)
+      var y = self.pointToParent.y+self.frame.height + 5
+      if height < (keyboardHeight+tableheightX) {
+          y = self.pointToParent.y - tableheightX
+      }
+      UIView.animate(withDuration: 0.9, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
+          self.suggestionsTable.frame = CGRect(x: self.pointToParent.x, y: y, width: self.frame.width, height: self.tableheightX)
+          self.suggestionsTable.alpha = 1
+      }, completion: { (finish) -> Void in
+          self.layoutIfNeeded()
+      })
     }
 
     public func hideList() {
-        TableWillDisappearCompletion()
-        UIView.animate(withDuration: 1.0, delay: 0.4, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
-            self.table.frame = CGRect(x: self.pointToParent.x, y: self.pointToParent.y+self.frame.height, width: self.frame.width, height: 0)
-        }, completion: { (didFinish) -> Void in
-            self.table.removeFromSuperview()
-            DispatchQueue.main.async {
-                self.backgroundView.removeFromSuperview()
-            }
-            self.isSelected = false
-            self.TableDidDisappearCompletion()
-        })
+      TableWillDisappearCompletion()
+      UIView.animate(withDuration: 0.1, delay: 0.6, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
+          self.suggestionsTable.frame = CGRect(x: self.pointToParent.x, y: self.pointToParent.y+self.frame.height, width: self.frame.width, height: 0)
+      }, completion: { (didFinish) -> Void in
+          self.suggestionsTable.removeFromSuperview()
+          self.TableDidDisappearCompletion()
+      })
     }
     
     func reSizeTable() {
@@ -443,7 +470,7 @@ open class W3wTextField: UITextField {
         }
         let y = self.pointToParent.y+self.frame.size.height + 5
         UIView.animate(withDuration: 0.2, delay: 0.1, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
-            self.table.frame = CGRect(x: self.pointToParent.x, y: y, width: self.frame.width, height: self.tableheightX)
+          self.suggestionsTable.frame = CGRect(x: self.pointToParent.x, y: y, width: self.frame.width, height: self.tableheightX)
         }, completion: { (didFinish) -> Void in
             self.layoutIfNeeded()
         })
@@ -479,13 +506,10 @@ open class W3wTextField: UITextField {
 extension W3wTextField : UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        //self.isSelected = false
-        self.backgroundView.isHidden = true
         return true
     }
+  
     public func  textFieldDidBeginEditing(_ textField: UITextField) {
-        self.optionArray.removeAll()
-        self.dataArray = self.optionArray
         touchAction()
     }
     
@@ -497,17 +521,12 @@ extension W3wTextField : UITextFieldDelegate {
         if (string == " ") {
             return false
         }
-        self.backgroundView.isHidden = false
+      
         if string != "" {
             self.searchText = "\(textField.text ?? "")\(String(describing: string.trimmingCharacters(in: .whitespaces)))"
         } else{
                 let subText = self.text?.dropLast()
                 self.searchText = String(subText!.trimmingCharacters(in: .whitespaces))
-            //}
-        }
-        
-        if !isSelected {
-            hideList()
         }
         
     
@@ -584,20 +603,14 @@ extension W3wTextField: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndex = (indexPath as NSIndexPath).row
         let selectedText = self.dataArray[self.selectedIndex!]
-        tableView.cellForRow(at: indexPath)?.alpha = 0
-        UIView.animate(withDuration: 0.5, animations: { () -> Void in
-            tableView.cellForRow(at: indexPath)?.alpha = 1.0
-            tableView.cellForRow(at: indexPath)?.backgroundColor = .none
-        } , completion: { (didFinish) -> Void in
-            self.text = "\(selectedText.words)"
-            tableView.reloadData()
-        })
-        if hideOptionsWhenSelect {
-            touchAction()
-            self.endEditing(true)
+        self.text = "\(selectedText.words)"
+        tableView.reloadData()
+
+      if hideOptionsWhenSelect {
+          hideList()
         }
-        showCheckMarkView()
-        didSelectCompletion(selectedText.words )
+      showCheckMarkView()
+      didSelectCompletion(selectedText.words )
     }
 }
 
