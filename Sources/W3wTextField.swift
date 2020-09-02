@@ -10,6 +10,13 @@ import UIKit
 import Foundation
 import CoreLocation
 
+
+/// Version number at top of file as extension solely for visibility
+extension W3wTextField {
+  static let component_version = "1.2.2"
+}
+
+
 struct Font {
     static let threeWordFont  = UIFont .systemFont(ofSize: 20)
     static let W3wTextColor = UIColor(red: 0.04, green: 0.19, blue: 0.29, alpha: 1)
@@ -91,7 +98,10 @@ open class W3wTextField: UITextField {
     // keep track of if the suggestions are showing or not
     private var showingSuggestions = false
 
-  
+    static let versionHeaderName  = "X-W3W-AS-Component"
+    static let versionHeaderValue = "what3words-Swift/" + W3wTextField.component_version + " " + figureOutVersionInfo()
+    static let versionHeader      = [W3wTextField.versionHeaderName : W3wTextField.versionHeaderValue]
+
     // set corner radius
     @IBInspectable public var cornerRadius: CGFloat = 0.0 {
         didSet {
@@ -278,17 +288,20 @@ open class W3wTextField: UITextField {
   
     // set up API key
     public func setAPIKey(APIKey: String) {
-        W3wGeocoder.setup(with: APIKey)
+      W3wGeocoder.setup(with: APIKey, apiUrl: W3wGeocoder.kApiUrl, customHeaders: W3wTextField.versionHeader)
     }
-  
+
     // set up API key, and use a custom endpoint
     public func setAPIKey(APIKey: String, apiUrl: String) {
-      W3wGeocoder.setup(with: APIKey, apiUrl: apiUrl)
+      W3wGeocoder.setup(with: APIKey, apiUrl: apiUrl, customHeaders: W3wTextField.versionHeader)
     }
   
     // set up API key, and use a custom endpoint, and set custom HTTP headers to be added to each request
     public func setAPIKey(APIKey: String, apiUrl: String, customHeaders: [String: String]) {
-      W3wGeocoder.setup(with: APIKey, apiUrl: apiUrl, customHeaders: customHeaders)
+      var modifiedCustomHeader = customHeaders
+      modifiedCustomHeader[W3wTextField.versionHeaderName] = W3wTextField.versionHeaderValue
+      
+      W3wGeocoder.setup(with: APIKey, apiUrl: apiUrl, customHeaders: modifiedCustomHeader)
     }
 
     
@@ -521,6 +534,40 @@ open class W3wTextField: UITextField {
         checkMarkViewUpdatedCompletion = completion
     }
 
+  
+  // Establish the various version numbers in order to set an HTTP header for the URL session
+  // ugly, but haven't found a better, way, if anyone knows a better way to get the swift version at runtime, let us know...
+  static private func figureOutVersionInfo() -> String {
+    #if os(macOS)
+    let os_name        = "Mac"
+    #elseif os(watchOS)
+    let os_name        = WKInterfaceDevice.current().systemName
+    #else
+    let os_name        = UIDevice.current.systemName
+    #endif
+    let os_version     = ProcessInfo().operatingSystemVersion
+    var swift_version  = "x.x"
+    
+    #if swift(>=7)
+    swift_version = "7.x"
+    #elseif swift(>=6)
+    swift_version = "6.x"
+    #elseif swift(>=5)
+    swift_version = "5.x"
+    #elseif swift(>=4)
+    swift_version = "4.x"
+    #elseif swift(>=3)
+    swift_version = "3.x"
+    #elseif swift(>=2)
+    swift_version = "2.x"
+    #else
+    swift_version = "1.x"
+    #endif
+    
+    return "(Swift " + swift_version + "; " + os_name + " "  + String(os_version.majorVersion) + "."  + String(os_version.minorVersion) + "."  + String(os_version.patchVersion) + ")"
+  }
+  
+  
 }
 
 //MARK: UITextFieldDelegate
@@ -551,17 +598,19 @@ extension W3wTextField : UITextFieldDelegate {
         }
         
     
-        W3wGeocoder.shared.convertToCoordinates(words: self.searchText)  { (place, error) in
-            if (( place?.coordinates ) != nil)
-            {
-                DispatchQueue.main.async {
-                    self.showCheckMarkView()
-                }
-            } else {
-                DispatchQueue.main.async {
-                    self.hideCheckMarkView()
-                }
-            }
+        if is3WordAddress(text: self.searchText) {
+          W3wGeocoder.shared.convertToCoordinates(words: self.searchText)  { (place, error) in
+              if (( place?.coordinates ) != nil)
+              {
+                  DispatchQueue.main.async {
+                      self.showCheckMarkView()
+                  }
+              } else {
+                  DispatchQueue.main.async {
+                      self.hideCheckMarkView()
+                  }
+              }
+          }
         }
         return true;
     }

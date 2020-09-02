@@ -32,7 +32,7 @@ public typealias W3wResponseLanguages       = ((_ result: [W3wLanguage]?, _ erro
 
 public class W3wGeocoder {
   
-  private static var kApiUrl = "https://api.what3words.com/v3"
+  static var kApiUrl = "https://api.what3words.com/v3"
   
   private static var instance: W3wGeocoder?
   private var apiKey: String!
