@@ -268,6 +268,8 @@ open class W3wTextField: UITextField {
       self.touchAction()
       self.suggestionsTable.reloadData()
       self.reSizeTable()
+      
+      self.showCheckMarkIfWarrented(words: self.searchText)
     }
   }
   
@@ -595,31 +597,34 @@ extension W3wTextField : UITextFieldDelegate {
     
     return false
   }
+
+  
+  public func showCheckMarkIfWarrented(words: String) {
+    print(words)
+    if is3WordAddress(text: self.searchText) {
+      if (self.suggestionsContain(words: self.searchText)) {
+        DispatchQueue.main.async {
+          self.showCheckMarkView()
+        }
+      } else {
+        DispatchQueue.main.async {
+          self.hideCheckMarkView()
+        }
+      }
+    }
+  }
   
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if (string == " ") {
             return false
         }
       
-        if string != "" {
-            self.searchText = "\(textField.text ?? "")\(String(describing: string.trimmingCharacters(in: .whitespaces)))"
-        } else{
-                let subText = self.text?.dropLast()
-                self.searchText = String(subText!.trimmingCharacters(in: .whitespaces))
+        if let t = textField.text {
+          self.searchText = t.replacingCharacters(in: Range(range, in: t)!, with: string)
         }
-        
     
-        if is3WordAddress(text: self.searchText) {
-          if (self.suggestionsContain(words: self.searchText)) {
-              DispatchQueue.main.async {
-                  self.showCheckMarkView()
-              }
-          } else {
-              DispatchQueue.main.async {
-                  self.hideCheckMarkView()
-              }
-          }
-        }
+      showCheckMarkIfWarrented(words: self.searchText)
+      
         return true;
     }
     
