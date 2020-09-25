@@ -13,7 +13,7 @@ import CoreLocation
 
 /// Version number at top of file as extension solely for visibility
 extension W3wTextField {
-  static let component_version = "1.2.2"
+  static let component_version = "1.3.0"
 }
 
 
@@ -585,6 +585,17 @@ extension W3wTextField : UITextFieldDelegate {
         
     }
     
+  
+  private func suggestionsContain(words: String) -> Bool {
+    for suggestion in dataArray {
+      if suggestion.words == words {
+        return true
+      }
+    }
+    
+    return false
+  }
+  
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if (string == " ") {
             return false
@@ -599,16 +610,13 @@ extension W3wTextField : UITextFieldDelegate {
         
     
         if is3WordAddress(text: self.searchText) {
-          W3wGeocoder.shared.convertToCoordinates(words: self.searchText)  { (place, error) in
-              if (( place?.coordinates ) != nil)
-              {
-                  DispatchQueue.main.async {
-                      self.showCheckMarkView()
-                  }
-              } else {
-                  DispatchQueue.main.async {
-                      self.hideCheckMarkView()
-                  }
+          if (self.suggestionsContain(words: self.searchText)) {
+              DispatchQueue.main.async {
+                  self.showCheckMarkView()
+              }
+          } else {
+              DispatchQueue.main.async {
+                  self.hideCheckMarkView()
               }
           }
         }
