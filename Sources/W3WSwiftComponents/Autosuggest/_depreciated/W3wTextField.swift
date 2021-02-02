@@ -561,16 +561,16 @@ extension W3wTextField: UITableViewDelegate {
 }
 
 extension UIView {
-    var parentViewController: UIViewController? {
-        var parentResponder: UIResponder? = self
-        while parentResponder != nil {
-          parentResponder = parentResponder!.next
-          if let viewController = parentResponder as? UIViewController {
-              return viewController
-          }
-        }
-        return nil
-    }
+//    var parentViewController: UIViewController? {
+//        var parentResponder: UIResponder? = self
+//        while parentResponder != nil {
+//          parentResponder = parentResponder!.next
+//          if let viewController = parentResponder as? UIViewController {
+//              return viewController
+//          }
+//        }
+//        return nil
+//    }
     
     func roundCorners(corners: UIRectCorner, radius: CGFloat) {
         let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
