@@ -133,7 +133,7 @@ open class W3WDrawingView: UIView {
   }
   
   
-  public func make(_ rect: CGRect) {
+  open func make(_ rect: CGRect) {
   }
   
   /// draw the microphone
