@@ -14,7 +14,7 @@ open class W3WInteractiveDrawingView : W3WDrawingView {
   public var tapped: () -> () = {}
   
   /// set up all the UI stuff, called from the init() functions
-  override func instantiateUIElements() {
+  override public func instantiateUIElements() {
     backgroundColor = .clear
     
     // create a gesture recognizer (tap gesture)

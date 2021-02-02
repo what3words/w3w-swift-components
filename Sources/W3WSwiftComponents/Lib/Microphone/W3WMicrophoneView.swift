@@ -22,7 +22,7 @@ open class W3WMicrophoneView: W3WVoiceIconView {
   @IBInspectable var micOffColor: UIColor  = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
   @IBInspectable var idealRadius: CGFloat = 40.0
   
-  var microphone: W3WMicrophone?
+  public var microphone: W3WMicrophone?
   
   /// speed of the animation
   public var framesPerSecond = 30.0

@@ -40,7 +40,7 @@ open class W3WDrawingView: UIView {
   
   
   /// set up all the UI stuff, called from the init() functions
-  func instantiateUIElements() {
+  public func instantiateUIElements() {
     backgroundColor = .clear
   }
   
@@ -137,7 +137,7 @@ open class W3WDrawingView: UIView {
   }
   
   /// draw the microphone
-  public override func draw(_ rect: CGRect) {
+  open override func draw(_ rect: CGRect) {
     make(rect.inset(by: insets))
   }
 
