@@ -20,7 +20,7 @@ open class W3WMicrophoneViewController: UIViewController {
   
   public var delegate: W3WMicrophoneViewControllerDelegate?
   
-  var microphone: W3WMicrophone?
+  public var microphone: W3WMicrophone?
   
   var closeButton: UIButton!
   var microphoneView: W3WMicrophoneView!

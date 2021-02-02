@@ -70,7 +70,7 @@ open class W3WMicrophoneView: W3WVoiceIconView {
   }
   
   
-  func configure(microphone: W3WMicrophone?) {
+  public func configure(microphone: W3WMicrophone?) {
     self.microphone = microphone
     
     microphone?.volumeUpdate = { volume in self.set(volume: CGFloat(volume)) }

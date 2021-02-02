@@ -60,7 +60,7 @@ open class W3WVoiceIconView: W3WInteractiveDrawingView {
   
 
   /// draw the microphone
-  override func make(_ rect: CGRect) {
+  override public func make(_ rect: CGRect) {
     let weight:CGFloat? = lineWidth == nil ? nil : CGFloat(lineWidth!.floatValue)
     
     var alignedRect = rect

@@ -15,13 +15,13 @@ public class W3WDebouncer {
 
   var handler: () -> Void
 
-  init(delay: TimeInterval, handler: @escaping () -> Void) {
+  public init(delay: TimeInterval, handler: @escaping () -> Void) {
     self.delay = delay
     self.handler = handler
   }
 
 
-  func call() {
+  public func call() {
     if #available(iOS 10.0, *) {
       timer?.invalidate()
       timer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false, block: { [weak self] _ in  self?.handler()})

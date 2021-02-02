@@ -47,7 +47,7 @@ public class W3WCheckIconView: W3WDrawingView {
   
   // MARK: Drawing
   
-  override func make(_ rect: CGRect) {
+  override public func make(_ rect: CGRect) {
     // gets a radius for the innermost circle
     let radius = min(rect.size.width, rect.size.height) / 2.0
     

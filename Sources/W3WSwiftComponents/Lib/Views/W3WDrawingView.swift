@@ -60,7 +60,7 @@ open class W3WDrawingView: UIView {
   ///     - centre: the centre of the circle
   ///     - radius: the radius of the circle
   ///     - transparancy: the amount to set the transparancy relative to the current self.micOnColour
-  func circle(centre: CGPoint, radius:CGFloat, colour: UIColor) {
+  public func circle(centre: CGPoint, radius:CGFloat, colour: UIColor) {
     let path = UIBezierPath(arcCenter: centre, radius: radius, startAngle: 0.0, endAngle: 2.0 * CGFloat.pi, clockwise: true)
     
     // choose the colour based on if the microphone is 'engaged'
@@ -71,7 +71,7 @@ open class W3WDrawingView: UIView {
   }
   
 
-  func roundedLine(p0: CGPoint, p1: CGPoint, colour: UIColor, lineWidth: CGFloat) {
+  public func roundedLine(p0: CGPoint, p1: CGPoint, colour: UIColor, lineWidth: CGFloat) {
     let path = UIBezierPath()
 
     path.move(to: p0)
@@ -86,7 +86,7 @@ open class W3WDrawingView: UIView {
   }
   
   
-  func rectangle(rect: CGRect, colour: UIColor) {
+  public func rectangle(rect: CGRect, colour: UIColor) {
     let path = UIBezierPath(rect: rect)
     
     colour.setFill()
@@ -96,7 +96,7 @@ open class W3WDrawingView: UIView {
   }
   
   
-  func slashes(rect: CGRect, colour: UIColor, width: CGFloat? = nil) {
+  public func slashes(rect: CGRect, colour: UIColor, width: CGFloat? = nil) {
     
     let size = min(rect.width, rect.height) * 0.9
     
@@ -133,7 +133,7 @@ open class W3WDrawingView: UIView {
   }
   
   
-  func make(_ rect: CGRect) {
+  public func make(_ rect: CGRect) {
   }
   
   /// draw the microphone
