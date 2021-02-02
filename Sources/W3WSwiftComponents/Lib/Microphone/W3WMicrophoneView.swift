@@ -15,7 +15,7 @@ import W3WSwiftApi
 
 
 @IBDesignable
-public class W3WMicrophoneView: W3WVoiceIconView {
+open class W3WMicrophoneView: W3WVoiceIconView {
   
   // preset colours and radius, settable from Interface Builder
   @IBInspectable var micOnColor: UIColor   = UIColor(red: 0.810, green: 0.217, blue: 0.196, alpha: 1.0)

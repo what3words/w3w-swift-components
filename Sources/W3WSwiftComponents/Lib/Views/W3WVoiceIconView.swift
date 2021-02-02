@@ -13,7 +13,7 @@ import UIKit
 
 
 @IBDesignable
-public class W3WVoiceIconView: W3WInteractiveDrawingView {
+open class W3WVoiceIconView: W3WInteractiveDrawingView {
   
   @IBInspectable public var iconColour: UIColor   = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
   @IBInspectable public var lineWidth: NSNumber?  = nil

@@ -9,7 +9,7 @@ import Foundation
 
 
 
-class W3WDebouncer {
+public class W3WDebouncer {
   private let delay: TimeInterval
   private var timer: Timer?
 

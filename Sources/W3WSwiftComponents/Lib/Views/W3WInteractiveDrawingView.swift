@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class W3WInteractiveDrawingView : W3WDrawingView {
+open class W3WInteractiveDrawingView : W3WDrawingView {
 
   /// closure to recieve tap events
   public var tapped: () -> () = {}

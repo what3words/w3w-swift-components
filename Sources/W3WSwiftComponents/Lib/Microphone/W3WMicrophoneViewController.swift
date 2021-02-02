@@ -16,7 +16,7 @@ public protocol W3WMicrophoneViewControllerDelegate {
 }
 
 
-public class W3WMicrophoneViewController: UIViewController {
+open class W3WMicrophoneViewController: UIViewController {
   
   public var delegate: W3WMicrophoneViewControllerDelegate?
   
