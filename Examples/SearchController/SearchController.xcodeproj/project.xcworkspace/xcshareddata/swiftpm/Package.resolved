@@ -1,0 +1,25 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "w3w-swift-components",
+        "repositoryURL": "/Users/daveduprey/Documents/src/projects/W3WSwiftComponents/src/public/w3w-swift-components",
+        "state": {
+          "branch": "v2.0.0",
+          "revision": "993c1b5a5e26dd325c49c3a0b80d006fb683d5c2",
+          "version": null
+        }
+      },
+      {
+        "package": "w3w-swift-wrapper",
+        "repositoryURL": "https://github.com/what3words/w3w-swift-wrapper.git",
+        "state": {
+          "branch": null,
+          "revision": "358b187fb874201274cc4c049ca230ebdcd354a0",
+          "version": "3.6.3"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
