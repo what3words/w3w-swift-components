@@ -9,7 +9,8 @@ A Swift library for what3words UI components. These depend on the [what3words sw
 AutoSuggest Text Field
 ---------------------- 
 <img src="Documentation/autosuggest.png" width="200" style="float: right; padding: 16px;">
-Full documentation can be found at [Documentation/autosuggest.md](Documentation/autosuggest.md)
+Full documentation can be found at [Documentation/autosuggest.md](Documentation/autosuggest.md).
+
 
 An iOS UIKit example project can be found at [Examples/TextField/TextField.xcodeproj](Examples/TextField/TextField.xcodeproj)
 
@@ -21,7 +22,8 @@ This conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any address
 AutoSuggest Search Controller
 ---------------------- 
 <img src="Documentation/searchcontroller.png" width="200"  style="float: right; padding: 16px;">
-Full documentation can be found at [Documentation/autosuggest.md](Documentation/autosuggest.md)
+Full documentation can be found at [Documentation/autosuggest.md](Documentation/autosuggest.md).
+
 
 An iOS UIKit example project can be found at [Examples/TextField/TextField.xcodeproj](Examples/TextField/TextField.xcodeproj)
 
