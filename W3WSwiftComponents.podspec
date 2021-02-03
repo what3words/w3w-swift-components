@@ -10,9 +10,8 @@ Pod::Spec.new do |s|
   s.source           = { :git => 'https://github.com/what3words/w3w-swift-components.git', :branch => 'v2.0.0' }
   s.ios.deployment_target = '10.0'
   s.requires_arc = true
-  s.source_files = 'Sources/*.swift'
+  s.source_files = 'Sources/**/*.swift'
   s.frameworks = 'UIKit'
-  s.swift_version = ['5.0', '5.1', '5.2', '5.3']
   s.pod_target_xcconfig =  {
         'SWIFT_VERSION' => '5.3',
   }
