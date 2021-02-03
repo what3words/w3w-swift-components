@@ -6,7 +6,8 @@ Pod::Spec.new do |s|
   s.homepage         = 'https://github.com/what3words/w3w-swift-components.git'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.authors          = { "what3words" => "support@what3words.com" }
-  s.source           = { :git => 'https://github.com/what3words/w3w-swift-components.git', :tag => s.version }
+  # s.source           = { :git => 'https://github.com/what3words/w3w-swift-components.git', :tag => s.version }
+  s.source           = { :git => 'https://github.com/what3words/w3w-swift-components.git', :branch => 'v2.0.0' }
   s.ios.deployment_target = '10.0'
   s.requires_arc = true
   s.source_files = 'Sources/*.swift'
@@ -16,5 +17,5 @@ Pod::Spec.new do |s|
         'SWIFT_VERSION' => '5.3',
   }
   s.resource = 'Resources/'
-
+  s.dependency = 'what3words', '~> 3.6.3'
 end
