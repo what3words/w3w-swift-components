@@ -181,19 +181,22 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   func confireuUI() {
     clipsToBounds = true
     
-    backgroundColor = .white
+    if backgroundColor == nil {
+      backgroundColor = .white
+    }
     
     if W3WSettings.leftToRight {
       textAlignment = .left
     } else {
       textAlignment = .right
     }
-    
-    //self.layer.sublayerTransform = CATransform3DMakeTranslation(frame.size.height / 2.0, 0.0, 0.0)
 
-    font = UIFont.systemFont(ofSize: frame.size.height * 0.618)
+    if font == nil {
+      font = UIFont.systemFont(ofSize: frame.size.height * 0.618)
+    } else {
+      font = font?.withSize(frame.size.height * 0.618)
+    }
     
-    //self.slashesSize    = self.font?.pointSize ?? self.frame.size.height * 0.8
     self.slashesPadding = (self.frame.size.height - self.slashesSize) / 2.0
 
     if slashesView == nil {
@@ -232,7 +235,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       self.checkView?.frame = CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.8, height: self.frame.size.height * 0.8)
     }
     
-    placeholder = W3WSettings.componentsPlaceholderText
+    if placeholder == nil {
+      placeholder = W3WSettings.componentsPlaceholderText
+    }
   }
   
   
