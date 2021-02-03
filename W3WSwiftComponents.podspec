@@ -17,5 +17,5 @@ Pod::Spec.new do |s|
         'SWIFT_VERSION' => '5.3',
   }
   s.resource = 'Resources/'
-  s.dependency = 'what3words', '~> 3.6.3'
+  s.dependency 'what3words', '~> 3.6.3'
 end
