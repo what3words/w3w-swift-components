@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
         'SWIFT_VERSION' => '5.3',
   }
   s.resource = 'Resources/'
-  s.dependency 'what3words', '~> 3.6.3'
+  s.dependency 'https://github.com/what3words/w3w-swift-wrapper.git', '~> 3.3.1'
 end
