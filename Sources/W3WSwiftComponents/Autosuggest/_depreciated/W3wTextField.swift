@@ -533,7 +533,7 @@ extension W3wTextField: UITableViewDataSource {
             let x = row * flag.width
             let y = col * flag.height
             let bundle = Bundle.init(for: W3wTextField.self)
-            let clearImage = UIImage(named: "flags", in: bundle, compatibleWith: nil)
+            let clearImage = UIImage(named: "flags", in: Bundle.module, compatibleWith: nil)
             cell.country_flag.image = UIImage(cgImage: (clearImage?.cgImage?.cropping(to: CGRect(x: x, y: y, width: flag.width, height: flag.height)))!)
         }
         return cell
