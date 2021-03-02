@@ -176,7 +176,7 @@ Both components conform to our `W3WAutoSuggestTextFieldProtocol` for returning a
 * `func set(voice: Bool)` - turns voice recignition on or off
 * `func set(options: W3WOptions)` - sets [autosuggest options](options.md)
 * `func set(options: [W3WOption])` - sets [autosuggest options](options.md)
-* `func set(option: W3WOption)` - sets an [autosuggest option](options.md)
+* `func set(options: W3WOption)` - sets one [autosuggest option](options.md)
   
 #### var suggestionSelected
 

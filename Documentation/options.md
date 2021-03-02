@@ -123,8 +123,8 @@ Others
 ----------------
 `inputType(W3WInputType)` is used if you are calling autosuggest with the output of a particular voice recognition system.  It doesn't apply to this component library
 
-`numberOfResults(Int)` sets the munber of results returned in an autosuggest call.  It defaults to 3 and it is reccomended that applicaitons use this for best results and user experience.
+`numberOfResults(Int)` sets the number of results returned in an autosuggest call.  It defaults to 3 and it is reccomended that applicaitons use the default for best results and user experience.
 
-`numberFocusResults(Int)` sets the number of results that will be sorted by the focus option.  It is reccomended that applicaitons use this for best results and user experience.
+`numberFocusResults(Int)` sets the number of results that will be sorted by the focus option.  It is reccomended that applicaitons do not use this, and let the system choose, for best results and user experience.
 
 `preferLand(Bool)` defaults to true.  Unless your application deals mostly with locations in the ocean it's best to leave this default.
