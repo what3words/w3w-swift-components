@@ -11,6 +11,8 @@ import UIKit
 
 public extension W3WSettings {
   
+  static let W3WSwiftComponentsVersion = "2.0.1"
+  
   static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? "en") == Locale.LanguageDirection.leftToRight)
   
   static let componentsSlashesColor       = UIColor(hex: 0xE11F26)

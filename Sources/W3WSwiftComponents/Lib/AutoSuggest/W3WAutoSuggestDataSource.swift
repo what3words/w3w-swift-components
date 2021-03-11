@@ -70,6 +70,11 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func set(w3w: W3WProtocolV3) {
     self.w3w = w3w
     configure()
+    
+    if let w3wApi = w3w as? What3WordsV3 {
+      let headerValue = "what3words-Swift/" + W3WSettings.W3WSwiftComponentsVersion + " " + figureOutVersionInfo()
+      w3wApi.set(customHeaders: ["X-W3W-AS-Component" : headerValue])
+    }
   }
   
   
@@ -425,6 +430,10 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
           }
         }
         
+        if let _ = selection as? W3WVoiceSuggestion {
+          parameters["source-api"] = "voice"
+        }
+        
         api.performRequest(path: "/autosuggest-selection", params: parameters) { results, error in
           // nothing is returned, and we ignore any error too
         }
@@ -517,6 +526,38 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     return cell!
   }
 
+  
+  // Establish the various version numbers in order to set an HTTP header
+  private func figureOutVersionInfo() -> String {
+    #if os(macOS)
+    let os_name        = "Mac"
+    #elseif os(watchOS)
+    let os_name        = WKInterfaceDevice.current().systemName
+    #else
+    let os_name        = UIDevice.current.systemName
+    #endif
+    let os_version     = ProcessInfo().operatingSystemVersion
+    var swift_version  = "x.x"
+    
+    #if swift(>=7)
+    swift_version = "7.x"
+    #elseif swift(>=6)
+    swift_version = "6.x"
+    #elseif swift(>=5)
+    swift_version = "5.x"
+    #elseif swift(>=4)
+    swift_version = "4.x"
+    #elseif swift(>=3)
+    swift_version = "3.x"
+    #elseif swift(>=2)
+    swift_version = "2.x"
+    #else
+    swift_version = "1.x"
+    #endif
+    
+    return "(Swift " + swift_version + "; " + os_name + " "  + String(os_version.majorVersion) + "."  + String(os_version.minorVersion) + "."  + String(os_version.patchVersion) + ")"
+  }
+  
   
 }
 
