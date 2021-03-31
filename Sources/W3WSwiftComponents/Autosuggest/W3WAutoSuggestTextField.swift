@@ -274,8 +274,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     super.layoutSubviews()
     
     iconsView?.resize()
-//    self.rightView = iconsView
-    assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
+    if let sv = slashesView, let iv = iconsView {
+      assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
+    }
   }
   
   
