@@ -43,7 +43,15 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   var leftPadding:CGFloat  = 16.0
   var rightPadding:CGFloat = 16.0
 
-  
+  /// you can set the API key in Interface Builder
+  @IBInspectable open var apiKey: String? {
+    didSet {
+      if let a = apiKey {
+        set(What3WordsV3(apiKey: a))
+      }
+    }
+  }
+
   public init() {
     super.init(searchResultsController: autoSuggestViewController)
   }

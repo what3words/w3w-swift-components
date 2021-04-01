@@ -5,6 +5,8 @@ Overview
 
 A Swift library for what3words UI components. These depend on the [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper).
 
+For information on using this package with Objective-C read [this](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/ObjectiveC.md)
+
 
 AutoSuggest Text Field
 ---------------------- 

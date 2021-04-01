@@ -11,7 +11,7 @@ import UIKit
 
 public extension W3WSettings {
   
-  static let W3WSwiftComponentsVersion = "2.0.1"
+  static let W3WSwiftComponentsVersion = "2.1.0"
   
   static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? "en") == Locale.LanguageDirection.leftToRight)
   
