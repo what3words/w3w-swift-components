@@ -42,6 +42,7 @@ Import the libraries into your Objective-C code:
 ```objective-c
 @import W3WSwiftComponents;
 @import W3WSwiftApi;
+#import <MapKit/MapKit.h>
 ```
 
 Add the following to your view controller's `-(void)viewDidLoad`:
