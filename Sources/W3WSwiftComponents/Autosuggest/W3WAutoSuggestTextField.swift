@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import W3WSwiftApi
 
-
+/// A text field, based on UITextField with a what3words autocomplete function
 @IBDesignable
 open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
 

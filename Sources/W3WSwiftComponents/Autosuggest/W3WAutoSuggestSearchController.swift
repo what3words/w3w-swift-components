@@ -10,6 +10,7 @@ import UIKit
 import W3WSwiftApi
 
 
+/// A text field, based on UISearchController with a what3words autocomplete function
 @IBDesignable
 open class W3WAutoSuggestSearchController: UISearchController, UISearchTextFieldDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
   
