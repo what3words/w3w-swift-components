@@ -98,7 +98,15 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   func set(options: [W3WOption]) {
     autoSuggestDataSource?.set(options: options)
   }
-    
+  
+  
+  /// adds an option to the option list, replaces any existing options of the same kind
+  /// - Parameters:
+  ///     - options: an array of W3WOption
+  func add(option: W3WOption) {
+    autoSuggestDataSource?.add(option: option)
+  }
+  
   
   /// tells the component to use convertToCoordinates to retrieve lat/long
   /// - Parameters:
@@ -147,14 +155,14 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
   /// handles changes to the text for the text field, and lets caller knwo if the new input is allowed or not
   func textChanged(currentText:String?, additionalText:String?, newTextPosition:NSRange) -> Bool {
-    return autoSuggestDataSource.textChanged(currentText: currentText, additionalText: additionalText, newTextPosition: newTextPosition)
+    return autoSuggestDataSource?.textChanged(currentText: currentText, additionalText: additionalText, newTextPosition: newTextPosition) ?? false
   }
   
   
   /// formats input text
   func groom(text: String?) -> String? {
     highlightCellOnTextMatch()
-    return autoSuggestDataSource.groom(text: text)
+    return autoSuggestDataSource?.groom(text: text) ?? text
   }
   
   
@@ -201,7 +209,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
     // divide all possible errors into either technical problems, or an error about the input given to the API, the detailed W3WError enum can be obtained with the updateError closue of the main textfield class
     switch error {
     case .apiError(let e):
-      if e == .invalidKey || e == .missingKey {
+      if e == .invalidKey || e == .missingKey || e == .badConnection {
         set(error: technicalErrorString)
       } else {
         set(error: apiErrorString)

@@ -94,6 +94,17 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   }
   
   
+  /// adds an option to the option list, replaces any existing options of the same kind
+  /// - Parameters:
+  ///     - options: an array of W3WOption
+  func add(option: W3WOption) {
+    options.removeAll(where: { o in
+      o.key() == option.key()
+    })
+    options.append(option)
+  }
+
+  
   /// tells the component to use convertToCoordinates to retrieve lat/long
   /// - Parameters:
   ///     - includeCoordinates: if true, then this will use convertToCoordinates to return lat/long for every suggestion (calls will return W3WSquare instead of W3WSuggestion)

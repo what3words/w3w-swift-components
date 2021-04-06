@@ -11,7 +11,7 @@ import UIKit
 
 public extension W3WSettings {
   
-  static let W3WSwiftComponentsVersion = "2.0.1"
+  static let W3WSwiftComponentsVersion = "2.1.0"
   
   static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? "en") == Locale.LanguageDirection.leftToRight)
   
@@ -37,7 +37,7 @@ public extension W3WSettings {
   static let componentsPlaceholderText    = NSLocalizedString("e.g. lock.spout.radar", comment: "e.g. lock.spout.radar")
   static let componentsNearFormatText     = NSLocalizedString("near %@", comment: "near %@")  // used to say NSLocalizedString("near %@", comment: "near %@"), but we need translations for this
   static let technicalErrorText           = NSLocalizedString("Something went wrong, try again later", comment: "There was some technical problem")
-  static let apiErrorText                 = NSLocalizedString("No valid what3word address found", comment: "The API didn't have an answer for the given input")
+  static let apiErrorText                 = NSLocalizedString("No valid what3words address found", comment: "The API didn't have an answer for the given input")
   static let didYouMeanText               = NSLocalizedString("Did you mean?", comment: "Asks if the user mean to write a different addres that is presented below this text")
   
   static let regex_3wa_characters         = "^/*([^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]|[.｡。･・︒។։။۔።।]){0,}$"

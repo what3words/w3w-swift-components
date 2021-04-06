@@ -10,6 +10,7 @@ import UIKit
 import W3WSwiftApi
 
 
+/// A text field, based on UISearchController with a what3words autocomplete function
 @IBDesignable
 open class W3WAutoSuggestSearchController: UISearchController, UISearchTextFieldDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
   
@@ -43,7 +44,15 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   var leftPadding:CGFloat  = 16.0
   var rightPadding:CGFloat = 16.0
 
-  
+  /// you can set the API key in Interface Builder
+  @IBInspectable open var apiKey: String? {
+    didSet {
+      if let a = apiKey {
+        set(What3WordsV3(apiKey: a))
+      }
+    }
+  }
+
   public init() {
     super.init(searchResultsController: autoSuggestViewController)
   }

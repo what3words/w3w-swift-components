@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 import W3WSwiftApi
 
-
+/// A text field, based on UITextField with a what3words autocomplete function
 @IBDesignable
 open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
 
@@ -274,8 +274,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     super.layoutSubviews()
     
     iconsView?.resize()
-//    self.rightView = iconsView
-    assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
+    if let sv = slashesView, let iv = iconsView {
+      assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
+    }
   }
   
   
