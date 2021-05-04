@@ -7,6 +7,8 @@ A Swift library for what3words UI components. These depend on the [what3words sw
 
 For information on using this package with Objective-C read [this](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/ObjectiveC.md)
 
+If you are upgrading from any version 1.x.x, see the [upgrade guide](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/UpgradeFromV1.md).
+
 
 AutoSuggest Text Field
 ---------------------- 
