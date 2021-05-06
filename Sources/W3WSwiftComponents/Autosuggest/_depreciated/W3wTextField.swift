@@ -190,7 +190,7 @@ struct Clip {
     // set isearchable
     public var isSearchEnable: Bool = true
     // set flag image
-    let flagImage = UIImage(named: "flags.png")
+    let flagImage = UIImage(named: "flag.water.png")
     // table height
     fileprivate  var tableheightX: CGFloat = 350
     // set up the array
@@ -526,15 +526,15 @@ extension W3wTextField: UITableViewDataSource {
         cell.nearest_place.text = "\(dataArray[indexPath.row].nearestPlace), \(dataArray[indexPath.row].country)"
         cell.layer.borderColor = #colorLiteral(red: 0.4313323498, green: 0.4313982427, blue: 0.4313178957, alpha: 1)
         cell.layer.borderWidth = 0.5
-        let country_index = countries.firstIndex(of: "\(dataArray[indexPath.row].country.lowercased())")
-        if let index = country_index {
-            let row = index % flag.cols
-            let col = index / flag.rows
-            let x = row * flag.width
-            let y = col * flag.height
-            let clearImage = UIImage(named: "flags", in: Bundle.module, compatibleWith: nil)
-            cell.country_flag.image = UIImage(cgImage: (clearImage?.cgImage?.cropping(to: CGRect(x: x, y: y, width: flag.width, height: flag.height)))!)
-        }
+        //let country_index = countries.firstIndex(of: "\(dataArray[indexPath.row].country.lowercased())")
+        //if let index = country_index {
+            //let row = index % flag.cols
+            //let col = index / flag.rows
+            //let x = row * flag.width
+            //let y = col * flag.height
+            //let clearImage = UIImage(named: "flags", in: Bundle.module, compatibleWith: nil)
+            //cell.country_flag.image = UIImage(cgImage: (clearImage?.cgImage?.cropping(to: CGRect(x: x, y: y, width: flag.width, height: flag.height)))!)
+        //}
         return cell
     }
 }
@@ -622,7 +622,7 @@ class SuggestionTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.containerView.addSubview(three_word_address)
-        self.containerView.addSubview(country_flag)
+        //self.containerView.addSubview(country_flag)
         self.containerView.addSubview(nearest_place)
         self.contentView.addSubview(containerView)
         // set up container view
@@ -639,14 +639,15 @@ class SuggestionTableViewCell: UITableViewCell {
         three_word_address.sizeToFit()
         // set up nearest place
         nearest_place.topAnchor.constraint(equalTo:self.three_word_address.bottomAnchor, constant: self.frame.height / 8.0 ).isActive = true
-        nearest_place.leadingAnchor.constraint(equalTo:self.country_flag.trailingAnchor, constant: 5.0).isActive = true
+        //nearest_place.leadingAnchor.constraint(equalTo:self.country_flag.trailingAnchor, constant: 5.0).isActive = true
+        nearest_place.leadingAnchor.constraint(equalTo:self.three_word_address.leadingAnchor).isActive = true
         //nearest_place.font = nearest_place.font.withSize(self.frame.height / 3)
         nearest_place.sizeToFit()
         // set up country flag
-        country_flag.leadingAnchor.constraint(equalTo:self.three_word_address.leadingAnchor).isActive = true
-        country_flag.centerYAnchor.constraint(equalTo: self.nearest_place.centerYAnchor).isActive = true
-        country_flag.widthAnchor.constraint(equalToConstant:self.frame.height / 2.0 ).isActive = true
-        country_flag.heightAnchor.constraint(equalToConstant: self.frame.height / 2.0 / 1.3).isActive = true
+        //country_flag.leadingAnchor.constraint(equalTo:self.three_word_address.leadingAnchor).isActive = true
+        //country_flag.centerYAnchor.constraint(equalTo: self.nearest_place.centerYAnchor).isActive = true
+        //country_flag.widthAnchor.constraint(equalToConstant:self.frame.height / 2.0 ).isActive = true
+        //country_flag.heightAnchor.constraint(equalToConstant: self.frame.height / 2.0 / 1.3).isActive = true
     }
 }
 

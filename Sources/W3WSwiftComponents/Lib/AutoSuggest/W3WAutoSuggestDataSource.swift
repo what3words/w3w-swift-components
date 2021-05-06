@@ -532,7 +532,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     let cell = tableView.dequeueReusableCell(withIdentifier: W3WSuggestionTableViewCell.cellIdentifier, for: indexPath) as? W3WSuggestionTableViewCell
     
     let suggestion = suggestions[indexPath.row]
-    cell?.set(address: suggestion.words, countryCode: suggestion.country, nearestPlace: suggestion.nearestPlace, language: language)
+    //cell?.set(address: suggestion.words, countryCode: suggestion.country, nearestPlace: suggestion.nearestPlace, language: language)
+    cell?.set(suggestion: suggestion)
     
     return cell!
   }

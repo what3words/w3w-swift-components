@@ -9,13 +9,24 @@ import W3WSwiftApi
 import UIKit
 
 
+public enum W3WMesurementSystem {
+  case metric
+  case imperial
+  case userPreference
+}
+
+
 public extension W3WSettings {
-  
+
   static let W3WSwiftComponentsVersion = "2.1.0"
   
+  // mutable settings
+  static var measurement = W3WMesurementSystem.userPreference
   static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? "en") == Locale.LanguageDirection.leftToRight)
   
+  // system settings
   static let componentsSlashesColor       = UIColor(hex: 0xE11F26)
+  static let componentsDashesColor        = UIColor(hex: 0xD9D9D9)
   static let componentsSeparatorColor     = UIColor(hex: 0xE5E5E5)
   static let componentsCheckMarkColor     = UIColor(hex: 0x5FC98F)
   static let componentsErrorTintColor     = UIColor(hex: 0xED694E)
@@ -31,7 +42,6 @@ public extension W3WSettings {
   static let componentsSlashesIconSize    = CGFloat(100.0)
   static let componentsSlashesPadding     = CGFloat(10.0)
   static let componentsIconPadding        = CGFloat(10.0)
-
   static let componentsLogoSize           = CGFloat(64.0)
   
   static let componentsPlaceholderText    = NSLocalizedString("e.g. lock.spout.radar", comment: "e.g. lock.spout.radar")

@@ -68,3 +68,14 @@ If you are using the Voice API on device, you should include Microphone permissi
 <img src="Documentation/plist2.png" width="75%">
 
 
+System Settings
+---------------
+
+#### Measurements
+
+The measurement system in these components are set to the user's preference or locale automatically, but you can override this to `.metric`, `.imperial`, or `.userPreference`:
+
+```swift
+W3WSettings.measurement = .metric
+```
+

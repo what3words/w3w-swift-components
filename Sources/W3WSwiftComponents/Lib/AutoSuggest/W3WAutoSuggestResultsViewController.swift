@@ -247,7 +247,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
       }
 
       self.didYouMeanView?.isHidden = false
-      self.didYouMeanView?.set(title: W3WSettings.didYouMeanText, hint: W3WAddress.ensureSlashes(text: didYouMean) ?? NSAttributedString())
+      self.didYouMeanView?.set(title: W3WSettings.didYouMeanText, hint: W3WFormatter.ensureSlashes(text: didYouMean) ?? NSAttributedString())
     }
   }
   
@@ -378,7 +378,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
       if let words = self.delegate?.getCurrentText() {
         for cell in self.tableView.visibleCells {
           if let c = cell as? W3WSuggestionTableViewCell {
-            c.set(highlight: c.threeWordAddressText?.address == words)
+            c.set(highlight: c.suggestion?.words == words)
           }
         }
       }
