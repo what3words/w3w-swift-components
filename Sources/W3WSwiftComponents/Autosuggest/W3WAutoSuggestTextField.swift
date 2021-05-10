@@ -44,13 +44,13 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   var autoSuggestViewController = W3WAutoSuggestResultsViewController()
   
   /// views for all the icons that may appear
-  var slashesView: W3WSlashesView!
+  //var slashesView: W3WSlashesView!
   var voiceIconView: W3WVoiceIconView!
   var checkView: W3WCheckIconView!
   var iconsView: W3WIconStack!
   
-  var slashesSize:CGFloat    = W3WSettings.componentsSlashesIconSize
-  var slashesPadding:CGFloat = W3WSettings.componentsSlashesPadding
+  var iconSize:CGFloat    = W3WSettings.componentsSlashesIconSize
+  var iconPadding:CGFloat = W3WSettings.componentsSlashesPadding
   
   var leftPadding:CGFloat  = 16.0
   var rightPadding:CGFloat = 16.0
@@ -197,23 +197,24 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       font = font?.withSize(frame.size.height * 0.618)
     }
     
-    self.slashesPadding = (self.frame.size.height - self.slashesSize) / 2.0
+    self.iconPadding = (self.frame.size.height - self.iconSize) / 2.0
 
-    if slashesView == nil {
-      slashesView = W3WSlashesView(frame: CGRect(x: slashesPadding, y: slashesPadding, width: frame.size.height, height: frame.size.height))
-    }
-    if W3WSettings.leftToRight {
-      slashesView.set(padding: 2.0)
-    } else {
-      slashesView.set(padding: 8.0)
-    }
+    //if slashesView == nil {
+    //  slashesView = W3WSlashesView(frame: CGRect(x: slashesPadding, y: slashesPadding, width: frame.size.height, height: frame.size.height))
+    //}
+    //if W3WSettings.leftToRight {
+    //  slashesView.set(padding: 2.0)
+    //} else {
+    //  slashesView.set(padding: 8.0)
+    //}
     
     if iconsView == nil {
       iconsView = W3WIconStack(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: frame.size.height))
       iconsView.spacing = frame.size.height * -0.2
     }
     
-    assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
+    //assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
+    assignLeadingAndTrailingIcons(leading: nil, trailing: iconsView)
     
     if checkView == nil {
       checkView = W3WCheckIconView()
@@ -230,8 +231,8 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     layer.borderColor = W3WSettings.componentsBorderColor.cgColor
     
     DispatchQueue.main.async {
-      self.slashesView.frame = CGRect(x: self.slashesPadding, y: self.slashesPadding, width: self.slashesSize, height: self.slashesSize)
-      self.voiceIconView?.frame = CGRect(x: self.slashesPadding, y: self.slashesPadding, width: self.slashesSize, height: self.slashesSize)
+      //self.slashesView.frame = CGRect(x: self.slashesPadding, y: self.slashesPadding, width: self.slashesSize, height: self.slashesSize)
+      self.voiceIconView?.frame = CGRect(x: self.iconPadding, y: self.iconPadding, width: self.iconSize, height: self.iconSize)
       self.checkView?.frame = CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.8, height: self.frame.size.height * 0.8)
     }
     
@@ -255,7 +256,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  func assignLeadingAndTrailingIcons(leading: UIView, trailing: UIView) {
+  func assignLeadingAndTrailingIcons(leading: UIView?, trailing: UIView) {
     self.leftViewMode = .always
     self.rightViewMode = .always
 
@@ -274,8 +275,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     super.layoutSubviews()
     
     iconsView?.resize()
-    if let sv = slashesView, let iv = iconsView {
-      assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
+    //if let sv = slashesView, let iv = iconsView {
+    //  assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
+    //}
+    if let iv = iconsView {
+      assignLeadingAndTrailingIcons(leading: nil, trailing: iv)
     }
   }
   
@@ -304,7 +308,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   ///     - selected: the suggestion chosen by the user
   func update(selected: W3WSuggestion) {
     if let words = selected.words {
-      update(text: words)
+      update(text: W3WAddress.ensureLeadingSlashes(words))
       suggestionSelected(selected)
       textChanged(words)
       dismissKeyboard()
@@ -388,6 +392,13 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     autoSuggestViewController.hideSuggestions()
     
     return true
+  }
+  
+  
+  public func textFieldDidBeginEditing(_ textField: UITextField) {
+    if textField.text == "" {
+      textField.text = W3WAddress.ensureLeadingSlashes(textField.text ?? "")
+    }
   }
   
   

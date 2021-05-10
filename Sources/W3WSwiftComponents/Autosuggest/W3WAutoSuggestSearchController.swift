@@ -182,10 +182,11 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
       self.slashesSize    = self.searchBar.frame.size.height * 0.333
     }
 
-    let slashesView = W3WSlashesView(frame: CGRect(x: 0.0, y: 0.0, width: slashesSize + leftPadding, height: slashesSize))
-    slashesView.alignment = .trailing
-    self.searchBar.setImage(slashesView.asImage(), for: .search, state: .normal)
-    
+    //let slashesView = W3WSlashesView(frame: CGRect(x: 0.0, y: 0.0, width: slashesSize + leftPadding, height: slashesSize))
+    //slashesView.alignment = .trailing
+    //self.searchBar.setImage(slashesView.asImage(), for: .search, state: .normal)
+    self.searchBar.showsSearchResultsButton = false
+
     if voiceEnabled {
       showVoiceIcon()
     }
@@ -223,7 +224,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   ///     - selected: the suggestion chosen by the user
   func update(selected: W3WSuggestion) {
     if let words = selected.words {
-      update(text: words)
+      update(text: W3WAddress.ensureLeadingSlashes(words))
       suggestionSelected(selected)
       textChanged(words)
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -287,6 +288,14 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   // MARK: UISearchBarDelegate Protocol
+  
+  
+
+  public func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    if searchBar.text == "" {
+      searchBar.text = W3WAddress.ensureLeadingSlashes(searchBar.text ?? "")
+    }
+  }
   
   
   /// called when the text field contents change

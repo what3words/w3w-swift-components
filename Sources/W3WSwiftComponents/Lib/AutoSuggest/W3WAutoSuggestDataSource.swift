@@ -151,7 +151,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
         if let i = u.range(of: "/", options: .backwards) {
           let twa = String(u.suffix(from: i.upperBound)).removingPercentEncoding ?? ""
           if is3wa(text: twa) {
-            delegate?.replace(text: twa)
+            delegate?.replace(text: W3WAddress.ensureLeadingSlashes(twa))
             suggestionsDebouncer?.call(text: twa)
             checkForValid3wa(text: twa)
             return false
@@ -162,7 +162,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     
     if let t = currentText, let n = additionalText {
       let newText = t.replacingCharacters(in: Range(newTextPosition, in: t)!, with: n)
-      removeLeadingTripleSlashesInTextField(text: newText)
+      //removeLeadingTripleSlashesInTextField(text: newText)
       
       allowTypingToContinue = has3waCharacters(text: newText) || freeformText
 
@@ -273,7 +273,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func isInKnownAddressList(text: String?) -> Bool {
     var valid = false
     
-    if let words = text {
+    if var words = text {
+      words.removeAll(where: { c in c == "/" })
       valid = knownValidThreeWordAddresses.contains(words)
     }
 

@@ -34,6 +34,8 @@ public extension W3WSettings {
   static let componentsBorderColor        = UIColor(hex: 0xC2C2C2)
   static let componentsNearestPlaceColor  = UIColor(hex: 0x525252)
   static let componentsAddressTextColor   = UIColor(hex: 0x0A3049)
+  static let componentsHighlightBacking   = UIColor(hex: 0xDBEFFA)
+  static let componentsTableCellBacking   = UIColor.white
 
   static let componentsAddressTextSize    = CGFloat(18.0)
   static let componentsTableCellHeight    = CGFloat(64.0)
@@ -44,7 +46,7 @@ public extension W3WSettings {
   static let componentsIconPadding        = CGFloat(10.0)
   static let componentsLogoSize           = CGFloat(64.0)
   
-  static let componentsPlaceholderText    = NSLocalizedString("e.g. lock.spout.radar", comment: "e.g. lock.spout.radar")
+  static let componentsPlaceholderText    = NSLocalizedString("e.g. ///lock.spout.radar", comment: "e.g. ///lock.spout.radar")
   static let componentsNearFormatText     = NSLocalizedString("near %@", comment: "near %@")  // used to say NSLocalizedString("near %@", comment: "near %@"), but we need translations for this
   static let technicalErrorText           = NSLocalizedString("Something went wrong, try again later", comment: "There was some technical problem")
   static let apiErrorText                 = NSLocalizedString("No valid what3words address found", comment: "The API didn't have an answer for the given input")

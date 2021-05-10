@@ -107,11 +107,19 @@ extension W3WSuggestionViewProtocol {
   }
   
   
+  
   /// set if this one should stand out form the rest
   public func set(highlight: Bool) {
     self.highlight = highlight
-    if let p = wordsLabel?.font.fontDescriptor.pointSize {
-      set(titleFontSize: p)
+    //if let p = wordsLabel?.font.fontDescriptor.pointSize {
+    //  set(titleFontSize: p)
+    //}
+    
+    // set the background colour
+    if self.highlight {
+      backgroundColor = W3WSettings.componentsHighlightBacking
+    } else {
+      backgroundColor = W3WSettings.componentsTableCellBacking
     }
   }
   
@@ -208,7 +216,7 @@ extension W3WSuggestionViewProtocol {
   
   /// layou t for a suggestion only showing an address
   func layoutForOneLineOfText() {
-    let space  = spacing()
+    //let space  = spacing()
     let lead   = leadingSpace()
     let height = wordsLabelHeight()
 
@@ -266,7 +274,7 @@ extension W3WSuggestionViewProtocol {
       }
     }
 
-    if let distance = suggestion?.distanceToFocus {
+    if suggestion?.distanceToFocus != nil {
       distanceLabel?.font = wordsLabel?.font.withSize(descriptionTextHeight())
 //      distanceLabel?.text = W3WFormatter.distanceAsString(meters: distance)
       distanceLabel?.sizeToFit()
@@ -279,7 +287,7 @@ extension W3WSuggestionViewProtocol {
       lineWidth = lineWidth - (distanceLabel?.frame.width ?? 0.0)
     }
     
-    if let np = suggestion?.nearestPlace {
+    if suggestion?.nearestPlace != nil {
       nearestPlaceLabel?.font = wordsLabel?.font.withSize(descriptionTextHeight())
       nearestPlaceLabel?.sizeToFit()
       if W3WSettings.leftToRight {
