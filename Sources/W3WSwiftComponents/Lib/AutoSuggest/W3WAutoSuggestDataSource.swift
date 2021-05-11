@@ -235,7 +235,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     
     var words = [String]()
     for match in matches {
-      print(text[Range(match.range, in: text)!])
+      //print(text[Range(match.range, in: text)!])
       let word = String(text[Range(match.range, in: text)!])
       words.append(word)
     }

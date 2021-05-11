@@ -153,8 +153,9 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   // MARK: W3AutoSuggestDataSource Pass Through
   
   
-  /// handles changes to the text for the text field, and lets caller knwo if the new input is allowed or not
+  /// handles changes to the text for the text field, and lets caller know if the new input is allowed or not
   func textChanged(currentText:String?, additionalText:String?, newTextPosition:NSRange) -> Bool {
+    self.didYouMeanView?.isHidden = true
     return autoSuggestDataSource?.textChanged(currentText: currentText, additionalText: additionalText, newTextPosition: newTextPosition) ?? false
   }
   
@@ -389,7 +390,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   /// show the suggestions view
   func showSuggestions() {
 
-    set(error: NSAttributedString?(nil))
+    //set(error: NSAttributedString?(nil))
 
     DispatchQueue.main.async {
             

@@ -44,7 +44,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   var autoSuggestViewController = W3WAutoSuggestResultsViewController()
   
   /// views for all the icons that may appear
-  //var slashesView: W3WSlashesView!
+  var slashesView: UIView! // W3WSlashesView!
   var voiceIconView: W3WVoiceIconView!
   var checkView: W3WCheckIconView!
   var iconsView: W3WIconStack!
@@ -52,7 +52,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   var iconSize:CGFloat    = W3WSettings.componentsSlashesIconSize
   var iconPadding:CGFloat = W3WSettings.componentsSlashesPadding
   
-  var leftPadding:CGFloat  = 16.0
+  //var leftPadding:CGFloat  = 16.0
   var rightPadding:CGFloat = 16.0
 
   
@@ -160,9 +160,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
 
   
-  public func set(leftPadding: CGFloat) {
-    self.leftPadding = leftPadding
-  }
+  //public func set(leftPadding: CGFloat) {
+  //  self.leftPadding = leftPadding
+  //}
 
   
   public func set(rightPadding: CGFloat) {
@@ -199,6 +199,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     
     self.iconPadding = (self.frame.size.height - self.iconSize) / 2.0
 
+    if slashesView == nil {
+      slashesView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.309, height: self.frame.size.height))
+    }
     //if slashesView == nil {
     //  slashesView = W3WSlashesView(frame: CGRect(x: slashesPadding, y: slashesPadding, width: frame.size.height, height: frame.size.height))
     //}
@@ -209,12 +212,12 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     //}
     
     if iconsView == nil {
-      iconsView = W3WIconStack(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: frame.size.height))
+      iconsView = W3WIconStack(frame: CGRect(x: 0.0, y: 0.0, width: iconPadding, height: iconPadding))
       iconsView.spacing = frame.size.height * -0.2
     }
     
-    //assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
-    assignLeadingAndTrailingIcons(leading: nil, trailing: iconsView)
+    assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
+    //assignLeadingAndTrailingIcons(leading: nil, trailing: iconsView)
     
     if checkView == nil {
       checkView = W3WCheckIconView()
@@ -242,9 +245,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  override public func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-    return CGRect(x: leftPadding, y: frame.size.height * 0.1, width: frame.size.height * 0.8, height: frame.size.height * 0.8)
-  }
+  //override public func leftViewRect(forBounds bounds: CGRect) -> CGRect {
+  //  return CGRect(x: leftPadding, y: frame.size.height * 0.1, width: frame.size.height * 0.8, height: frame.size.height * 0.8)
+  //}
   
   
   override public func rightViewRect(forBounds bounds: CGRect) -> CGRect {
@@ -256,7 +259,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  func assignLeadingAndTrailingIcons(leading: UIView?, trailing: UIView) {
+  func assignLeadingAndTrailingIcons(leading: UIView, trailing: UIView) {
     self.leftViewMode = .always
     self.rightViewMode = .always
 
@@ -275,12 +278,12 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     super.layoutSubviews()
     
     iconsView?.resize()
-    //if let sv = slashesView, let iv = iconsView {
-    //  assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
-    //}
-    if let iv = iconsView {
-      assignLeadingAndTrailingIcons(leading: nil, trailing: iv)
+    if let sv = slashesView, let iv = iconsView {
+      assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
     }
+    //if let iv = iconsView {
+    //  assignLeadingAndTrailingIcons(leading: nil, trailing: iv)
+    //}
   }
   
   

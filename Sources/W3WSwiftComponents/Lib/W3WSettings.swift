@@ -54,8 +54,7 @@ public extension W3WSettings {
   
   static let regex_3wa_characters         = "^/*([^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]|[.｡。･・︒។։။۔።।]){0,}$"
   static let regex_3wa_separator          = "[.｡。･・︒។։။۔።।]"
-  static let regex_3wa_mistaken_separator = "[.｡。･・︒។։။۔።। ,-_/+]{1,2}"
-  //static let regex_3wa_word               = "[^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}"
+  static let regex_3wa_mistaken_separator = "[.｡。･・︒។։။۔።। ,\\-_/+'&\\:;|]{1,2}"
   static let regex_3wa_word               = "\\w+"
   static let regex_match                  = "^/*" + W3WSettings.regex_3wa_word + W3WSettings.regex_3wa_separator + W3WSettings.regex_3wa_word + W3WSettings.regex_3wa_separator + W3WSettings.regex_3wa_word + "$"
   static let regex_loose_match            = "^/*" + W3WSettings.regex_3wa_word + W3WSettings.regex_3wa_mistaken_separator + W3WSettings.regex_3wa_word + W3WSettings.regex_3wa_mistaken_separator + W3WSettings.regex_3wa_word + "$"
