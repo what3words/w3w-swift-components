@@ -47,7 +47,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   var slashesView: UIView! // W3WSlashesView!
   var voiceIconView: W3WVoiceIconView!
   var checkView: W3WCheckIconView!
-  var iconsView: W3WIconStack!
+  //var iconsView: W3WIconStack!
   
   var iconSize:CGFloat    = W3WSettings.componentsSlashesIconSize
   var iconPadding:CGFloat = W3WSettings.componentsSlashesPadding
@@ -144,7 +144,8 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
           voiceIconView = W3WVoiceIconView()
           voiceIconView.set(padding: frame.size.height * 0.2)
           voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
-          iconsView.add(right: voiceIconView)
+          //iconsView.add(right: voiceIconView)
+          updateIcons()
         }
 //        DispatchQueue.main.async {
 //          self.voiceIconView?.isHidden = false
@@ -211,19 +212,21 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     //  slashesView.set(padding: 8.0)
     //}
     
-    if iconsView == nil {
-      iconsView = W3WIconStack(frame: CGRect(x: 0.0, y: 0.0, width: iconPadding, height: iconPadding))
-      iconsView.spacing = frame.size.height * -0.2
-    }
+    //if iconsView == nil {
+    //  iconsView = W3WIconStack(frame: CGRect(x: 0.0, y: 0.0, width: iconPadding, height: iconPadding))
+    //  iconsView.spacing = frame.size.height * -0.2
+    //}
     
-    assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
+    //assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
     //assignLeadingAndTrailingIcons(leading: nil, trailing: iconsView)
+    updateIcons()
     
     if checkView == nil {
       checkView = W3WCheckIconView()
       checkView.set(padding: frame.size.height * 0.2)
       checkView.isHidden = true
-      iconsView.add(left: checkView)
+      //iconsView.add(left: checkView)
+      updateIcons()
     }
 
     keyboardType = .URL
@@ -259,17 +262,34 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  func assignLeadingAndTrailingIcons(leading: UIView, trailing: UIView) {
+//  func assignLeadingAndTrailingIcons(leading: UIView, trailing: UIView) {
+//    self.leftViewMode = .always
+//    self.rightViewMode = .always
+//
+//    if W3WSettings.leftToRight {
+//      self.leftView = leading
+//      self.rightView = trailing
+//    } else {
+//      self.leftView = trailing
+//      self.rightView = leading
+//    }
+//  }
+  
+  
+  func updateIcons() {
     self.leftViewMode = .always
     self.rightViewMode = .always
 
+    let icon = (checkView?.isHidden ?? true) ? voiceIconView : checkView
+    
     if W3WSettings.leftToRight {
-      self.leftView = leading
-      self.rightView = trailing
+      self.leftView  = slashesView
+      self.rightView = icon
     } else {
-      self.leftView = trailing
-      self.rightView = leading
+      self.leftView  = icon
+      self.rightView = slashesView
     }
+
   }
   
   
@@ -277,10 +297,12 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   public override func layoutSubviews() {
     super.layoutSubviews()
     
-    iconsView?.resize()
-    if let sv = slashesView, let iv = iconsView {
-      assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
-    }
+    updateIcons()
+    
+    //iconsView?.resize()
+    //if let sv = slashesView, let iv = iconsView {
+    //  assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
+    //}
     //if let iv = iconsView {
     //  assignLeadingAndTrailingIcons(leading: nil, trailing: iv)
     //}
@@ -339,6 +361,8 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
         self.checkView?.isHidden = true
         self.voiceIconView?.isHidden = true
       }
+      
+      self.updateIcons()
     }
   }
   

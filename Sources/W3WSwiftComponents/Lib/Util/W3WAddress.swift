@@ -11,7 +11,7 @@ import Foundation
 class W3WAddress {
   
   static func equal(w1: String, w2: String) -> Bool {
-    return W3WAddress.removeLeadingSlashes(w1) == W3WAddress.removeLeadingSlashes(w2)
+    return W3WAddress.removeLeadingSlashes(w1).lowercased() == W3WAddress.removeLeadingSlashes(w2).lowercased()
   }
   
   
@@ -23,6 +23,7 @@ class W3WAddress {
     
     return x;
   }
+  
   
   static func ensureLeadingSlashes(_ w: String) -> String {
     return "///" + W3WAddress.removeLeadingSlashes(w)

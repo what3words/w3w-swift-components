@@ -79,17 +79,43 @@ class W3WFormatter {
     
     let formatter = MKDistanceFormatter()
     formatter.unitStyle = .abbreviated
-
+    
     // note: W3WSettings.measurement might be .userPreference, in which case formatter.units is let to it's default
     if W3WSettings.measurement == .metric {
       formatter.units = .metric
     } else if W3WSettings.measurement == .imperial {
       formatter.units = .imperial
     }
-
+    
     distance = formatter.string(fromDistance: meters)
-
+    
     return distance
   }
+
   
+  public static func distanceAsString(kilometers: Double) -> String {
+    var distance = ""
+    
+    let formatter = MKDistanceFormatter()
+    formatter.unitStyle = .abbreviated
+    
+    // note: W3WSettings.measurement might be .userPreference, in which case formatter.units is let to it's default
+    if W3WSettings.measurement == .metric {
+      formatter.units = .metric
+    } else if W3WSettings.measurement == .imperial {
+      formatter.units = .imperial
+    }
+    
+    if kilometers == 0 {
+      distance = "<" + formatter.string(fromDistance: 1000.0)
+    } else {
+      distance = formatter.string(fromDistance: kilometers * 1000.0)
+    }
+    //distance = formatter.string(fromDistance: 2.0)
+    
+    distance = distance.replacingOccurrences(of: ".0", with: "")
+    
+    return distance
+  }
+
 }

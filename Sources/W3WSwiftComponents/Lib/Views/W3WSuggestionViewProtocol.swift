@@ -46,7 +46,9 @@ extension W3WSuggestionViewProtocol {
     }
     
     if let distance = suggestion.distanceToFocus {
-      distanceLabel?.text = W3WFormatter.distanceAsString(meters: distance)
+      distanceLabel?.text = W3WFormatter.distanceAsString(kilometers: distance)
+    } else {
+      distanceLabel?.text = ""
     }
     
     if let code = suggestion.country {
@@ -93,6 +95,13 @@ extension W3WSuggestionViewProtocol {
     if let d = distanceLabel {
       addSubview(d)
     }
+    
+    if let cell = self as? UITableViewCell {
+      let cellBackground = UIView()
+      cellBackground.backgroundColor = W3WSettings.componentsHighlightBacking
+      cell.selectedBackgroundView = cellBackground
+    }
+    
   }
   
   
@@ -111,12 +120,13 @@ extension W3WSuggestionViewProtocol {
   /// set if this one should stand out form the rest
   public func set(highlight: Bool) {
     self.highlight = highlight
-    //if let p = wordsLabel?.font.fontDescriptor.pointSize {
-    //  set(titleFontSize: p)
-    //}
-    
+
     // set the background colour
-    if self.highlight {
+    if let cell = self as? UITableViewCell {
+      cell.isHighlighted = highlight
+      
+    // also enable highlighting in the case this isn't a UITableViewCell
+    } else if self.highlight {
       backgroundColor = W3WSettings.componentsHighlightBacking
     } else {
       backgroundColor = W3WSettings.componentsTableCellBacking
@@ -276,7 +286,7 @@ extension W3WSuggestionViewProtocol {
 
     if suggestion?.distanceToFocus != nil {
       distanceLabel?.font = wordsLabel?.font.withSize(descriptionTextHeight())
-//      distanceLabel?.text = W3WFormatter.distanceAsString(meters: distance)
+//      distanceLabel?.text = W3WFormatter.distanceAsString(kilometers: distance)
       distanceLabel?.sizeToFit()
       if W3WSettings.leftToRight {
         distanceLabel?.frame = CGRect(x: frame.width - (distanceLabel?.frame.width ?? 0.0) - space, y: y, width: (distanceLabel?.frame.width ?? 0.0), height: secondHeight)

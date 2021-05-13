@@ -73,7 +73,7 @@ System Settings
 
 #### Measurements
 
-The measurement system in these components are set to the user's preference or locale automatically, but you can override this to `.metric`, `.imperial`, or `.userPreference`:
+The measurement system in these components are set to the user's preference or locale automatically, but you can override this to `.metric`, or `.imperial`:
 
 ```swift
 W3WSettings.measurement = .metric

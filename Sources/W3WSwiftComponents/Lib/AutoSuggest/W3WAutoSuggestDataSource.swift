@@ -540,6 +540,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   }
 
   
+  // MARK: Utility
+  
   // Establish the various version numbers in order to set an HTTP header
   private func figureOutVersionInfo() -> String {
     #if os(macOS)
