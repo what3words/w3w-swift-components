@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
   name: "w3w-swift-components",
+  defaultLocalization: "en",
   products: [
     // Products define the executables and libraries a package produces, and make them visible to other packages.
     .library(
@@ -21,7 +22,9 @@ let package = Package(
     .target(
       name: "W3WSwiftComponents",
       dependencies: [.product(name: "W3WSwiftApi", package: "w3w-swift-wrapper")],
-      resources: [.copy("Resources/flag.water.png"), .copy("Resources/logo.png")]
+      //resources: [.copy("Resources/flag.water.png"), .copy("Resources/logo.png")]
+      resources: [.process("Resources")]
+      //resources: [.copy("Resources")]
     ),
     .testTarget(
       name: "w3w-swift-componentsTests",

@@ -53,8 +53,15 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
     }
   }
 
+  
   public init() {
     super.init(searchResultsController: autoSuggestViewController)
+    
+    let x = Bundle.module
+    print(x)
+    
+    print(NSLocalizedString("input_hint", bundle: x, comment: "e.g. ///lock.spout.radar"))
+//    abort()
   }
   
   

@@ -1,0 +1,35 @@
+/*
+  Localizable.strings
+  W3W Components
+
+  Created by Dave Duprey on 05/13/2021.
+  Copyright © 2021 what3words. All rights reserved.
+
+*/
+
+/* No comment provided by engineer. */
+"w3w_slashes" = "///"
+
+/* No comment provided by engineer. */
+"w3w_slashes_with_address" = "///%s"
+
+/* No comment provided by engineer. */
+"input_hint" = "e.g. index.home.raft"
+
+/* No comment provided by engineer. */
+"invalid_address_message" = "No valid what3words address found"
+
+/* No comment provided by engineer. */
+"error_message" = "An error occurred. Please try again later"
+
+/* No comment provided by engineer. */
+"voice_placeholder" = "Say a 3 word address…"
+
+/* No comment provided by engineer. */
+"near" = "near %s"
+
+/* No comment provided by engineer. */
+"distance" = "%s km"
+
+/* No comment provided by engineer. */
+"correction_message" = "Did you mean?"
