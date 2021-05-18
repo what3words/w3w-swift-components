@@ -377,6 +377,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       
       // call autosuggest with the audio stream from the microphone
       voiceapi.autosuggest(audio: microphone, language:language, options: options, callback: { suggestions, error in
+        self.lastAutosuggestTextUsed = ""
         if let e = error {
           self.update(voiceApiError: e)
         } else {
@@ -428,30 +429,23 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func log(selection: W3WSuggestion) {
     // if we are using the API, report activity
     if let api = w3w as? What3WordsV3 {
-      if !api.customServersSet() {
-        var parameters = [
-          "raw-input": lastAutosuggestTextUsed,
-          "selection": selection.words ?? "",
-          "rank": ""
-        ]
-        
-        if let s = selection as? W3WApiSuggestion {
-          if let rank = s.rank {
-            parameters["rank"] = "\(rank)"
+      
+      // check if 'rank' is avilable in the suggestion
+      if let s = selection as? W3WRanked {
+        if let rank = s.rank {
+      
+          // check what kind of suggestion this is, and if it's voice then indicate that
+          var sourceApi = W3WSelectionType.text
+          if let _ = selection as? W3WVoiceSuggestion {
+            sourceApi = .voice
           }
-        }
-        
-        if let _ = selection as? W3WVoiceSuggestion {
-          parameters["source-api"] = "voice"
-        }
-        
-        api.performRequest(path: "/autosuggest-selection", params: parameters) { results, error in
-          // nothing is returned, and we ignore any error too
+          
+          api.autosuggestSelection(selection: selection.words ?? "", rank: rank, rawInput: lastAutosuggestTextUsed, sourceApi: sourceApi)
         }
       }
     }
   }
-  
+
   
   
   // MARK: Errors
