@@ -49,12 +49,13 @@ public class W3WCheckIconView: W3WDrawingView {
   
   override public func make(_ rect: CGRect) {
     // gets a radius for the innermost circle
-    let radius = min(rect.size.width, rect.size.height) / 2.0
+    let radius = min(rect.size.width, rect.size.height) * 0.4
     
     // find the centre
     let centre = CGPoint(x:rect.midX, y:rect.midY)
+    let weight = radius * (1.0 / 12.0)
     
-    checkIcon(centre: centre, radius: radius, colour: W3WSettings.componentsCheckMarkColor, weight: radius * (1.0 / 12.0))
+    checkIcon(centre: centre, radius: radius - weight * 2.0, colour: W3WSettings.componentsCheckMarkColor, weight: weight)
   }
   
   

@@ -61,17 +61,15 @@ open class W3WVoiceIconView: W3WInteractiveDrawingView {
 
   /// draw the microphone
   override public func make(_ rect: CGRect) {
-    let weight:CGFloat? = lineWidth == nil ? nil : CGFloat(lineWidth!.floatValue)
+
+    // gets a radius for the innermost circle
+    let radius = min(rect.size.width, rect.size.height) * 0.4
     
-    var alignedRect = rect
-    
-    if alignment == .leading {
-      alignedRect = CGRect(x: 0.0, y: rect.origin.y, width: rect.size.height, height: rect.size.height)
-    } else if alignment == .trailing {
-      alignedRect = CGRect(x: rect.size.width - rect.size.height, y: rect.origin.y, width: rect.size.height, height: rect.size.height)
-    }
-    
-    voiceIcon(centre: CGPoint(x: alignedRect.midX, y: alignedRect.midY), radius: min(alignedRect.width, alignedRect.height) / 2.0, colour: iconColour, weight: weight)
+    // find the centre
+    let centre = CGPoint(x:rect.midX, y:rect.midY)
+    let weight = radius * (1.0 / 12.0)
+
+    voiceIcon(centre: CGPoint(x: rect.midX, y: rect.midY), radius: radius - weight * 2.0, colour: iconColour, weight: weight)
   }
   
   
