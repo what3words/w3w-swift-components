@@ -132,6 +132,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
     self.voiceEnabled = voice
     
     if voice && autoSuggestViewController.supportsVoice() {
+      self.autoSuggestViewController.initialiseMicrophone()
       showVoiceIcon()
     }
   }
