@@ -21,6 +21,7 @@ DerivedData
 /.swiftpm
 swiftpm/
 Package.resolved
+/Package.resolved
 
 
 # Bundler

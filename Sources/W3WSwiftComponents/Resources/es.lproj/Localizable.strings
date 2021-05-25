@@ -7,29 +7,29 @@
  
  */
 
-/* Slashes to prefix the three word address. */
+/* No comment provided by engineer. */
 "w3w_slashes" = "///";
 
-/* Slashes with a marker for the three word address */
+/* No comment provided by engineer. */
 "w3w_slashes_with_address" = "///%@";
 
-/* hint for text field */
+/* No comment provided by engineer. */
 "input_hint" = "e.g. index.home.raft";
 
-/* Warning message indicating no address */
+/* No comment provided by engineer. */
 "invalid_address_message" = "No valid what3words address found";
 
-/* Error message */
+/* No comment provided by engineer. */
 "error_message" = "An error occurred. Please try again later";
 
-/* Prompt to tell a user to speak */
+/* No comment provided by engineer. */
 "voice_placeholder" = "Say a 3 word address…";
 
-/* Indicate that the address is close to the place named in the parameter */
+/* No comment provided by engineer. */
 "near" = "near %@";
 
-/* Distance in kilometers */
+/* No comment provided by engineer. */
 "distance" = "%@ km";
 
-/* Ask the user if they meant something else */
+/* No comment provided by engineer. */
 "correction_message" = "Did you mean?";

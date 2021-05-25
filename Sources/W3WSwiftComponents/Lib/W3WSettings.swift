@@ -46,11 +46,11 @@ public extension W3WSettings {
   static let componentsIconPadding        = CGFloat(10.0)
   static let componentsLogoSize           = CGFloat(64.0)
   
-  static let componentsPlaceholderText    = NSLocalizedString("input_hint",               bundle: .module, comment: "e.g. ///lock.spout.radar")
-  static let componentsNearFormatText     = NSLocalizedString("near",                     bundle: .module, comment: "near %@")  // used to say NSLocalizedString("near %@", comment: "near %@"), but we need translations for this
-  static let technicalErrorText           = NSLocalizedString("error_message", 	          bundle: .module, comment: "There was some technical problem")
-  static let apiErrorText                 = NSLocalizedString("invalid_address_message",  bundle: .module, comment: "The API didn't have an answer for the given input")
-  static let didYouMeanText               = NSLocalizedString("correction_message",       bundle: .module, comment: "Asks if the user meant to write a different addres that is presented below this text")
+  static let componentsPlaceholderText    = NSLocalizedString("input_hint",               bundle: Bundle.module, comment: "e.g. ///lock.spout.radar")
+  static let componentsNearFormatText     = NSLocalizedString("near",                     bundle: Bundle.module, comment: "near %@")  // used to say NSLocalizedString("near %@", comment: "near %@"), but we need translations for this
+  static let technicalErrorText           = NSLocalizedString("error_message", 	          bundle: Bundle.module, comment: "There was some technical problem")
+  static let apiErrorText                 = NSLocalizedString("invalid_address_message",  bundle: Bundle.module, comment: "The API didn't have an answer for the given input")
+  static let didYouMeanText               = NSLocalizedString("correction_message",       bundle: Bundle.module, comment: "Asks if the user meant to write a different addres that is presented below this text")
   
   static let regex_3wa_characters         = "^/*([^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]|[.｡。･・︒។։။۔።।]){0,}$"
   static let regex_3wa_separator          = "[.｡。･・︒។։။۔።।]"

@@ -12,7 +12,7 @@ import W3WSwiftApi
 
 
 /// protocol for talking to the textfield, either a W3WAutosuggestTextField, or W3WAutosuggestSearcController at this point
-protocol W3AutoSuggestResultsViewControllerDelegate {
+public protocol W3AutoSuggestResultsViewControllerDelegate {
   func suggestionsLocation(preferedHeight: CGFloat) -> CGRect
   func errorLocation(preferedHeight: CGFloat) -> CGRect
   func getParentView() -> UIView
@@ -26,10 +26,10 @@ protocol W3AutoSuggestResultsViewControllerDelegate {
 
 
 /// presents W3WSuggestions to the user for them to choose one
-class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggestDataSourceDelegate, W3WMicrophoneViewControllerDelegate, W3WOptionAcceptorProtocol {
+public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggestDataSourceDelegate, W3WMicrophoneViewControllerDelegate, W3WOptionAcceptorProtocol {
   
   // the text field's conform to this so we can send updates to them
-  var delegate: W3AutoSuggestResultsViewControllerDelegate?
+  public var delegate: W3AutoSuggestResultsViewControllerDelegate?
   
   /// shows the microphone inside the text field (only works for W3WTextField for now)
   var showMicInTextField = true
@@ -65,7 +65,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
   
   /// sets up the UI
-  override func viewWillAppear(_ animated: Bool) {
+  override public func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
@@ -82,7 +82,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
 
   
   /// sets the API or SDK and initializes the datasource for making API calls and updating suggestions
-  func set(w3w: W3WProtocolV3) {
+  public func set(_ w3w: W3WProtocolV3) {
     autoSuggestDataSource = W3AutoSuggestDataSource()
     autoSuggestDataSource.set(w3w: w3w)
     autoSuggestDataSource.delegate = self
@@ -95,7 +95,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   /// assigns an array of options to use on autosuggest calls
   /// - Parameters:
   ///     - options: an array of W3WOption
-  func set(options: [W3WOption]) {
+  public func set(options: [W3WOption]) {
     autoSuggestDataSource?.set(options: options)
   }
   
@@ -136,7 +136,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
 
   /// called when the user slects a cell
-  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+  override public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {
       datasource.update(rowSelected: indexPath.row)
     }
@@ -144,7 +144,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
   
   /// sets the cell height
-  override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+  override public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return cellHeight
   }
   
@@ -166,6 +166,10 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
     return autoSuggestDataSource?.groom(text: text) ?? text
   }
   
+  
+  public func updateSuggestions(text: String) {
+    autoSuggestDataSource.updateSuggestions(text: text)
+  }
   
   
   // MARK: W3AutoSuggestDataSourceDelegate
@@ -620,12 +624,12 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   // MARK: W3MicrophoneViewControllerDelegate
   
   /// Microphone view controller close button pressed
-  func closeButtonPressed() {
+  public func closeButtonPressed() {
     self.autoSuggestDataSource.stopListening()
     self.hideMicrophone()
   }
   
-  func voiceButtonPressed() {
+  public func voiceButtonPressed() {
     if self.autoSuggestDataSource.isListening() {
       self.autoSuggestDataSource.stopListening()
       microphoneViewController?.set(engaged: false)

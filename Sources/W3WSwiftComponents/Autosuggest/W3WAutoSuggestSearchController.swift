@@ -56,12 +56,6 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   public init() {
     super.init(searchResultsController: autoSuggestViewController)
-    
-    let x = Bundle.module
-    print(x)
-    
-    print(NSLocalizedString("input_hint", bundle: x, comment: "e.g. ///lock.spout.radar"))
-//    abort()
   }
   
   
@@ -75,7 +69,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   ///     - w3w: the what3words API or SDK
   ///     - language: a ISO two letter langauge code
   public func set(_ w3w: W3WProtocolV3, language: String = "en") {
-    autoSuggestViewController.set(w3w: w3w)
+    autoSuggestViewController.set(w3w)
     configure()
     
     // this can affect voice ability, reset the voice icon
@@ -216,7 +210,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// called when new suggestions are avialable
   /// - Parameters:
   ///     - suggestions: the new suggestions
-  func update(suggestions: [W3WSuggestion]) {
+  public func update(suggestions: [W3WSuggestion]) {
     if let suggestion = suggestions.first as? W3WVoiceSuggestion {
       if let words = suggestion.words {
         //self.searchBar.text = words
@@ -229,7 +223,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// called when the user selects a suggestion
   /// - Parameters:
   ///     - selected: the suggestion chosen by the user
-  func update(selected: W3WSuggestion) {
+  public func update(selected: W3WSuggestion) {
     if let words = selected.words {
       update(text: W3WAddress.ensureLeadingSlashes(words))
       suggestionSelected(selected)
@@ -242,12 +236,12 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   /// notifies when and if the address in the text field is a known three word address
-  func update(valid3wa: Bool) {
+  public func update(valid3wa: Bool) {
   }
   
   
   /// called when an error happens
-  func update(error: W3WAutosuggestComponentError) {
+  public func update(error: W3WAutosuggestComponentError) {
     onError(error)
   }
   
@@ -256,7 +250,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   /// instructs the suggestions view on a good place to position itself
-  func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
+  public func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
     let origin = self.view.frame.origin
     let size   = CGSize(width: self.searchBar.frame.size.width, height: preferedHeight)
     
@@ -265,7 +259,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   /// tells the suggestions view a good place for the error notice
-  func errorLocation(preferedHeight: CGFloat) -> CGRect {
+  public func errorLocation(preferedHeight: CGFloat) -> CGRect {
     var frame = self.searchBar.superview?.subviews.first?.subviews.first?.frame ?? CGRect.zero
     frame.origin.y += frame.size.height
     frame.size.height = preferedHeight
@@ -275,19 +269,19 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
 
   
   /// gives the suggestions view self's view so it can place itself on it
-  func getParentView() -> UIView {
+  public func getParentView() -> UIView {
     return self.view
   }
   
   
   /// returns the text currently being displayed
-  func getCurrentText() -> String? {
+  public func getCurrentText() -> String? {
     return searchBar.text
   }
 
   
   /// replaces the text in the text field
-  func replace(text: String) {
+  public func replace(text: String) {
     DispatchQueue.main.async {
       self.searchBar.text = text
     }
@@ -368,7 +362,8 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
       if searchBar.text != "" {
         if !autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: searchBar.text) {
           searchBar.text = ""
-          autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
+          //autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
+          autoSuggestViewController.updateSuggestions(text: "")
           autoSuggestViewController.autoSuggestDataSource.update(error: .noValidAdressFound)
         }
       }

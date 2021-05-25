@@ -74,7 +74,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   ///     - w3w: the what3words API or SDK
   ///     - language: a ISO two letter langauge code
   public func set(_ w3w: W3WProtocolV3, language: String = "en") {
-    autoSuggestViewController.set(w3w: w3w)
+    autoSuggestViewController.set(w3w)
     configure()
     confireuUI()
     
@@ -324,14 +324,14 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   /// called when new suggestions are avialable
   /// - Parameters:
   ///     - suggestions: the new suggestions
-  func update(suggestions: [W3WSuggestion]) {
+  public func update(suggestions: [W3WSuggestion]) {
   }
   
   
   /// called when the user selects a suggestion
   /// - Parameters:
   ///     - selected: the suggestion chosen by the user
-  func update(selected: W3WSuggestion) {
+  public func update(selected: W3WSuggestion) {
     if let words = selected.words {
       update(text: W3WAddress.ensureLeadingSlashes(words))
       suggestionSelected(selected)
@@ -343,7 +343,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   /// notifies when and if the address in the text field is a known three word address
   /// shows the green check mark on the right of the field
-  func update(valid3wa: Bool) {
+  public func update(valid3wa: Bool) {
     DispatchQueue.main.async {
       
       // show green check on valid 3wa
@@ -368,7 +368,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   /// called when an error happens
-  func update(error: W3WAutosuggestComponentError) {
+  public func update(error: W3WAutosuggestComponentError) {
     onError(error)
   }
   
@@ -410,7 +410,8 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     if !allowInvalid3wa && !autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: text ?? "") {
       if !autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: text) {
         text = ""
-        autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
+        //autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
+        autoSuggestViewController.updateSuggestions(text: "")
         autoSuggestViewController.autoSuggestDataSource.update(error: .noValidAdressFound)
       }
     }
@@ -433,7 +434,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   /// instructs the suggestions view on a good place to position itself
-  func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
+  public func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
     var origin = frame.origin
     origin.y += frame.size.height + W3WSettings.componentsTableTopMargin
     
@@ -444,7 +445,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   /// tells the suggestions view a good place for the error notice
-  func errorLocation(preferedHeight: CGFloat) -> CGRect {
+  public func errorLocation(preferedHeight: CGFloat) -> CGRect {
     var f = frame
     f.origin.y += f.size.height
     f.size.height = preferedHeight
@@ -455,19 +456,19 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
 
   
   /// gives the suggestions view self's view so it can place itself on it
-  func getParentView() -> UIView {
+  public func getParentView() -> UIView {
     return self
   }
   
   
   /// returns the text currently being displayed
-  func getCurrentText() -> String? {
+  public func getCurrentText() -> String? {
     return text
   }
   
 
   /// replaces the text in the text field
-  func replace(text: String) {
+  public func replace(text: String) {
     DispatchQueue.main.async {
       self.text = text
     }
