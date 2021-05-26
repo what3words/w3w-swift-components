@@ -52,8 +52,10 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   var iconSize:CGFloat    = W3WSettings.componentsSlashesIconSize
   var iconPadding:CGFloat = W3WSettings.componentsSlashesPadding
   
-  //var leftPadding:CGFloat  = 16.0
+  var leftPadding:CGFloat  = 16.0
   var rightPadding:CGFloat = 16.0
+  var padding = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+  
 
   
   public override init(frame: CGRect) {
@@ -140,12 +142,15 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
 
     if voiceEnabled && autoSuggestViewController.supportsVoice() {
       if autoSuggestViewController.supportsVoice() {
+        self.autoSuggestViewController.initialiseMicrophone()
         if voiceIconView == nil {
-          voiceIconView = W3WVoiceIconView()
-          voiceIconView.set(padding: frame.size.height * 0.2)
-          voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
-          //iconsView.add(right: voiceIconView)
-          updateIcons()
+          DispatchQueue.main.async {
+            self.voiceIconView = W3WVoiceIconView()
+            self.voiceIconView.set(padding: self.frame.size.height * 0.2)
+            self.voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
+            //iconsView.add(right: voiceIconView)
+            self.updateIcons()
+          }
         }
 //        DispatchQueue.main.async {
 //          self.voiceIconView?.isHidden = false
@@ -168,6 +173,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   public func set(rightPadding: CGFloat) {
     self.rightPadding = rightPadding
+    self.padding      = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
   }
 
   
@@ -177,10 +183,24 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     set(options: [W3WOption.voiceLanguage(autoSuggestViewController.autoSuggestDataSource.language)])
   }
   
+    
+  override open func textRect(forBounds bounds: CGRect) -> CGRect {
+    return bounds.inset(by: padding)
+  }
+  
+  override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+    return bounds.inset(by: padding)
+  }
+  
+  override open func editingRect(forBounds bounds: CGRect) -> CGRect {
+    return bounds.inset(by: padding)
+  }
   
   /// initializes the UI
   func confireuUI() {
     clipsToBounds = true
+    
+    padding = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
     
     if backgroundColor == nil {
       backgroundColor = .white
@@ -222,11 +242,13 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     updateIcons()
     
     if checkView == nil {
-      checkView = W3WCheckIconView()
-      checkView.set(padding: frame.size.height * 0.2)
-      checkView.isHidden = true
-      //iconsView.add(left: checkView)
-      updateIcons()
+      DispatchQueue.main.async {
+        self.checkView = W3WCheckIconView()
+        self.checkView.set(padding: self.frame.size.height * 0.15)
+        self.checkView.isHidden = true
+        //iconsView.add(left: checkView)
+        self.updateIcons()
+      }
     }
 
     keyboardType = .URL
@@ -239,7 +261,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     DispatchQueue.main.async {
       //self.slashesView.frame = CGRect(x: self.slashesPadding, y: self.slashesPadding, width: self.slashesSize, height: self.slashesSize)
       self.voiceIconView?.frame = CGRect(x: self.iconPadding, y: self.iconPadding, width: self.iconSize, height: self.iconSize)
-      self.checkView?.frame = CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.8, height: self.frame.size.height * 0.8)
+      //self.checkView?.frame = CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.2, height: self.frame.size.height * 0.2)
     }
     
     if placeholder == nil {
@@ -253,13 +275,13 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   //}
   
   
-  override public func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-    if W3WSettings.leftToRight {
-      return CGRect(x: frame.size.width - frame.size.height * 0.8 - rightPadding, y: 0.0, width: frame.size.height, height: frame.size.height)
-    } else {
-      return CGRect(x: frame.size.width - frame.size.height * 0.8 - rightPadding * 0.75, y: 0.0, width: frame.size.height, height: frame.size.height)
-    }
-  }
+//  override public func rightViewRect(forBounds bounds: CGRect) -> CGRect {
+//    if W3WSettings.leftToRight {
+//      return CGRect(x: frame.size.width - frame.size.height * 0.8 - rightPadding, y: 0.0, width: frame.size.height, height: frame.size.height)
+//    } else {
+//      return CGRect(x: frame.size.width - frame.size.height * 0.8 - rightPadding * 0.75, y: 0.0, width: frame.size.height, height: frame.size.height)
+//    }
+//  }
   
   
 //  func assignLeadingAndTrailingIcons(leading: UIView, trailing: UIView) {

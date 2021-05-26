@@ -133,6 +133,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
     self.voiceEnabled = voice
     
     if voice && autoSuggestViewController.supportsVoice() {
+      self.autoSuggestViewController.initialiseMicrophone()
       showVoiceIcon()
     }
   }
@@ -158,7 +159,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
       //voiceIconView.insets = UIEdgeInsets(top: 1.0, left: 1.0, bottom: 1.0, right:1.0)
       //voiceIconView.alignment = .leading
       //voiceIconView.set(padding: self.searchBar.frame.size.height * 0.3)
-      voiceIconView.set(padding: 1.0)
+      voiceIconView.set(padding: 0.0)
       
       self.searchBar.showsBookmarkButton = true
       self.searchBar.setImage(voiceIconView.asImage(), for: .bookmark, state: .normal)

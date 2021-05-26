@@ -120,14 +120,16 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     self.freeformText = freeformText
   }
 
-
-  /// do initial set up
-  func configure() {
-    // initialize the microphone and localize two of it's event closures to be used by viewcontrollers associated with this object
+  /// initialize the microphone and localize two of it's event closures to be used by viewcontrollers associated with this object
+  func initialiseMicrophone() {
     microphone = W3WMicrophone()
     microphone.volumeUpdate = { volume in self.volumeUpdate(volume) }
     microphone.listeningUpdate = { state in self.listeningUpdate(state) }
-    
+  }
+
+
+  /// do initial set up
+  func configure() {    
     // set up the debouncer as to not call autosuggest too rapidly
     suggestionsDebouncer = W3WTextFieldDebouncer(delay: 1.0, handler: { text in self.updateSuggestions(text: text) })
   }

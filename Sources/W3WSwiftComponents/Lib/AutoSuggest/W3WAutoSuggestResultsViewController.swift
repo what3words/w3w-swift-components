@@ -131,7 +131,11 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   }
   
   
+  func initialiseMicrophone() {
+    autoSuggestDataSource.initialiseMicrophone()
+  }
   
+
   // MARK: UITableViewDelegate
   
 
