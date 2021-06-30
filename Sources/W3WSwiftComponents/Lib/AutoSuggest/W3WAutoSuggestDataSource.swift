@@ -396,7 +396,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   /// if this is currently recording the user's voice
   func isListening() -> Bool {
-    return microphone.isRecording()
+    return microphone?.isRecording() ?? false
   }
   
   
