@@ -33,7 +33,7 @@ extension W3WSuggestionViewProtocol {
     self.suggestion = suggestion
     
     let threeWordAddressText = W3WFormatter(suggestion.words)
-    wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: W3WSettings.componentsAddressTextSize, slashColor: W3WSettings.componentsSlashesColor)
+    wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: W3WSettings.componentsAddressTextSize, slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
     
     if let place = suggestion.nearestPlace {
       if (suggestion.language ?? "") == "en" && !place.isEmpty {
@@ -107,13 +107,13 @@ extension W3WSuggestionViewProtocol {
   
 
   /// adjust the font size of the title
-  func set(titleFontSize: CGFloat) {
-    if self.highlight {
-      wordsLabel?.font = UIFont.systemFont(ofSize: titleFontSize, weight: .semibold)
-    } else {
-      self.wordsLabel?.font = UIFont.systemFont(ofSize: titleFontSize, weight: .regular)
-    }
-  }
+//  func set(titleFontSize: CGFloat) {
+//    if self.highlight {
+//      wordsLabel?.font = UIFont.systemFont(ofSize: titleFontSize, weight: .semibold)
+//    } else {
+//      self.wordsLabel?.font = UIFont.systemFont(ofSize: titleFontSize, weight: .regular)
+//    }
+//  }
   
   
   
@@ -196,7 +196,7 @@ extension W3WSuggestionViewProtocol {
     let height = wordsLabelHeight()
 
     let threeWordAddressText = W3WFormatter("")
-    wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor)
+    wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
     wordsLabel?.sizeToFit()
 
     if W3WSettings.leftToRight {
@@ -239,7 +239,7 @@ extension W3WSuggestionViewProtocol {
     wordsLabel?.frame = CGRect(x: lead, y: (frame.height - height) / 2.0, width: frame.size.width - lead * 2.0, height: height)
     if let words = suggestion?.words {
       let threeWordAddressText = W3WFormatter(words)
-      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor)
+      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
     }
   }
   
@@ -255,10 +255,10 @@ extension W3WSuggestionViewProtocol {
     
     if W3WSettings.leftToRight {
       wordsLabel?.textAlignment = .left
-      nearestPlaceLabel?.textAlignment     = .left
+      nearestPlaceLabel?.textAlignment = .left
     } else {
       wordsLabel?.textAlignment = .right
-      nearestPlaceLabel?.textAlignment     = .right
+      nearestPlaceLabel?.textAlignment = .right
     }
 
     var lineWidth = frame.size.width - lead * 2.0
@@ -266,7 +266,7 @@ extension W3WSuggestionViewProtocol {
     wordsLabel?.frame = CGRect(x: lead, y: space, width: lineWidth, height: height)
     if let words = suggestion?.words {
       let threeWordAddressText = W3WFormatter(words)
-      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor)
+      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
     }
 
     let y = space + height + internalSpace
@@ -298,7 +298,11 @@ extension W3WSuggestionViewProtocol {
     }
     
     if suggestion?.nearestPlace != nil {
-      nearestPlaceLabel?.font = wordsLabel?.font.withSize(descriptionTextHeight())
+      // get the same font as used by the address, but the regular version of it
+      if let font = wordsLabel?.font {
+        let descriptor = font.fontDescriptor.addingAttributes([.traits: [UIFontDescriptor.TraitKey.weight: UIFont.Weight.regular]])
+        nearestPlaceLabel?.font = UIFont(descriptor: descriptor, size: descriptionTextHeight())
+      }
       nearestPlaceLabel?.sizeToFit()
       if W3WSettings.leftToRight {
         nearestPlaceLabel?.frame = CGRect(x: inset, y: y, width: frame.width - inset - space - internalSpace - (distanceLabel?.frame.width ?? 0.0), height: secondHeight)

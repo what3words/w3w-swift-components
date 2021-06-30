@@ -136,6 +136,11 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   }
   
 
+  func isValid3wa(text: String) -> Bool {
+    return autoSuggestDataSource.isInKnownAddressList(text: text)
+  }
+  
+  
   // MARK: UITableViewDelegate
   
 

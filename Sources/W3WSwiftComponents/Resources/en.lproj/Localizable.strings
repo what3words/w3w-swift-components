@@ -14,7 +14,7 @@
 "w3w_slashes_with_address" = "///%@";
 
 /* hint for text field */
-"input_hint" = "e.g. index.home.raft";
+"input_hint" = "e.g. ///index.home.raft";
 
 /* Warning message indicating no address */
 "invalid_address_message" = "No valid what3words address found";

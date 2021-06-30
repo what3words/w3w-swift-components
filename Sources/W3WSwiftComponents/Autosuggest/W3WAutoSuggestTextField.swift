@@ -313,7 +313,31 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     }
 
   }
+
   
+  
+  func update(checkmark: Bool) {
+    // show green check on valid 3wa
+    if checkmark {
+      self.checkView?.isHidden = false
+      self.voiceIconView?.isHidden = true
+      
+      // show voice icon if voice is enabled and supported by the w3w engine
+    } else if self.voiceEnabled && self.autoSuggestViewController.supportsVoice() {
+      self.checkView?.isHidden = true
+      self.voiceIconView?.isHidden = false
+      
+      // word is not a valied 3wa and voice is not available - show no icon
+    } else {
+      self.checkView?.isHidden = true
+      self.voiceIconView?.isHidden = true
+    }
+    
+    self.updateIcons()
+  }
+  
+  
+
   
   /// puts all subviews into their place
   public override func layoutSubviews() {
@@ -359,32 +383,20 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       suggestionSelected(selected)
       textChanged(words)
       dismissKeyboard()
+      DispatchQueue.main.async {
+        self.update(checkmark: self.autoSuggestViewController.isValid3wa(text: self.text ?? ""))
+      }
     }
   }
   
   
   /// notifies when and if the address in the text field is a known three word address
-  /// shows the green check mark on the right of the field
+  /// removes the green check mark on the right of the field if the word isn't valid
   public func update(valid3wa: Bool) {
-    DispatchQueue.main.async {
-      
-      // show green check on valid 3wa
-      if valid3wa {
-        self.checkView?.isHidden = false
-        self.voiceIconView?.isHidden = true
-        
-      // show voice icon if voice is enabled and supported by the w3w engine
-      } else if self.voiceEnabled && self.autoSuggestViewController.supportsVoice() {
-        self.checkView?.isHidden = true
-        self.voiceIconView?.isHidden = false
-        
-      // word is not a valied 3wa and voice is not available - show no icon
-      } else {
-        self.checkView?.isHidden = true
-        self.voiceIconView?.isHidden = true
+    if !valid3wa {
+      DispatchQueue.main.async {
+        self.update(checkmark: valid3wa)
       }
-      
-      self.updateIcons()
     }
   }
   
@@ -514,6 +526,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
             self.resignFirstResponder()
             self.autoSuggestViewController.hideSuggestions()
             //self.text = ""
+            self.update(checkmark: self.autoSuggestViewController.isValid3wa(text: words))
           }
         }
       }
