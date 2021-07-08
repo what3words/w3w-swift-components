@@ -141,7 +141,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
 
     if voiceEnabled && autoSuggestViewController.supportsVoice() {
       if autoSuggestViewController.supportsVoice() {
-        self.autoSuggestViewController.initialiseMicrophone()
+        //self.autoSuggestViewController.initialiseMicrophone()
         if voiceIconView == nil {
           DispatchQueue.main.async {
             self.voiceIconView = W3WVoiceIconView()

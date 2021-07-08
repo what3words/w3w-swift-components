@@ -122,9 +122,11 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
 
   /// initialize the microphone and localize two of it's event closures to be used by viewcontrollers associated with this object
   func initialiseMicrophone() {
-    microphone = W3WMicrophone()
-    microphone.volumeUpdate = { volume in self.volumeUpdate(volume) }
-    microphone.listeningUpdate = { state in self.listeningUpdate(state) }
+    if microphone == nil {
+      microphone = W3WMicrophone()
+      microphone.volumeUpdate = { volume in self.volumeUpdate(volume) }
+      microphone.listeningUpdate = { state in self.listeningUpdate(state) }
+    }
   }
 
 
@@ -367,6 +369,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
 
   /// start recoring the voice input
   func startListening() {
+    
+    initialiseMicrophone()
     
     if microphone.isRecording() {
       microphone.stop()

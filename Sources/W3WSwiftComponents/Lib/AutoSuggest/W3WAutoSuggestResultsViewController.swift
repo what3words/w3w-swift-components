@@ -131,9 +131,9 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   }
   
   
-  func initialiseMicrophone() {
-    autoSuggestDataSource.initialiseMicrophone()
-  }
+  //func initialiseMicrophone() {
+  //  autoSuggestDataSource.initialiseMicrophone()
+  //}
   
 
   func isValid3wa(text: String) -> Bool {
