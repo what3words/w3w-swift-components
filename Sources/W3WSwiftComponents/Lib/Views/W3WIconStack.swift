@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+/// a view containing a number of icons for display in a textfield
 class W3WIconStack: UIView {
 
   var icons   = [UIView]()

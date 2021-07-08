@@ -12,7 +12,7 @@ import W3WSwiftApi
 /// A text field, based on UITextField with a what3words autocomplete function
 @IBDesignable
 open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
-
+  
   /// callback for when the user choses a suggestion
   public var suggestionSelected: W3WSuggestionResponse = { _ in }
 
@@ -47,7 +47,6 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   var slashesView: UIView! // W3WSlashesView!
   var voiceIconView: W3WVoiceIconView!
   var checkView: W3WCheckIconView!
-  //var iconsView: W3WIconStack!
   
   var iconSize:CGFloat    = W3WSettings.componentsSlashesIconSize
   var iconPadding:CGFloat = W3WSettings.componentsSlashesPadding
@@ -152,23 +151,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
             self.updateIcons()
           }
         }
-//        DispatchQueue.main.async {
-//          self.voiceIconView?.isHidden = false
-//        }
       }
-
-    } else {
-//      DispatchQueue.main.async {
-//        self.voiceIconView?.isHidden = true
-//      }
     }
-
   }
-
-  
-  //public func set(leftPadding: CGFloat) {
-  //  self.leftPadding = leftPadding
-  //}
 
   
   public func set(rightPadding: CGFloat) {
@@ -200,11 +185,13 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   func confireuUI() {
     clipsToBounds = true
     
+    disable(darkmode: true)
+    
     padding = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
     
-    if backgroundColor == nil {
-      backgroundColor = .white
-    }
+    //if backgroundColor == nil {
+    //  backgroundColor = W3WSettings.componentsTextfieldBackground
+    //}
     
     if W3WSettings.leftToRight {
       textAlignment = .left
@@ -223,22 +210,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     if slashesView == nil {
       slashesView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.309, height: self.frame.size.height))
     }
-    //if slashesView == nil {
-    //  slashesView = W3WSlashesView(frame: CGRect(x: slashesPadding, y: slashesPadding, width: frame.size.height, height: frame.size.height))
-    //}
-    //if W3WSettings.leftToRight {
-    //  slashesView.set(padding: 2.0)
-    //} else {
-    //  slashesView.set(padding: 8.0)
-    //}
-    
-    //if iconsView == nil {
-    //  iconsView = W3WIconStack(frame: CGRect(x: 0.0, y: 0.0, width: iconPadding, height: iconPadding))
-    //  iconsView.spacing = frame.size.height * -0.2
-    //}
-    
-    //assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
-    //assignLeadingAndTrailingIcons(leading: nil, trailing: iconsView)
+
     updateIcons()
     
     if checkView == nil {
@@ -259,9 +231,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     layer.borderColor = W3WSettings.componentsBorderColor.cgColor
     
     DispatchQueue.main.async {
-      //self.slashesView.frame = CGRect(x: self.slashesPadding, y: self.slashesPadding, width: self.slashesSize, height: self.slashesSize)
       self.voiceIconView?.frame = CGRect(x: self.iconPadding, y: self.iconPadding, width: self.iconSize, height: self.iconSize)
-      //self.checkView?.frame = CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.2, height: self.frame.size.height * 0.2)
     }
     
     if placeholder == nil {
@@ -270,32 +240,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  //override public func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-  //  return CGRect(x: leftPadding, y: frame.size.height * 0.1, width: frame.size.height * 0.8, height: frame.size.height * 0.8)
-  //}
-  
-  
-//  override public func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-//    if W3WSettings.leftToRight {
-//      return CGRect(x: frame.size.width - frame.size.height * 0.8 - rightPadding, y: 0.0, width: frame.size.height, height: frame.size.height)
-//    } else {
-//      return CGRect(x: frame.size.width - frame.size.height * 0.8 - rightPadding * 0.75, y: 0.0, width: frame.size.height, height: frame.size.height)
-//    }
-//  }
-  
-  
-//  func assignLeadingAndTrailingIcons(leading: UIView, trailing: UIView) {
-//    self.leftViewMode = .always
-//    self.rightViewMode = .always
-//
-//    if W3WSettings.leftToRight {
-//      self.leftView = leading
-//      self.rightView = trailing
-//    } else {
-//      self.leftView = trailing
-//      self.rightView = leading
-//    }
-//  }
+  public func disable(darkmode: Bool) {
+    if #available(iOS 13.0, *) {
+      overrideUserInterfaceStyle = .light
+    }
+  }
   
   
   func updateIcons() {
@@ -337,21 +286,18 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-
+  
+  public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    //backgroundColor = W3WSettings.componentsTextfieldBackground
+    layer.borderColor = W3WSettings.componentsBorderColor.cgColor
+  }
+  
+  
   
   /// puts all subviews into their place
   public override func layoutSubviews() {
     super.layoutSubviews()
-    
     updateIcons()
-    
-    //iconsView?.resize()
-    //if let sv = slashesView, let iv = iconsView {
-    //  assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
-    //}
-    //if let iv = iconsView {
-    //  assignLeadingAndTrailingIcons(leading: nil, trailing: iv)
-    //}
   }
   
   
@@ -514,9 +460,6 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   /// called when the text field contents change
   public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    //addressSelected(self.text ?? "")
-    //resignFirstResponder()
-    
     if let words = self.text {
       if autoSuggestViewController.autoSuggestDataSource.is3wa(text: words) {
         DispatchQueue.main.async {

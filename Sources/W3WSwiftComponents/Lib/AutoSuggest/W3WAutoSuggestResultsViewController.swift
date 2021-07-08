@@ -526,7 +526,6 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
             mic.set(tinyMode: true)
             let sizeFactor = CGFloat(3.0)
             mic.view.frame = CGRect(x: 0.0, y: 0.0, width: textFieldView.frame.height * sizeFactor, height: textFieldView.frame.height * sizeFactor)
-            //mic.view.center = CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
             if W3WSettings.leftToRight {
               mic.view.center = textFieldView.rightView?.center ?? CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
             } else {
@@ -617,7 +616,6 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
         let parent = self.getParentViewController()
         let height = CGFloat(parent.view.frame.size.width)
         let endingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height)
-        //let startingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height - height)
         let viewSize = CGSize(width: parent.view.frame.size.width, height: height)
         
         UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in

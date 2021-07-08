@@ -8,7 +8,7 @@
 import Foundation
 
 
-/// calls a closure no faster than a certain frequency
+/// calls a closure with a `String` no faster than a certain frequency
 class W3WTextFieldDebouncer {
   
   /// the minimum time between calls

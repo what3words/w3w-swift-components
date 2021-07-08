@@ -82,6 +82,7 @@ struct Clip {
     }
 }
 
+@available(swift, deprecated: 0.0.1, message: "use W3WAutoSuggestTextField instead")
 @IBDesignable open class W3wTextField: UITextField {
     // autosuggest options wrapper
     fileprivate var options = [AutoSuggestOption]()
@@ -460,6 +461,7 @@ struct Clip {
 }
 
 //MARK: UITextFieldDelegate
+@available(swift, deprecated: 0.0.1, message: "use W3WAutoSuggestTextField instead")
 extension W3wTextField : UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
@@ -506,6 +508,7 @@ extension W3wTextField : UITextFieldDelegate {
 }
 
 ///MARK: UITableViewDataSource
+@available(swift, deprecated: 0.0.1, message: "use W3WAutoSuggestTextField instead")
 extension W3wTextField: UITableViewDataSource {
 
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -539,6 +542,7 @@ extension W3wTextField: UITableViewDataSource {
     }
 }
 
+@available(swift, deprecated: 0.0.1, message: "use W3WAutoSuggestTextField instead")
 extension W3wTextField: UITableViewDelegate {
     public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         selectedIndex = (indexPath as NSIndexPath).row

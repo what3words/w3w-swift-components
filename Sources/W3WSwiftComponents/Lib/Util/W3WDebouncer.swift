@@ -9,6 +9,7 @@ import Foundation
 
 
 
+/// calls a closure no faster than a certain frequency
 public class W3WDebouncer {
   private let delay: TimeInterval
   private var timer: Timer?

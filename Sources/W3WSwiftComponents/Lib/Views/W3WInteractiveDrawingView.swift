@@ -8,6 +8,8 @@
 
 import UIKit
 
+
+/// W3WDrawingView turned into a button
 open class W3WInteractiveDrawingView : W3WDrawingView {
 
   /// closure to recieve tap events

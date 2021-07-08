@@ -190,7 +190,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       return false
     }
     
-    //let regex_string = "^/*([^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]|[.｡。･・︒។։။۔።।]){0,}$"
     let regex = try! NSRegularExpression(pattern:W3WSettings.regex_3wa_characters, options: [])
     let count = regex.numberOfMatches(in: text, options: [], range: NSRange(text.startIndex..<text.endIndex, in:text))
     if (count > 0) {
@@ -204,7 +203,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   /// checks if input looks like a 3 word address or not
   func is3wa(text: String) -> Bool {
-    //let regex_string = "^/*[^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}[.｡。･・︒។։။۔።।][^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}[.｡。･・︒។։။۔።।][^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}$"
     let regex = try! NSRegularExpression(pattern:W3WSettings.regex_match, options: [])
     let count = regex.numberOfMatches(in: text, options: [], range: NSRange(text.startIndex..<text.endIndex, in:text))
     if (count > 0) {
@@ -237,7 +235,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     
     var words = [String]()
     for match in matches {
-      //print(text[Range(match.range, in: text)!])
       let word = String(text[Range(match.range, in: text)!])
       words.append(word)
     }

@@ -10,12 +10,13 @@
 //
 
 import UIKit
+import W3WSwiftApi
 
 
+/// draws a voice icon
 @IBDesignable
 open class W3WVoiceIconView: W3WInteractiveDrawingView {
   
-  @IBInspectable public var iconColour: UIColor   = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
   @IBInspectable public var lineWidth: NSNumber?  = nil
 
   public var alignment = W3WHorizontalAlignment.center
@@ -72,7 +73,7 @@ open class W3WVoiceIconView: W3WInteractiveDrawingView {
       alignedRect = CGRect(x: rect.size.width - rect.size.height, y: rect.origin.y, width: rect.size.height, height: rect.size.height)
     }
     
-    voiceIcon(centre: CGPoint(x: alignedRect.midX, y: alignedRect.midY), radius: min(alignedRect.width, alignedRect.height) / 2.0, colour: iconColour, weight: weight)
+    voiceIcon(centre: CGPoint(x: alignedRect.midX, y: alignedRect.midY), radius: min(alignedRect.width, alignedRect.height) / 2.0, colour: W3WSettings.componentsVoiceIconColor, weight: weight)
   }
   
   

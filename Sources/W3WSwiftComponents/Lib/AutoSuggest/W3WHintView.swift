@@ -60,7 +60,7 @@ class W3WHintView: UIView {
       addSubview(l)
     }
     
-    backgroundColor = .white
+    backgroundColor = W3WSettings.componentsHintBackground
     layer.borderColor = W3WSettings.componentsBorderColor.cgColor
     layer.borderWidth = 0.5
     

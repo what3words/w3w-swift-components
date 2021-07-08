@@ -19,10 +19,10 @@ public class W3WDashes: W3WDrawingView {
   
   public var alignment = W3WHorizontalAlignment.leading
   
-  @IBInspectable var dashColour = W3WSettings.componentsDashesColor    //: UIColor   = UIColor(red: 0.810, green: 0.217, blue: 0.196, alpha: 1.0)
   
   // MARK: Drawing
     
+  
   /// draw the microphone
   public override func make(_ rect: CGRect) {
 
@@ -42,11 +42,11 @@ public class W3WDashes: W3WDrawingView {
     let dash2p2 = CGPoint(x: dot2.x - spacing, y: y)
     let dash3p1 = CGPoint(x: dot2.x + spacing, y: y)
 
-    roundedLine(p0: dash1p1, p1: dash1p2, colour: dashColour, lineWidth: size)
-    roundedLine(p0: dot1, p1: dot1, colour: dashColour, lineWidth: size)
-    roundedLine(p0: dash2p1, p1: dash2p2, colour: dashColour, lineWidth: size)
-    roundedLine(p0: dot2, p1: dot2, colour: dashColour, lineWidth: size)
-    roundedLine(p0: dash3p1, p1: dash3p2, colour: dashColour, lineWidth: size)
+    roundedLine(p0: dash1p1, p1: dash1p2, colour: W3WSettings.componentsDashesColor, lineWidth: size)
+    roundedLine(p0: dot1, p1: dot1, colour: W3WSettings.componentsDashesColor, lineWidth: size)
+    roundedLine(p0: dash2p1, p1: dash2p2, colour: W3WSettings.componentsDashesColor, lineWidth: size)
+    roundedLine(p0: dot2, p1: dot2, colour: W3WSettings.componentsDashesColor, lineWidth: size)
+    roundedLine(p0: dash3p1, p1: dash3p2, colour: W3WSettings.componentsDashesColor, lineWidth: size)
 
     //roundedLine(p0: CGPoint(x: size * 2.0, y: rect.height / 2.0), p1: CGPoint(x: rect.width - size * 4.0, y: rect.height / 2.0), colour: dashColour, lineWidth: size)
   }

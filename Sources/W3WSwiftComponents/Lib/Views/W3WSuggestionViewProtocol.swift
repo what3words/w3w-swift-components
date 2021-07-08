@@ -9,13 +9,17 @@ import UIKit
 import W3WSwiftApi
 
 
+/// layout and UI code for UIViews that display a three word address, such as W3WSuggestionTableViewCell and W3WSuggestionView
 protocol W3WSuggestionViewProtocol : UIView {
   
   /// the three word address to display
   var suggestion: W3WSuggestion?  { get set }
 
-  /// indicates if this one should stand out form the rest
+  /// indicates if this one should stand out from the rest
   var highlight: Bool { get set }
+  
+  /// called when the dispaly colours should change, ei, light/dark mode
+  func updateColours()
 
   /// the UI elements
   var wordsLabel: UILabel? { get set }
@@ -25,6 +29,7 @@ protocol W3WSuggestionViewProtocol : UIView {
 }
  
 
+/// functions for W3WSuggestionViewProtocol that display a three word address, such as W3WSuggestionTableViewCell and W3WSuggestionView
 extension W3WSuggestionViewProtocol {
   
   /// assign the three words values to the UI elecments
@@ -65,7 +70,7 @@ extension W3WSuggestionViewProtocol {
   /// set up the UI stuff
   func instantiateUIElements() {
     
-    backgroundColor = .white
+    backgroundColor = W3WSettings.componentsTableCellBacking
     
     wordsLabel = UILabel()
     wordsLabel?.textColor = W3WSettings.componentsAddressTextColor
@@ -105,35 +110,41 @@ extension W3WSuggestionViewProtocol {
   }
   
   
-
-  /// adjust the font size of the title
-//  func set(titleFontSize: CGFloat) {
-//    if self.highlight {
-//      wordsLabel?.font = UIFont.systemFont(ofSize: titleFontSize, weight: .semibold)
-//    } else {
-//      self.wordsLabel?.font = UIFont.systemFont(ofSize: titleFontSize, weight: .regular)
-//    }
-//  }
-  
-  
-  
   /// set if this one should stand out form the rest
   public func set(highlight: Bool) {
     self.highlight = highlight
+    updateColours()
+  }
+  
 
+  func updateColours() {
     // set the background colour
+    backgroundColor = W3WSettings.componentsTableCellBacking
+
+    // deal with highlight colour in UITableViewCell
     if let cell = self as? UITableViewCell {
       cell.isHighlighted = highlight
-      
-    // also enable highlighting in the case this isn't a UITableViewCell
-    } else if self.highlight {
+      cell.selectedBackgroundView?.backgroundColor = W3WSettings.componentsHighlightBacking
+    }
+    
+    // deal with highlight colour in non-UITableViewCell
+    if self.highlight {
       backgroundColor = W3WSettings.componentsHighlightBacking
     } else {
       backgroundColor = W3WSettings.componentsTableCellBacking
     }
+
+    wordsLabel?.textColor = W3WSettings.componentsAddressTextColor
+
+    if let words = suggestion?.words {
+      let threeWordAddressText = W3WFormatter(words)
+      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
+    }
+
+    nearestPlaceLabel?.textColor = W3WSettings.componentsNearestPlaceColor
+    distanceLabel?.textColor = W3WSettings.componentsNearestPlaceColor
   }
   
-
   
   func wordsTextHeight() -> CGFloat {
     return frame.size.height * (17.0 / 72.0)
@@ -189,6 +200,7 @@ extension W3WSuggestionViewProtocol {
   }
   
   
+  /// lalyout for suggestions with nothing in them.  Shows a dashed line
   func layoutEmpty() {
     
     let space  = spacing()
@@ -215,6 +227,7 @@ extension W3WSuggestionViewProtocol {
   }
   
   
+  /// layout the elements
   func layoutContent() {
     if (suggestion?.nearestPlace?.count ?? 0) > 0 || suggestion?.distanceToFocus != nil || suggestion?.country?.uppercased() == "ZZ"  {
       layoutForTwoLinesOfText()
@@ -224,7 +237,7 @@ extension W3WSuggestionViewProtocol {
   }
   
   
-  /// layou t for a suggestion only showing an address
+  /// layout for a suggestion only showing an address
   func layoutForOneLineOfText() {
     //let space  = spacing()
     let lead   = leadingSpace()
@@ -244,7 +257,7 @@ extension W3WSuggestionViewProtocol {
   }
   
   
-  /// layou t for a suggestion showing an address and a nearest place
+  /// layout for a suggestion showing an address and a nearest place
   func layoutForTwoLinesOfText() {
     let space     = spacing()
     let lead       = leadingSpace()
@@ -286,7 +299,6 @@ extension W3WSuggestionViewProtocol {
 
     if suggestion?.distanceToFocus != nil {
       distanceLabel?.font = wordsLabel?.font.withSize(descriptionTextHeight())
-//      distanceLabel?.text = W3WFormatter.distanceAsString(kilometers: distance)
       distanceLabel?.sizeToFit()
       if W3WSettings.leftToRight {
         distanceLabel?.frame = CGRect(x: frame.width - (distanceLabel?.frame.width ?? 0.0) - space, y: y, width: (distanceLabel?.frame.width ?? 0.0), height: secondHeight)

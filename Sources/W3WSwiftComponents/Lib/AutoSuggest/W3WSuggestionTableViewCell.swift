@@ -10,7 +10,7 @@ import UIKit
 import W3WSwiftApi
 
 
-/// a UITableViewCell for displaying a W3WSuggestion
+/// a UITableViewCell for displaying a W3WSuggestion, W3WSuggestionViewProtocol does all the heavy lifting
 public class W3WSuggestionTableViewCell: UITableViewCell, W3WSuggestionViewProtocol {
 
   static let cellIdentifier = "W3SuggestionTableViewCell"
@@ -41,7 +41,10 @@ public class W3WSuggestionTableViewCell: UITableViewCell, W3WSuggestionViewProto
   }
   
   
- 
+  public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    updateColours()
+  }
+
   
   /// lays out the UI elements, depending on how much info is present
   public override func layoutSubviews() {
