@@ -241,8 +241,10 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   public func disable(darkmode: Bool) {
-    if #available(iOS 13.0, *) {
-      overrideUserInterfaceStyle = .light
+    if darkmode {
+      if #available(iOS 13.0, *) {
+        overrideUserInterfaceStyle = .light
+      }
     }
   }
   

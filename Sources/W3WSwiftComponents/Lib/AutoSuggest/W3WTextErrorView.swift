@@ -30,6 +30,10 @@ class W3WTextErrorView: UIView {
   
   /// initialize the UI
   func setupUI() {
+    if #available(iOS 13.0, *) {
+      overrideUserInterfaceStyle = .light
+    }
+
     var labelFrame = frame
     labelFrame.origin = CGPoint(x: W3WSettings.componentsIconPadding, y: 0.0)
     labelFrame.size.width -= W3WSettings.componentsIconPadding * 2.0

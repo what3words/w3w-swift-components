@@ -37,6 +37,11 @@ class W3WHintView: UIView {
   
   /// initialize the UI
   func setupUI() {
+    
+    if #available(iOS 13.0, *) {
+      overrideUserInterfaceStyle = .light
+    }
+    
     var labelFrame = frame
     labelFrame.origin = CGPoint(x: W3WSettings.componentsIconPadding, y: W3WSettings.componentsIconPadding)
     labelFrame.size.width -= W3WSettings.componentsIconPadding * 2.0
