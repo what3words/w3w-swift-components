@@ -19,7 +19,7 @@ public class W3WSlashesView: W3WDrawingView {
   
   public var alignment = W3WHorizontalAlignment.center
   
-  @IBInspectable var slashColour = W3WSettings.componentsSlashesColor
+  @IBInspectable var slashColour = W3WSettings.color(named: "SlashesColor")
   
   // MARK: Drawing
     

@@ -73,7 +73,7 @@ open class W3WVoiceIconView: W3WInteractiveDrawingView {
       alignedRect = CGRect(x: rect.size.width - rect.size.height, y: rect.origin.y, width: rect.size.height, height: rect.size.height)
     }
     
-    voiceIcon(centre: CGPoint(x: alignedRect.midX, y: alignedRect.midY), radius: min(alignedRect.width, alignedRect.height) / 2.0, colour: W3WSettings.componentsVoiceIconColor, weight: weight)
+    voiceIcon(centre: CGPoint(x: alignedRect.midX, y: alignedRect.midY), radius: min(alignedRect.width, alignedRect.height) / 2.0, colour: W3WSettings.color(named: "VoiceIconColor"), weight: weight)
   }
   
   

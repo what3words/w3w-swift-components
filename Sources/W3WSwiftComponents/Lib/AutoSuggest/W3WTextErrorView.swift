@@ -45,8 +45,8 @@ class W3WTextErrorView: UIView {
       addSubview(l)
     }
     
-    backgroundColor = W3WSettings.componentsErrorBackground
-    layer.borderColor = W3WSettings.componentsBorderColor.cgColor
+    backgroundColor = W3WSettings.color(named: "ErrorBackground")
+    layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
     layer.borderWidth = 0.5
   }
   

@@ -9,6 +9,7 @@ import W3WSwiftApi
 import UIKit
 
 
+/// mertic imperial or default from the system
 public enum W3WMesurementSystem {
   case metric
   case imperial
@@ -16,56 +17,68 @@ public enum W3WMesurementSystem {
 }
 
 
-public enum W3WColourMode {
-  case light
-  case dark
-}
-
-
 public extension W3WSettings {
 
-  static let W3WSwiftComponentsVersion = "2.1.0"
+  static let W3WSwiftComponentsVersion = "2.2.0"
   
   // mutable settings
   static var measurement = W3WMesurementSystem.system
   static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? "en") == Locale.LanguageDirection.leftToRight)
   
-  // will be used for dark mode - not quite ready yet
-  static let colourMode = W3WColourMode.light
-  //static var colourMode: W3WColourMode {
-  //  if #available(iOS 12, *) {
-  //     return UIScreen.main.traitCollection.userInterfaceStyle == .light ? W3WColourMode.light : W3WColourMode.dark
-  //  } else {
-  //    return W3WColourMode.light
-  //  }
-  //}
+  // MARK:- Colours
   
-  // colours
-  static let componentsSlashesColor         = UIColor(hex: 0xE11F26)
-  static let componentsDashesColor          = UIColor(hex: 0xD9D9D9)
-  static let componentsSeparatorColor       = UIColor(hex: 0xE5E5E5)
-  static let componentsCheckMarkColor       = UIColor(hex: 0x5FC98F)
-  static let componentsErrorTintColor       = UIColor(hex: 0xED694E)
-  static let componentsWarningTintColor     = UIColor(hex: 0x0A3049)
-  static let componentsBorderColor          = UIColor(hex: 0xC2C2C2)
-  static let componentsMicBackground        = UIColor(red: 0.975, green: 0.975, blue: 0.975, alpha: 1.0)
-  static let componentsMicTextColor         = UIColor.black
-  static let componentsMicTextSecondary     = UIColor.gray
-  static let componentsMicShadow            = UIColor.darkGray
-  static let componentsCloseIconColor       = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
+  static internal var colorPalette:W3WColorPalette =
+    [
+      "SlashesColor"        : [.light: W3WColorScheme.w3wRed],
+      "DashesColor"         : [.light: W3WColorScheme.w3wSupportLightGrey],
+      "SeparatorColor"      : [.light: W3WColorScheme.w3wSupportLightGrey],
+      "CheckMarkColor"      : [.light: W3WColorScheme.w3wSecondaryGreen],
+      "ErrorTintColor"      : [.light: W3WColorScheme.w3wSecondaryCoral],
+      "WarningTintColor"    : [.light: W3WColorScheme.w3wDarkBlue],
+      "BorderColor"         : [.light: W3WColorScheme.w3wSupportMediumGrey],
+      "MicTextSecondary"    : [.light: W3WColorScheme.w3wSupportMediumGrey],
+      "MicShadow"           : [.light: W3WColorScheme.w3wSupportDarkGrey],
+      "CloseIconColor"      : [.light: W3WColorScheme.w3wBlack],
+      "MicTextColor"        : [.light: W3WColorScheme.w3wBlack],
+      "MicBackground"       : [.light: W3WColorScheme.componentOffWhite],
+      "NearestPlaceColor"   : [.light: W3WColorScheme.componentSubheading,    .dark: W3WColorScheme.w3wWhite],
+      "AddressTextColor"    : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wWhite],
+      "HighlightBacking"    : [.light: W3WColorScheme.w3wSecondaryLightBlue,  .dark: W3WColorScheme.w3wSupportMediumGrey],
+      "TableCellBacking"    : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
+      "TextfieldText"       : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite],
+      "TextfieldBackground" : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
+      "HintBackground"      : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
+      "ErrorBackground"     : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
+      "MicOnColor"          : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wWhite],
+      "MicOffColor"         : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
+      "VoiceIconColor"      : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite]
+    ]
 
-  // dark/light mode dependant colours
-  static var componentsNearestPlaceColor:   UIColor { return colourMode == .light ? UIColor(hex: 0x525252) : UIColor.white }
-  static var componentsAddressTextColor:    UIColor { return colourMode == .light ? UIColor(hex: 0x0A3049) : UIColor.white }
-  static var componentsHighlightBacking:    UIColor { return colourMode == .light ? UIColor(hex: 0xDBEFFA) : UIColor.gray }
-  static var componentsTableCellBacking:    UIColor { return colourMode == .light ? UIColor.white : UIColor.black }
-  static var componentsTextfieldBackground: UIColor { return colourMode == .light ? UIColor.white : UIColor.black }
-  static var componentsHintBackground:      UIColor { return colourMode == .light ? UIColor.white : UIColor.black }
-  static var componentsErrorBackground:     UIColor { return colourMode == .light ? UIColor.white : UIColor.black }
-  static var componentsMicOnColor:          UIColor { return colourMode == .light ? UIColor(red: 0.810, green: 0.217, blue: 0.196, alpha: 1.0) : .white }
-  static var componentsMicOffColor:         UIColor { return colourMode == .light ? UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0) : .black }
-  static var componentsVoiceIconColor:      UIColor { return colourMode == .light ? UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0) : .white }
+  /// the colour information for all components
+  static internal var colors = W3WColorScheme(colors: colorPalette)
+  
+  /// set a colour for a colour mode
+  static func set(color: UIColor, named: String, forMode: W3WColourMode) {
+    colorPalette[named]?[forMode] = color
+  }
+  
+  /// return a color of a particular name, in the current colour mode (dark/light), failing that return in any colour mode, failing that, return black
+  static func color(named: String) -> UIColor {
+    if let color = color(named: named, forMode: W3WColorScheme.colourMode) {
+      return color
+    } else {
+      return colorPalette[named]?.first?.value ?? W3WColorScheme.w3wBlack
+    }
+  }
 
+  /// return a color of a particular name, for a specific colour mode
+  static func color(named: String, forMode: W3WColourMode) -> UIColor? {
+    return colorPalette[named]?[forMode]
+  }
+  
+  
+  // MARK: Text
+  
   // text sizes
   static let componentsAddressTextSize    = CGFloat(18.0)
   static let componentsTableCellHeight    = CGFloat(64.0)

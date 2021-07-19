@@ -101,7 +101,7 @@ open class W3WMicrophoneViewController: UIViewController {
   func set(shadow: Bool) {
     DispatchQueue.main.async {
       if shadow {
-        self.microphoneView?.layer.shadowColor = W3WSettings.componentsMicShadow.cgColor
+        self.microphoneView?.layer.shadowColor = W3WSettings.color(named: "MicShadow").cgColor
         self.microphoneView?.layer.shadowOpacity = 0.25
         self.microphoneView?.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
         self.microphoneView?.layer.shadowRadius = 1
@@ -139,7 +139,7 @@ open class W3WMicrophoneViewController: UIViewController {
   
   /// initiaize the views
   public override func viewWillAppear(_ animated: Bool) {
-    self.view.backgroundColor = W3WSettings.componentsMicBackground
+    self.view.backgroundColor = W3WSettings.color(named: "MicBackground")
     
     if microphoneView == nil {
       microphoneView = W3WMicrophoneView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.width), microphone: microphone)
@@ -196,7 +196,7 @@ open class W3WMicrophoneViewController: UIViewController {
   
   /// setup for large mode
   func largeModeSetup() {
-    self.view.backgroundColor = W3WSettings.componentsMicBackground
+    self.view.backgroundColor = W3WSettings.color(named: "MicBackground")
     
     let size = self.view.frame.size.width / 2.0
     microphoneView.frame = CGRect(x: size / 2.0, y: size / 2.0, width: size, height: size)
@@ -210,7 +210,7 @@ open class W3WMicrophoneViewController: UIViewController {
     }
     headerLabel.center = CGPoint(x: size, y: microphoneView.center.y / 3.0)
     headerLabel.textAlignment = .center
-    headerLabel.textColor = W3WSettings.componentsMicTextColor
+    headerLabel.textColor = W3WSettings.color(named: "MicTextColor") 
     headerLabel.font = UIFont.systemFont(ofSize: textSize, weight: .light)
     view.addSubview(headerLabel)
     
@@ -219,7 +219,7 @@ open class W3WMicrophoneViewController: UIViewController {
     }
     footerLabel.center = CGPoint(x: size, y: self.view.frame.height - microphoneView.center.y / 3.0)
     footerLabel.textAlignment = .center
-    footerLabel.textColor = W3WSettings.componentsMicTextSecondary
+    footerLabel.textColor = W3WSettings.color(named: "MicTextSecondary")
     footerLabel.font = UIFont.systemFont(ofSize: textSize * 0.8, weight: .light)
     footerLabel.minimumScaleFactor = 0.5
     footerLabel.adjustsFontSizeToFitWidth = true

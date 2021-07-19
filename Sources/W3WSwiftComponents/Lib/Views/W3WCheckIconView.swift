@@ -56,7 +56,7 @@ public class W3WCheckIconView: W3WDrawingView {
     let centre = CGPoint(x:rect.midX, y:rect.midY)
     let weight = radius * 0.1 // (2.0 / 13.0)
     
-    checkIcon(centre: centre, radius: radius - weight, colour: W3WSettings.componentsCheckMarkColor, weight: weight)
+    checkIcon(centre: centre, radius: radius - weight, colour: W3WSettings.color(named: "CheckMarkColor"), weight: weight)
   }
   
   

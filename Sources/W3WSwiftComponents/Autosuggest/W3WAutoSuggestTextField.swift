@@ -13,6 +13,8 @@ import W3WSwiftApi
 @IBDesignable
 open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
   
+  // MARK: Vars
+  
   /// callback for when the user choses a suggestion
   public var suggestionSelected: W3WSuggestionResponse = { _ in }
 
@@ -55,7 +57,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   var rightPadding:CGFloat = 16.0
   var padding = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
   
-
+  
+  // MARK: Init
+  
   
   public override init(frame: CGRect) {
     super.init(frame: frame)
@@ -68,6 +72,8 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     self.delegate = self
   }
   
+  
+  // MARK: Accessors
   
   
   /// assign a what3words engine, or API to this  component.  language is optional and defaults to English: "en"
@@ -92,6 +98,28 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
 
 
+  /// set the color of the text in all AutosuggestTextFields globally
+  /// - Parameters:
+  ///     - textColor: the color for the text
+  ///     - darkMode: the color for the text when the device is in "dark mode"
+  public func set(textColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: textColor, named: "TextfieldText", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldText", forMode: .dark)
+    updateColours()
+  }
+  
+  
+  /// set the color of the textfield background in all AutosuggestTextFields globally
+  /// - Parameters:
+  ///     - backgroundColor: the color for the textfield background
+  ///     - darkMode: the color for the textfield background when the device is in "dark mode"
+  public func set(backgroundColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: backgroundColor, named: "TextfieldBackground", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldBackground", forMode: .dark)
+    updateColours()
+  }
+  
+  
   /// sets the langauge to use when returning three word addresses
   /// - Parameters:
   ///     - language: a ISO two letter langauge code
@@ -185,13 +213,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   func confireuUI() {
     clipsToBounds = true
     
-    disable(darkmode: true)
+   // disable(darkmode: true)
     
     padding = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
     
-    //if backgroundColor == nil {
-    //  backgroundColor = W3WSettings.componentsTextfieldBackground
-    //}
+    updateColours()
     
     if W3WSettings.leftToRight {
       textAlignment = .left
@@ -228,7 +254,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     adjustsFontSizeToFitWidth = false
     
     layer.borderWidth = 0.5
-    layer.borderColor = W3WSettings.componentsBorderColor.cgColor
+    layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
     
     DispatchQueue.main.async {
       self.voiceIconView?.frame = CGRect(x: self.iconPadding, y: self.iconPadding, width: self.iconSize, height: self.iconSize)
@@ -290,10 +316,18 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-    //backgroundColor = W3WSettings.componentsTextfieldBackground
-    layer.borderColor = W3WSettings.componentsBorderColor.cgColor
+    updateColours()
   }
   
+  
+  
+  func updateColours() {
+    DispatchQueue.main.async {
+      self.textColor         = W3WSettings.color(named: "TextfieldText")
+      self.backgroundColor   = W3WSettings.color(named: "TextfieldBackground")
+      self.layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
+    }
+  }
   
   
   /// puts all subviews into their place

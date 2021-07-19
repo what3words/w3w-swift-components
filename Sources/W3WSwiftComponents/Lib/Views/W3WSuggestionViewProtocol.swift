@@ -38,7 +38,7 @@ extension W3WSuggestionViewProtocol {
     self.suggestion = suggestion
     
     let threeWordAddressText = W3WFormatter(suggestion.words)
-    wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: W3WSettings.componentsAddressTextSize, slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
+    wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: W3WSettings.componentsAddressTextSize, slashColor: W3WSettings.color(named: "SlashesColor"), weight: .semibold)
     
     if let place = suggestion.nearestPlace {
       if (suggestion.language ?? "") == "en" && !place.isEmpty {
@@ -70,10 +70,10 @@ extension W3WSuggestionViewProtocol {
   /// set up the UI stuff
   func instantiateUIElements() {
     
-    backgroundColor = W3WSettings.componentsTableCellBacking
+    backgroundColor = W3WSettings.color(named: "TableCellBacking")
     
     wordsLabel = UILabel()
-    wordsLabel?.textColor = W3WSettings.componentsAddressTextColor
+    wordsLabel?.textColor = W3WSettings.color(named: "AddressTextColor")
     wordsLabel?.backgroundColor = .clear
     if let l = wordsLabel {
       addSubview(l)
@@ -88,14 +88,14 @@ extension W3WSuggestionViewProtocol {
     }
     
     nearestPlaceLabel = UILabel()
-    nearestPlaceLabel?.textColor = W3WSettings.componentsNearestPlaceColor
+    nearestPlaceLabel?.textColor = W3WSettings.color(named: "NearestPlaceColor")
     nearestPlaceLabel?.backgroundColor = .clear
     if let p = nearestPlaceLabel {
       addSubview(p)
     }
     
     distanceLabel = UILabel()
-    distanceLabel?.textColor = W3WSettings.componentsNearestPlaceColor
+    distanceLabel?.textColor = W3WSettings.color(named: "NearestPlaceColor")
     distanceLabel?.backgroundColor = .clear
     if let d = distanceLabel {
       addSubview(d)
@@ -103,7 +103,7 @@ extension W3WSuggestionViewProtocol {
     
     if let cell = self as? UITableViewCell {
       let cellBackground = UIView()
-      cellBackground.backgroundColor = W3WSettings.componentsHighlightBacking
+      cellBackground.backgroundColor = W3WSettings.color(named: "HighlightBacking")
       cell.selectedBackgroundView = cellBackground
     }
     
@@ -119,30 +119,30 @@ extension W3WSuggestionViewProtocol {
 
   func updateColours() {
     // set the background colour
-    backgroundColor = W3WSettings.componentsTableCellBacking
+    backgroundColor = W3WSettings.color(named: "TableCellBacking")
 
     // deal with highlight colour in UITableViewCell
     if let cell = self as? UITableViewCell {
       cell.isHighlighted = highlight
-      cell.selectedBackgroundView?.backgroundColor = W3WSettings.componentsHighlightBacking
+      cell.selectedBackgroundView?.backgroundColor = W3WSettings.color(named: "HighlightBacking")
     }
     
     // deal with highlight colour in non-UITableViewCell
     if self.highlight {
-      backgroundColor = W3WSettings.componentsHighlightBacking
+      backgroundColor = W3WSettings.color(named: "HighlightBacking")
     } else {
-      backgroundColor = W3WSettings.componentsTableCellBacking
+      backgroundColor = W3WSettings.color(named: "TableCellBacking")
     }
 
-    wordsLabel?.textColor = W3WSettings.componentsAddressTextColor
+    wordsLabel?.textColor = W3WSettings.color(named: "AddressTextColor")
 
     if let words = suggestion?.words {
       let threeWordAddressText = W3WFormatter(words)
-      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
+      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.color(named: "SlashesColor"), weight: .semibold)
     }
 
-    nearestPlaceLabel?.textColor = W3WSettings.componentsNearestPlaceColor
-    distanceLabel?.textColor = W3WSettings.componentsNearestPlaceColor
+    nearestPlaceLabel?.textColor = W3WSettings.color(named: "NearestPlaceColor")
+    distanceLabel?.textColor = W3WSettings.color(named: "NearestPlaceColor")
   }
   
   
@@ -208,7 +208,7 @@ extension W3WSuggestionViewProtocol {
     let height = wordsLabelHeight()
 
     let threeWordAddressText = W3WFormatter("")
-    wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
+    wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.color(named: "SlashesColor"), weight: .semibold)
     wordsLabel?.sizeToFit()
 
     if W3WSettings.leftToRight {
@@ -252,7 +252,7 @@ extension W3WSuggestionViewProtocol {
     wordsLabel?.frame = CGRect(x: lead, y: (frame.height - height) / 2.0, width: frame.size.width - lead * 2.0, height: height)
     if let words = suggestion?.words {
       let threeWordAddressText = W3WFormatter(words)
-      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
+      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.color(named: "SlashesColor"), weight: .semibold)
     }
   }
   
@@ -279,7 +279,7 @@ extension W3WSuggestionViewProtocol {
     wordsLabel?.frame = CGRect(x: lead, y: space, width: lineWidth, height: height)
     if let words = suggestion?.words {
       let threeWordAddressText = W3WFormatter(words)
-      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.componentsSlashesColor, weight: .semibold)
+      wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.color(named: "SlashesColor"), weight: .semibold)
     }
 
     let y = space + height + internalSpace

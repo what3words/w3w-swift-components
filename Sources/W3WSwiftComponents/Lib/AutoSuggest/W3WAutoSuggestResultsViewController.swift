@@ -70,10 +70,10 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     
     tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
     tableView.separatorStyle = .singleLineEtched
-    tableView.separatorColor = W3WSettings.componentsSeparatorColor
+    tableView.separatorColor = W3WSettings.color(named: "SeparatorColor")
     
     tableView.layer.borderWidth = 0.5
-    tableView.layer.borderColor = W3WSettings.componentsBorderColor.cgColor
+    tableView.layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
   }
 
 
@@ -314,32 +314,32 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   /// displays a warning
   func set(warning: String?) {
-    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.componentsWarningTintColor]
+    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "WarningTintColor")]
     set(warning: warning == nil ? nil : NSAttributedString(string: warning ?? "?", attributes: attributes))
   }
   
   
   /// displays a formatted text warning
   func set(warning: NSAttributedString?) {
-    showNoticeView(message: warning, tint: W3WSettings.componentsWarningTintColor)
+    showNoticeView(message: warning, tint: W3WSettings.color(named: "WarningTintColor"))
   }
   
 
   /// displays an error
   func set(error: String?) {
-    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.componentsErrorTintColor]
+    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "ErrorTintColor")]
     set(error: error == nil ? nil : NSAttributedString(string: error ?? "?", attributes: attributes))
   }
   
   
   /// displays a formatted text error
   func set(error: NSAttributedString?) {
-    showNoticeView(message: error, tint: W3WSettings.componentsErrorTintColor)
+    showNoticeView(message: error, tint: W3WSettings.color(named: "ErrorTintColor"))
   }
   
   
   /// shows a view contianing a text message
-  func showNoticeView(message: NSAttributedString?, tint: UIColor = W3WSettings.componentsErrorTintColor) {
+  func showNoticeView(message: NSAttributedString?, tint: UIColor = W3WSettings.color(named: "ErrorTintColor")) {
     DispatchQueue.main.async {
       let frame = self.delegate?.errorLocation(preferedHeight: 32.0) ?? CGRect.zero //.getParentView().frame ?? CGRect.zero
 

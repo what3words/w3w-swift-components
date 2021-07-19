@@ -209,11 +209,11 @@ open class W3WMicrophoneView: W3WVoiceIconView {
     let fanSpread = volumeToFanSpread()
     
     // draw the four circles and the icon on top
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.9, colour: engaged ? W3WSettings.componentsMicOnColor.withAlphaComponent(0.2) : W3WSettings.componentsMicOffColor)
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.6, colour: engaged ? W3WSettings.componentsMicOnColor.withAlphaComponent(0.3) : W3WSettings.componentsMicOffColor)
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.3, colour: engaged ? W3WSettings.componentsMicOnColor.withAlphaComponent(0.4) : W3WSettings.componentsMicOffColor)
-    circle(centre: centre, radius: radius, colour: engaged ? W3WSettings.componentsMicOnColor : W3WSettings.componentsMicOffColor)
-    voiceIcon(centre: centre, radius: radius / 2.2, colour: engaged ? W3WSettings.componentsMicOffColor : W3WSettings.componentsMicOnColor)
+    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.9, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.2) : W3WSettings.color(named: "MicOffColor"))
+    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.6, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.3) : W3WSettings.color(named: "MicOffColor"))
+    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.3, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.4) : W3WSettings.color(named: "MicOffColor"))
+    circle(centre: centre, radius: radius, colour: engaged ? W3WSettings.color(named: "MicOnColor") : W3WSettings.color(named: "MicOffColor"))
+    voiceIcon(centre: centre, radius: radius / 2.2, colour: engaged ? W3WSettings.color(named: "MicOffColor") : W3WSettings.color(named: "MicOnColor"))
   }
   
   

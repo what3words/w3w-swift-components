@@ -65,8 +65,8 @@ class W3WHintView: UIView {
       addSubview(l)
     }
     
-    backgroundColor = W3WSettings.componentsHintBackground
-    layer.borderColor = W3WSettings.componentsBorderColor.cgColor
+    backgroundColor = W3WSettings.color(named: "HintBackground")
+    layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
     layer.borderWidth = 0.5
     
     // create a gesture recognizer (tap gesture)

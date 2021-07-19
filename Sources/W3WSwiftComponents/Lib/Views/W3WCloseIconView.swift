@@ -21,8 +21,8 @@ public class W3WCloseIconView: W3WDrawingView {
   /// draw the microphone
   public override func make(_ rect: CGRect) {
     let lineWidth = rect.maxX * 0.1
-    roundedLine(p0: CGPoint(x: lineWidth, y: lineWidth), p1: CGPoint(x: rect.maxX - lineWidth, y: rect.maxX - lineWidth), colour: W3WSettings.componentsCloseIconColor, lineWidth: lineWidth)
-    roundedLine(p0: CGPoint(x: rect.maxX - lineWidth, y: lineWidth), p1: CGPoint(x: lineWidth, y: rect.maxY - lineWidth), colour: W3WSettings.componentsCloseIconColor, lineWidth: lineWidth)
+    roundedLine(p0: CGPoint(x: lineWidth, y: lineWidth), p1: CGPoint(x: rect.maxX - lineWidth, y: rect.maxX - lineWidth), colour: W3WSettings.color(named: "CloseIconColor"), lineWidth: lineWidth)
+    roundedLine(p0: CGPoint(x: rect.maxX - lineWidth, y: lineWidth), p1: CGPoint(x: lineWidth, y: rect.maxY - lineWidth), colour: W3WSettings.color(named: "CloseIconColor"), lineWidth: lineWidth)
   }
   
   

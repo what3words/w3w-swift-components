@@ -34,7 +34,7 @@ class W3WFormatter {
   
   func withSlashes(font:UIFont? = nil, slashColor:UIColor? = nil, weight: W3WFontWeight = .regular) -> NSAttributedString? {
     let slashAttributes: [NSAttributedString.Key: Any] = [
-      .foregroundColor: slashColor ?? W3WSettings.componentsSlashesColor,
+      .foregroundColor: slashColor ?? W3WSettings.color(named: "SlashesColor"),
       .font: font ?? pickaFont(size: font?.pointSize, weight: weight)
     ]
 
