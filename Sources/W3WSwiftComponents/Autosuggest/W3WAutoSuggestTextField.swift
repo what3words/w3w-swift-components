@@ -326,6 +326,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       self.textColor         = W3WSettings.color(named: "TextfieldText")
       self.backgroundColor   = W3WSettings.color(named: "TextfieldBackground")
       self.layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
+      self.attributedPlaceholder = NSAttributedString(string: self.attributedPlaceholder?.string ?? "", attributes: [NSAttributedString.Key.foregroundColor: W3WSettings.color(named: "TextfieldPlaceholder")])
     }
   }
   

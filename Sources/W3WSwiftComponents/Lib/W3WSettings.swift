@@ -47,6 +47,7 @@ public extension W3WSettings {
       "TableCellBacking"    : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
       "TextfieldText"       : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite],
       "TextfieldBackground" : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
+      "TextfieldPlaceholder": [.light: W3WColorScheme.w3wSupportMediumGrey,   .dark: W3WColorScheme.w3wSupportMediumGrey],
       "HintBackground"      : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
       "ErrorBackground"     : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
       "MicOnColor"          : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wWhite],
