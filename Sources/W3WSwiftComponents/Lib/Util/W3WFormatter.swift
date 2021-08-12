@@ -28,18 +28,18 @@ class W3WFormatter {
   
   
   func withSlashes(fontSize:CGFloat, slashColor: UIColor? = nil, weight: W3WFontWeight = .regular) -> NSAttributedString? {
-    return withSlashes(font: pickaFont(size: fontSize, weight: weight), slashColor: slashColor)
+    return withSlashes(font: W3WFormatter.pickaFont(size: fontSize, weight: weight), slashColor: slashColor)
   }
   
   
   func withSlashes(font:UIFont? = nil, slashColor:UIColor? = nil, weight: W3WFontWeight = .regular) -> NSAttributedString? {
     let slashAttributes: [NSAttributedString.Key: Any] = [
       .foregroundColor: slashColor ?? W3WSettings.color(named: "SlashesColor"),
-      .font: font ?? pickaFont(size: font?.pointSize, weight: weight)
+      .font: font ?? W3WFormatter.pickaFont(size: font?.pointSize, weight: weight)
     ]
 
     let fontAttributes: [NSAttributedString.Key: Any] = [
-      .font: font ?? pickaFont(size: font?.pointSize, weight: weight)
+      .font: font ?? W3WFormatter.pickaFont(size: font?.pointSize, weight: weight)
     ]
 
     let slashes = NSMutableAttributedString(string: "///", attributes: slashAttributes)
@@ -50,7 +50,7 @@ class W3WFormatter {
   }
   
   
-  func pickaFont(size: CGFloat? = nil, weight: W3WFontWeight) -> UIFont {
+  static func pickaFont(size: CGFloat? = nil, weight: W3WFontWeight) -> UIFont {
     var font: UIFont
 
     if let s = size {
@@ -64,7 +64,11 @@ class W3WFormatter {
         }
       }
     } else {
-      font = UIFont.preferredFont(forTextStyle: .body)
+      if weight == .semibold {
+        font = UIFont.systemFont(ofSize: UIFont.systemFontSize, weight: .semibold)
+      } else {
+        font = UIFont.systemFont(ofSize: UIFont.systemFontSize, weight: .regular)
+      }
     }
 
     return font

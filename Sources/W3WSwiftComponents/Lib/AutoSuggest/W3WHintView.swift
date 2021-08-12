@@ -14,60 +14,27 @@ typealias W3WHintTapped = () ->()
 
 
 /// view to display an erro
-class W3WHintView: UIView {
+class W3WHintView: W3WMessageView {
 
   var onTapped: W3WHintTapped = { }
   
-  var hintLabel: UILabel?
-  var titleLabel: UILabel?
+  var hintLabel: UILabel?  = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0)))
+  var titleLabel: UILabel? = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0)))
 
   
-  // Init
-  public override init(frame: CGRect) {
-    super.init(frame: frame)
-    setupUI()
-  }
-  
-  
-  public required init(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)!
-    setupUI()
-  }
-
   
   /// initialize the UI
-  func setupUI() {
-    
-    if #available(iOS 13.0, *) {
-      overrideUserInterfaceStyle = .light
-    }
-    
-    var labelFrame = frame
-    labelFrame.origin = CGPoint(x: W3WSettings.componentsIconPadding, y: W3WSettings.componentsIconPadding)
-    labelFrame.size.width -= W3WSettings.componentsIconPadding * 2.0
-    labelFrame.size.height = frame.height * 0.35
-    
-    titleLabel = UILabel(frame: labelFrame)
-    hintLabel?.font = UIFont.systemFont(ofSize: labelFrame.size.height, weight: .light)
-    titleLabel?.adjustsFontSizeToFitWidth = true
-    titleLabel?.minimumScaleFactor = 0.5
+  override func setupUI() {
     if let l = titleLabel {
       addSubview(l)
     }
     
-    labelFrame.origin.y = labelFrame.size.height
-    labelFrame.size.height = frame.height - labelFrame.origin.y
-    hintLabel = UILabel(frame: labelFrame)
-    hintLabel?.font = UIFont.systemFont(ofSize: labelFrame.size.height * 0.4, weight: .semibold)
-    hintLabel?.adjustsFontSizeToFitWidth = true
-    hintLabel?.minimumScaleFactor = 0.5
     if let l = hintLabel {
       addSubview(l)
     }
-    
-    backgroundColor = W3WSettings.color(named: "HintBackground")
-    layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
-    layer.borderWidth = 0.5
+
+    updateGeometry()
+    updateColours()
     
     // create a gesture recognizer (tap gesture)
     let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapHappened(recognizer:)))
@@ -82,10 +49,54 @@ class W3WHintView: UIView {
   }
 
   
+  override func updateColours() {
+    backgroundColor       = W3WSettings.color(named: "HintBackground")
+    titleLabel?.textColor = W3WSettings.color(named: "HintTextColor")
+    hintLabel?.textColor  = W3WSettings.color(named: "HintTextColor")
+    layer.borderColor     = W3WSettings.color(named: "BorderColor").cgColor
+
+    let hintFontHeight  = frame.height * (18.0 / 58.0)
+    hintLabel?.attributedText = W3WFormatter.ensureSlashes(text: hintLabel?.text, font: W3WFormatter.pickaFont(size: hintFontHeight, weight: .semibold))
+    
+    tintColor = W3WSettings.color(named: "HintTopLine")
+  }
+  
+  
+  override func updateGeometry() {
+    let padding         = frame.height * (6.0 / 58.0)
+    let titleHeight     = frame.height * (20.0 / 58.0)
+    let titleFontHeight = frame.height * (14.0 / 58.0)
+    let hintHeight      = frame.height * (22.0 / 58.0)
+    let hintFontHeight  = frame.height * (18.0 / 58.0)
+    let spaceBetween    = frame.height * (3.0 / 58.0)
+    
+    var labelFrame = frame
+    labelFrame.origin = CGPoint(x: padding * 2.0, y: padding)
+    labelFrame.size.width = frame.width - padding * 4.0
+    labelFrame.size.height = titleHeight
+    
+    titleLabel?.frame = labelFrame
+    titleLabel?.font = UIFont.systemFont(ofSize: titleFontHeight, weight: .regular)
+    titleLabel?.adjustsFontSizeToFitWidth = true
+    titleLabel?.minimumScaleFactor = 0.4
+
+    labelFrame.origin.y = labelFrame.origin.y + labelFrame.size.height + spaceBetween
+    labelFrame.size.height = hintHeight
+    
+    hintLabel?.frame = labelFrame
+    hintLabel?.font = UIFont.systemFont(ofSize: hintFontHeight, weight: .semibold)
+    hintLabel?.adjustsFontSizeToFitWidth = true
+    hintLabel?.minimumScaleFactor = 0.5
+
+    layer.borderWidth = 0.5
+  }
+  
+  
   /// sets the error as an atributed string
   func set(title: String, hint: NSAttributedString) {
     titleLabel?.text = title
     hintLabel?.attributedText = hint
+    updateColours()
   }
   
   
@@ -95,15 +106,5 @@ class W3WHintView: UIView {
     hintLabel?.text = hint
   }
   
-  
-  /// draws in some diesign elements
-  override func draw(_ rect: CGRect) {
-    let cgContext = UIGraphicsGetCurrentContext()
-    cgContext?.move(to: CGPoint(x: rect.minX, y: rect.minY))
-    cgContext?.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-    cgContext?.setStrokeColor(tintColor.cgColor)
-    cgContext?.setLineWidth(3.0)
-    cgContext?.strokePath()
-  }
-  
+
 }

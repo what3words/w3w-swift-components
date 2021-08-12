@@ -41,7 +41,7 @@ extension W3WSuggestionViewProtocol {
     wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: W3WSettings.componentsAddressTextSize, slashColor: W3WSettings.color(named: "SlashesColor"), weight: .semibold)
     
     if let place = suggestion.nearestPlace {
-      if (suggestion.language ?? "") == "en" && !place.isEmpty {
+      if (suggestion.language ?? "") == W3WSettings.defaultLanguage && !place.isEmpty {
         nearestPlaceLabel?.text = String(format: W3WSettings.componentsNearFormatText, place)
       } else {
         nearestPlaceLabel?.text = place

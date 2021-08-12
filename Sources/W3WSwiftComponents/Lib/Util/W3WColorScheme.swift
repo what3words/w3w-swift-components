@@ -55,15 +55,15 @@ struct W3WColorScheme {
   // named off brand colours
   static let componentOffWhite      = UIColor(hex: 0xF2F4F5)
   static let componentSubheading    = UIColor(hex: 0x525252)
+  static let componentOffBlack      = UIColor(hex: 0x001626)
   
   // will be used for dark mode - not quite ready yet
-  static let colourMode = W3WColourMode.light
-  //static var colourMode: W3WColourMode {
-  //  if #available(iOS 12, *) {
-  //     return UIScreen.main.traitCollection.userInterfaceStyle == .light ? W3WColourMode.light : W3WColourMode.dark
-  //  } else {
-  //    return W3WColourMode.light
-  //  }
-  //}
+  static var colourMode: W3WColourMode {
+    if #available(iOS 12, *) {
+       return UIScreen.main.traitCollection.userInterfaceStyle == .light ? W3WColourMode.light : W3WColourMode.dark
+    } else {
+      return W3WColourMode.light
+    }
+  }
   
 }

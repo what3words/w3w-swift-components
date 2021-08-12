@@ -139,7 +139,7 @@ Here is an example of presenting a W3WObjcAutoSuggestTextField in UIViewcontroll
   // make the autosuggest component
   W3WObjcAutoSuggestTextField *textfield = [[W3WObjcAutoSuggestTextField alloc] initWithFrame:frame];
 
-  // assign the API key an set the desired langauge
+  // assign the API key an set the desired language
   [textfield setApiKey:@"YourApiKey"];
   [textfield setLanguage:@"en"];
   
@@ -175,7 +175,7 @@ Set the API key
 
 `  [textfield setApiKey:@"YourApiKey"];`
 
-#### setLangauge
+#### setLanguage
 
 Set the expected input language.  Defaults to English.
 

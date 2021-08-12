@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import W3WSwiftApi
 
 
 /// continass functions for formatting three word addresses and comparing them
@@ -23,14 +24,21 @@ class W3WAddress {
     while x.prefix(1) == "/" {
       _ = x.removeFirst()
     }
-    
+    while x.last == "/" {
+      _ = x.removeLast()
+    }
+
     return x;
   }
   
   
   /// make sure a three word address starts with a ///
   static func ensureLeadingSlashes(_ w: String) -> String {
-    return "///" + W3WAddress.removeLeadingSlashes(w)
+    if W3WSettings.leftToRight == true {
+      return "///" + W3WAddress.removeLeadingSlashes(w)
+    } else {
+      return W3WAddress.removeLeadingSlashes(w)
+    }
   }
   
 }

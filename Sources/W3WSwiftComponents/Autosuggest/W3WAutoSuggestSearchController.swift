@@ -67,8 +67,8 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// assign a what3words engine, or API to this  component.  language is optional and defaults to English: "en"
   /// - Parameters:
   ///     - w3w: the what3words API or SDK
-  ///     - language: a ISO two letter langauge code
-  public func set(_ w3w: W3WProtocolV3, language: String = "en") {
+  ///     - language: a ISO two letter language code
+  public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
     autoSuggestViewController.set(w3w)
     configure()
     
@@ -85,9 +85,9 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   }
 
 
-  /// sets the langauge to use when returning three word addresses
+  /// sets the language to use when returning three word addresses
   /// - Parameters:
-  ///     - language: a ISO two letter langauge code
+  ///     - language: a ISO two letter language code
   public func set(language l: String) {
     language = l
     
@@ -151,15 +151,16 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// shows the voice icon
   func showVoiceIcon() {
     if autoSuggestViewController.supportsVoice() {
-      var height = self.searchBar.frame.size.height * 0.333
+      var height = self.searchBar.frame.size.height
       if #available(iOS 13.0, *) {
-        height    = searchBar[keyPath: \.searchTextField].font?.pointSize ?? self.searchBar.frame.size.height * 0.8
+        height    = searchBar[keyPath: \.searchTextField].font?.pointSize ?? self.searchBar.frame.size.height
       }
-      let voiceIconView = W3WVoiceIconView(frame: CGRect(x: 0.0, y: 0.0, width: height + rightPadding, height: height))
+      //let voiceIconView = W3WVoiceIconView(frame: CGRect(x: 0.0, y: 0.0, width: height + rightPadding, height: height))
       //voiceIconView.insets = UIEdgeInsets(top: 1.0, left: 1.0, bottom: 1.0, right:1.0)
       //voiceIconView.alignment = .leading
       //voiceIconView.set(padding: self.searchBar.frame.size.height * 0.3)
-      voiceIconView.set(padding: 0.0)
+      //voiceIconView.set(padding: 0.0)
+      let voiceIconView = W3WVoiceIconView(frame: CGRect(x: 0.0, y: 0.0, width: height, height: height))
       
       self.searchBar.showsBookmarkButton = true
       self.searchBar.setImage(voiceIconView.asImage(), for: .bookmark, state: .normal)
@@ -189,10 +190,33 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
     //self.searchBar.setImage(slashesView.asImage(), for: .search, state: .normal)
     self.searchBar.showsSearchResultsButton = false
 
+    if #available(iOS 13.0, *) {
+      if W3WSettings.leftToRight {
+        self.searchBar.searchTextField.textAlignment = .left
+        self.searchBar.searchTextField.semanticContentAttribute = UISemanticContentAttribute.forceLeftToRight
+      } else {
+        self.searchBar.searchTextField.textAlignment = .right
+        self.searchBar.searchTextField.semanticContentAttribute = UISemanticContentAttribute.forceRightToLeft
+      }
+    } else {
+      if W3WSettings.leftToRight {
+        self.searchBar.semanticContentAttribute = .forceLeftToRight
+      } else {
+        self.searchBar.semanticContentAttribute = .forceRightToLeft
+      }
+    }
+
+
+    // remove the left side icon
+    if #available(iOS 13.0, *) {
+      self.searchBar.searchTextField.leftViewMode = .never
+      self.searchBar.setPositionAdjustment(UIOffset(horizontal: -20, vertical: 0), for: .search)
+    }
+
     if voiceEnabled {
       showVoiceIcon()
     }
-    
+
     self.searchBar.placeholder = W3WSettings.componentsPlaceholderText
   }
   
@@ -395,6 +419,17 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// Called when the search bar becomes the first responder or when the user makes changes inside the search bar.
   public func updateSearchResults(for searchController: UISearchController) {
   }
+
+  
+  public override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    autoSuggestViewController.updateGeometry()
+    autoSuggestViewController.tableView.layoutIfNeeded()
+    autoSuggestViewController.tableView.layoutSubviews()
+  }
+
+  
+  
   
 }
 

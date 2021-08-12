@@ -14,7 +14,7 @@ public class W3WDebouncer {
   private let delay: TimeInterval
   private var timer: Timer?
 
-  var handler: () -> Void
+  public var handler: () -> Void
 
   public init(delay: TimeInterval, handler: @escaping () -> Void) {
     self.delay = delay

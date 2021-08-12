@@ -101,6 +101,11 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     options.removeAll(where: { o in
       o.key() == option.key()
     })
+    
+    if option.key() == W3WOptionKey.voiceLanguage {
+      language = option.asString()
+    }
+    
     options.append(option)
   }
 
@@ -166,7 +171,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     
     if let t = currentText, let n = additionalText {
       let newText = t.replacingCharacters(in: Range(newTextPosition, in: t)!, with: n)
-      //removeLeadingTripleSlashesInTextField(text: newText)
       
       allowTypingToContinue = has3waCharacters(text: newText) || freeformText
 
@@ -295,19 +299,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   }
   
 
-  /// remove any leading /// from the text - only if it is in three word address format
-  func removeLeadingTripleSlashesInTextField(text: String) {
-    var newText = text
-    
-    if is3wa(text: newText) {
-      if newText.prefix(3) == "///" {
-        newText.removeFirst(3)
-        delegate?.replace(text: newText)
-      }
-    }
-  }
-  
-  
   /// given new text, this calls autosuggest to update the current suggestions
   func updateSuggestions(text: String) {
     if is3wa(text: text) {
@@ -407,7 +398,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   }
 
   
-  /// if this is voice capable, make sure we have a list of available langauges, if we don't then block execution and go get one
+  /// if this is voice capable, make sure we have a list of available languages, if we don't then block execution and go get one
   func updateVoiceLanguageListIfNessesary() {
     if let w3wApi = w3w as? What3WordsV3 {
       if let _ = w3w as? W3WVoice {

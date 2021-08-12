@@ -303,8 +303,23 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     
     tableView.tableFooterView = UIView(frame: CGRect.zero)
     
-    DispatchQueue.main.async {
-      self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0) ?? CGRect.zero
+    if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
+      DispatchQueue.main.async {
+        self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0) ?? CGRect.zero
+      }
+    }
+  }
+  
+  
+  public func updateGeometry() {
+    // update the postion of the tableview if this is a textfield
+    if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
+      tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: min(CGFloat(((self.tableView.dataSource as? W3AutoSuggestDataSource)?.suggestions.count) ?? 0) * self.cellHeight, self.maxTableHeight)) ?? CGRect.zero
+    }
+    
+    // update the position of the hint view if visible
+    if !(didYouMeanView?.isHidden ?? true) {
+      didYouMeanView?.frame = self.delegate?.errorLocation(preferedHeight: self.cellHeight) ?? CGRect.zero
     }
   }
   
@@ -314,32 +329,32 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   /// displays a warning
   func set(warning: String?) {
-    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "WarningTintColor")]
+    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "WarningTextColor")]
     set(warning: warning == nil ? nil : NSAttributedString(string: warning ?? "?", attributes: attributes))
   }
   
   
   /// displays a formatted text warning
   func set(warning: NSAttributedString?) {
-    showNoticeView(message: warning, tint: W3WSettings.color(named: "WarningTintColor"))
+    showNoticeView(message: warning, textColor: W3WSettings.color(named: "WarningTextColor"), backgroundColor: W3WSettings.color(named: "WarningBackground"))
   }
   
 
   /// displays an error
   func set(error: String?) {
-    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "ErrorTintColor")]
+    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "ErrorTextColor")]
     set(error: error == nil ? nil : NSAttributedString(string: error ?? "?", attributes: attributes))
   }
   
   
   /// displays a formatted text error
   func set(error: NSAttributedString?) {
-    showNoticeView(message: error, tint: W3WSettings.color(named: "ErrorTintColor"))
+    showNoticeView(message: error, textColor: W3WSettings.color(named: "ErrorTextColor"), backgroundColor: W3WSettings.color(named: "ErrorBackground"))
   }
   
   
   /// shows a view contianing a text message
-  func showNoticeView(message: NSAttributedString?, tint: UIColor = W3WSettings.color(named: "ErrorTintColor")) {
+  func showNoticeView(message: NSAttributedString?, textColor: UIColor = W3WSettings.color(named: "ErrorTextColor"), backgroundColor: UIColor = W3WSettings.color(named: "ErrorBackground")) {
     DispatchQueue.main.async {
       let frame = self.delegate?.errorLocation(preferedHeight: 32.0) ?? CGRect.zero //.getParentView().frame ?? CGRect.zero
 
@@ -353,8 +368,9 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
       }
 
       self.errorView?.frame = frame
-      self.errorView?.tintColor = tint
-      
+      self.errorView?.tintColor = textColor
+      self.errorView?.backgroundColor = backgroundColor
+
       // if there is a message, unhide the view and make it transparent to begin with and animate it to opacity
       if let e = message {
         self.errorView?.alpha = 0.0
@@ -526,11 +542,14 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
             mic.set(tinyMode: true)
             let sizeFactor = CGFloat(3.0)
             mic.view.frame = CGRect(x: 0.0, y: 0.0, width: textFieldView.frame.height * sizeFactor, height: textFieldView.frame.height * sizeFactor)
-            if W3WSettings.leftToRight {
-              mic.view.center = textFieldView.rightView?.center ?? CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
-            } else {
-              mic.view.center = textFieldView.leftView?.center ?? CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
+
+            // find the location of the mic and place the inut animation there
+            var micCenter = textFieldView.rightView?.center ?? CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
+            if let c = textFieldView.icons?.centerOfMic(), let f = textFieldView.icons?.frame {
+              micCenter = CGPoint(x: c.x + f.origin.x, y: c.y + f.origin.y)
             }
+            mic.view.center = micCenter
+            
             textFieldView.clipsToBounds = true
             textFieldView.addSubview(mic.view)
             if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {

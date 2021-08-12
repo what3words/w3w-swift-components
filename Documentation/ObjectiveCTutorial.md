@@ -58,7 +58,7 @@ Add the following to your view controller's `-(void)viewDidLoad`:
   // make the autosuggest component
   W3WObjcAutoSuggestTextField *textfield = [[W3WObjcAutoSuggestTextField alloc] initWithFrame:frame];
 
-  // assign the API key an set the desired langauge
+  // assign the API key an set the desired language
   [textfield setApiKey:@"YourApiKey"];
   [textfield setLanguage:@"en"];
   

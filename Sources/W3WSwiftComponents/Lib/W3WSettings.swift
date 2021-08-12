@@ -23,7 +23,7 @@ public extension W3WSettings {
   
   // mutable settings
   static var measurement = W3WMesurementSystem.system
-  static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? "en") == Locale.LanguageDirection.leftToRight)
+  static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? W3WSettings.defaultLanguage) == Locale.LanguageDirection.leftToRight)
   
   // MARK:- Colours
   
@@ -33,25 +33,28 @@ public extension W3WSettings {
       "DashesColor"         : [.light: W3WColorScheme.w3wSupportLightGrey],
       "SeparatorColor"      : [.light: W3WColorScheme.w3wSupportLightGrey],
       "CheckMarkColor"      : [.light: W3WColorScheme.w3wSecondaryGreen],
-      "ErrorTintColor"      : [.light: W3WColorScheme.w3wSecondaryCoral],
-      "WarningTintColor"    : [.light: W3WColorScheme.w3wDarkBlue],
+      "ErrorTextColor"      : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wDarkBlue],
+      "ErrorBackground"     : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wSecondaryCoral],
+      "WarningTextColor"    : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wDarkBlue],
+      "WarningBackground"   : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wSecondaryCoral],
       "BorderColor"         : [.light: W3WColorScheme.w3wSupportMediumGrey],
       "MicTextSecondary"    : [.light: W3WColorScheme.w3wSupportMediumGrey],
       "MicShadow"           : [.light: W3WColorScheme.w3wSupportDarkGrey],
-      "CloseIconColor"      : [.light: W3WColorScheme.w3wBlack],
-      "MicTextColor"        : [.light: W3WColorScheme.w3wBlack],
-      "MicBackground"       : [.light: W3WColorScheme.componentOffWhite],
-      "NearestPlaceColor"   : [.light: W3WColorScheme.componentSubheading,    .dark: W3WColorScheme.w3wWhite],
+      "CloseIconColor"      : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wSupportMediumGrey],
+      "MicTextColor"        : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite],
+      "MicBackground"       : [.light: W3WColorScheme.componentOffWhite,      .dark: W3WColorScheme.w3wDarkBlue],
+      "NearestPlaceColor"   : [.light: W3WColorScheme.componentSubheading,    .dark: W3WColorScheme.w3wSupportLightGrey],
       "AddressTextColor"    : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wWhite],
-      "HighlightBacking"    : [.light: W3WColorScheme.w3wSecondaryLightBlue,  .dark: W3WColorScheme.w3wSupportMediumGrey],
+      "HighlightBacking"    : [.light: W3WColorScheme.w3wSecondaryLightBlue,  .dark: W3WColorScheme.w3wDarkBlue],
       "TableCellBacking"    : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
       "TextfieldText"       : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite],
-      "TextfieldBackground" : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
+      "TextfieldBackground" : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.componentOffBlack],
       "TextfieldPlaceholder": [.light: W3WColorScheme.w3wSupportMediumGrey,   .dark: W3WColorScheme.w3wSupportMediumGrey],
-      "HintBackground"      : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
-      "ErrorBackground"     : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
-      "MicOnColor"          : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wWhite],
-      "MicOffColor"         : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wBlack],
+      "HintBackground"      : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.componentOffBlack],
+      "HintTextColor"       : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wWhite],
+      "HintTopLine"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: .clear],
+      "MicOnColor"          : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wRed],
+      "MicOffColor"         : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wWhite],
       "VoiceIconColor"      : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite]
     ]
 

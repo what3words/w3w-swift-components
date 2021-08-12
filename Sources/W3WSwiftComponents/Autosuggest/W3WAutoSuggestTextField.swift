@@ -49,6 +49,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   var slashesView: UIView! // W3WSlashesView!
   var voiceIconView: W3WVoiceIconView!
   var checkView: W3WCheckIconView!
+  var icons: W3WIconStack?
   
   var iconSize:CGFloat    = W3WSettings.componentsSlashesIconSize
   var iconPadding:CGFloat = W3WSettings.componentsSlashesPadding
@@ -76,11 +77,18 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   // MARK: Accessors
   
   
+  // let the child view controller know size is changing
+  override public var frame: CGRect {
+    didSet {
+      autoSuggestViewController.updateGeometry()
+    }
+  }
+  
   /// assign a what3words engine, or API to this  component.  language is optional and defaults to English: "en"
   /// - Parameters:
   ///     - w3w: the what3words API or SDK
-  ///     - language: a ISO two letter langauge code
-  public func set(_ w3w: W3WProtocolV3, language: String = "en") {
+  ///     - language: a ISO two letter language code
+  public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
     autoSuggestViewController.set(w3w)
     configure()
     confireuUI()
@@ -120,9 +128,21 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  /// sets the langauge to use when returning three word addresses
+  /// set the color of the textfield background in all AutosuggestTextFields globally
   /// - Parameters:
-  ///     - language: a ISO two letter langauge code
+  ///     - backgroundColor: the color for the textfield background
+  ///     - darkMode: the color for the textfield background when the device is in "dark mode"
+  public func set(placeholderColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: placeholderColor, named: "TextfieldPlaceholder", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldPlaceholder", forMode: .dark)
+    updateColours()
+  }
+  
+
+  
+  /// sets the language to use when returning three word addresses
+  /// - Parameters:
+  ///     - language: a ISO two letter language code
   public func set(language l: String) {
     autoSuggestViewController.autoSuggestDataSource.language = l
     
@@ -172,7 +192,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
         //self.autoSuggestViewController.initialiseMicrophone()
         if voiceIconView == nil {
           DispatchQueue.main.async {
-            self.voiceIconView = W3WVoiceIconView()
+            self.voiceIconView = W3WVoiceIconView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height)))
             self.voiceIconView.set(padding: self.frame.size.height * 0.2)
             self.voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
             //iconsView.add(right: voiceIconView)
@@ -196,19 +216,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     set(options: [W3WOption.voiceLanguage(autoSuggestViewController.autoSuggestDataSource.language)])
   }
   
-    
-  override open func textRect(forBounds bounds: CGRect) -> CGRect {
-    return bounds.inset(by: padding)
-  }
-  
-  override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-    return bounds.inset(by: padding)
-  }
-  
-  override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-    return bounds.inset(by: padding)
-  }
-  
+     
   /// initializes the UI
   func confireuUI() {
     clipsToBounds = true
@@ -221,16 +229,16 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     
     if W3WSettings.leftToRight {
       textAlignment = .left
+      semanticContentAttribute = UISemanticContentAttribute.forceLeftToRight
     } else {
       textAlignment = .right
+      semanticContentAttribute = UISemanticContentAttribute.forceRightToLeft
     }
 
     if font == nil {
       font = UIFont.systemFont(ofSize: frame.size.height * 0.618)
-    } else {
-      font = font?.withSize(frame.size.height * 0.618)
     }
-    
+
     self.iconPadding = (self.frame.size.height - self.iconSize) / 2.0
 
     if slashesView == nil {
@@ -242,7 +250,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     if checkView == nil {
       DispatchQueue.main.async {
         self.checkView = W3WCheckIconView()
-        self.checkView.set(padding: self.frame.size.height * 0.15)
+        self.checkView.set(padding: self.frame.size.height * 0.2)
         self.checkView.isHidden = true
         //iconsView.add(left: checkView)
         self.updateIcons()
@@ -256,9 +264,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     layer.borderWidth = 0.5
     layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
     
-    DispatchQueue.main.async {
-      self.voiceIconView?.frame = CGRect(x: self.iconPadding, y: self.iconPadding, width: self.iconSize, height: self.iconSize)
-    }
+//    DispatchQueue.main.async {
+//      self.voiceIconView?.frame = CGRect(x: self.iconPadding, y: self.iconPadding, width: self.iconSize, height: self.iconSize)
+//    }
     
     if placeholder == nil {
       placeholder = W3WSettings.componentsPlaceholderText
@@ -279,16 +287,28 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     self.leftViewMode = .always
     self.rightViewMode = .always
 
-    let icon = (checkView?.isHidden ?? true) ? voiceIconView : checkView
+    // make icon placeholder
+    if icons == nil {
+      icons = W3WIconStack(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height)))
+    }
+    let iconHeight = (self.frame.width / self.frame.height > 5) ? self.frame.height : self.frame.width / 5.0
+    icons?.frame = CGRect(origin: icons?.frame.origin ?? .zero, size: CGSize(width: iconHeight, height: iconHeight))
+    icons?.resize()
     
-    if W3WSettings.leftToRight {
-      self.leftView  = slashesView
-      self.rightView = icon
-    } else {
-      self.leftView  = icon
-      self.rightView = slashesView
+    // if there is a checkmark, put it in
+    if checkView != nil {
+      icons?.add(left: checkView)
+    }
+    
+    // if there is a voice icon, put it in
+    voiceIconView?.frame = CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height))
+    if voiceIconView != nil {
+      icons?.add(left: voiceIconView)
     }
 
+    // assign the things to the correct sides of the textfield
+    self.leftView  = slashesView
+    self.rightView = icons
   }
 
   
