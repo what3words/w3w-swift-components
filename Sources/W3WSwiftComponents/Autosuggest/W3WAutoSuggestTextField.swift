@@ -89,8 +89,9 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   ///     - w3w: the what3words API or SDK
   ///     - language: a ISO two letter language code
   public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
+    autoSuggestViewController.delegate = self
     autoSuggestViewController.set(w3w)
-    configure()
+    set(options: [W3WOption.voiceLanguage(autoSuggestViewController.autoSuggestDataSource.language)])
     confireuUI()
     
     // this can affect voice ability, reset the voice icon
@@ -209,12 +210,6 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     self.padding      = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
   }
 
-  
-  /// makes nessesary initialization, called by init()s
-  func configure() {
-    autoSuggestViewController.delegate = self
-    set(options: [W3WOption.voiceLanguage(autoSuggestViewController.autoSuggestDataSource.language)])
-  }
   
      
   /// initializes the UI

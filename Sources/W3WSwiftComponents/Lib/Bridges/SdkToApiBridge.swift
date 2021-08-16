@@ -5,6 +5,14 @@
 //  Created by Dave Duprey on 18/09/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
+//  NOTE:
+//  This is included by the compiler if the iOS SDK is available
+//  It creates compatibility between the API and the SDK, specifically
+//  interoperability.  This is achived by extending the classes and
+//  and structs to conform to the protocols that are used throughout
+//  the component library.  Contact what3words if you wish to use
+//  the SDK and remove the dependancy on an Internet conneciton
+//
 
 import Foundation
 import W3WSwiftApi
