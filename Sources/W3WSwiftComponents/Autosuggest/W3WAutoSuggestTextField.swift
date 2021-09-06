@@ -56,10 +56,23 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   var leftPadding:CGFloat  = 16.0
   var rightPadding:CGFloat = 16.0
-  var padding = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+  var padding = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
   
   
   // MARK: Init
+  
+  
+  public init() {
+    super.init(frame: CGRect(origin: .zero, size: CGSize(width: W3WSettings.componentsTextFieldWidth, height: W3WSettings.componentsTextFieldHeight)))
+    self.delegate = self
+  }
+  
+  
+  public init(_ w3w: W3WProtocolV3, frame: CGRect? = nil) {
+    super.init(frame: frame ?? CGRect(origin: .zero, size: CGSize(width: W3WSettings.componentsTextFieldWidth, height: W3WSettings.componentsTextFieldHeight)))
+    set(w3w)
+    self.delegate = self
+  }
   
   
   public override init(frame: CGRect) {

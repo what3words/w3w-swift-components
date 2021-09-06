@@ -469,7 +469,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   
   // MARK: - Table view
-  // wasn't sure if this shouidl go here in the DataSource, or in the TableView.
+  // wasn't sure if this should go here in the DataSource, or in the TableView.
   // this returns UITableViewCells so should probably go in TableView
   // but it also needs to know the data, so should probably go here
   

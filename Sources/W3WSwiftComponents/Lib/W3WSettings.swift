@@ -55,7 +55,11 @@ public extension W3WSettings {
       "HintTopLine"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: .clear],
       "MicOnColor"          : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wRed],
       "MicOffColor"         : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wWhite],
-      "VoiceIconColor"      : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite]
+      "VoiceIconColor"      : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite],
+      
+      "MapGridColor"        : [.light: W3WColorScheme.w3wSupportMediumGrey,   .dark: W3WColorScheme.w3wSupportMediumGrey],
+      "MapSquareColor"      : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wSupportLightGrey],
+      "MapPinColor"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wRed]
     ]
 
   /// the colour information for all components
@@ -92,7 +96,9 @@ public extension W3WSettings {
   static let componentsSlashesPadding     = CGFloat(10.0)
   static let componentsIconPadding        = CGFloat(10.0)
   static let componentsLogoSize           = CGFloat(64.0)
-  
+  static let componentsTextFieldWidth     = CGFloat(300.0)
+  static let componentsTextFieldHeight    = CGFloat(48.0)
+
   // display text
   static let componentsPlaceholderText    = NSLocalizedString("input_hint",               bundle: Bundle.module, comment: "e.g. ///lock.spout.radar")
   static let componentsNearFormatText     = NSLocalizedString("near",                     bundle: Bundle.module, comment: "near %@")  // used to say NSLocalizedString("near %@", comment: "near %@"), but we need translations for this
