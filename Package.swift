@@ -15,7 +15,8 @@ let package = Package(
   ],
   dependencies: [
     // Dependencies declare other packages that this package depends on.
-    .package(url: "https://github.com/what3words/w3w-swift-wrapper.git", "3.6.6"..<"4.0.0"),
+    //.package(url: "https://github.com/what3words/w3w-swift-wrapper.git", "3.6.6"..<"4.0.0"),
+    .package(url: "https://github.com/what3words/w3w-swift-wrapper.git", .branch("dd-v3.6.7")),
   ],
   targets: [
     // Targets are the basic building blocks of a package. A target can define a module or a test suite.
