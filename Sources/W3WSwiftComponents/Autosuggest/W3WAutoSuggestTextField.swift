@@ -203,13 +203,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
 
     if voiceEnabled && autoSuggestViewController.supportsVoice() {
       if autoSuggestViewController.supportsVoice() {
-        //self.autoSuggestViewController.initialiseMicrophone()
         if voiceIconView == nil {
+          self.voiceIconView = W3WVoiceIconView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height)))
+          self.voiceIconView.set(padding: self.frame.size.height * 0.2)
+          self.voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
           DispatchQueue.main.async {
-            self.voiceIconView = W3WVoiceIconView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height)))
-            self.voiceIconView.set(padding: self.frame.size.height * 0.2)
-            self.voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
-            //iconsView.add(right: voiceIconView)
             self.updateIcons()
           }
         }
