@@ -18,8 +18,11 @@ public class W3WSuggestionView: UIView, W3WSuggestionViewProtocol {
   var suggestion: W3WSuggestion?
   //var threeWordAddressText: W3WFormatter?
   
-  /// indicates if this one should stand out form the rest
+  /// indicates if this one should stand out from the rest
   var highlight = false
+
+  /// indicates  if the view should ignore dark mode
+  var disableDarkmode: Bool = false
   
   /// the UI elements
   var wordsLabel: UILabel?

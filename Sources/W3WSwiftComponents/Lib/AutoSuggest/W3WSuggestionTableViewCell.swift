@@ -22,6 +22,9 @@ public class W3WSuggestionTableViewCell: UITableViewCell, W3WSuggestionViewProto
   /// indicates if this one should stand out form the rest
   var highlight = false
   
+  /// indicates  if the view should ignore dark mode
+  var disableDarkmode: Bool = false
+
   /// the UI elements
   var wordsLabel: UILabel?
   var flagIcon: UIImageView?

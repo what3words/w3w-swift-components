@@ -66,6 +66,9 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   /// indicates if free form text is being used in text field, or if it is only allowing w3w characters
   private var freeformText = true
 
+  /// indicates if we should ignore darkmode
+  var disableDarkmode = false
+  
   
   func set(w3w: W3WProtocolV3) {
     self.w3w = w3w
@@ -124,6 +127,14 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func set(freeformText: Bool) {
     self.freeformText = freeformText
   }
+  
+
+  /// this set whether cells are set to ignore dark mode.
+  /// this maybe shouldn't be here either, see notes in tableview section
+  public func disable(darkmode: Bool) {
+    disableDarkmode = darkmode
+  }
+
 
   /// initialize the microphone and localize two of it's event closures to be used by viewcontrollers associated with this object
   func initialiseMicrophone() {
@@ -518,8 +529,11 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: W3WSuggestionTableViewCell.cellIdentifier, for: indexPath) as? W3WSuggestionTableViewCell
     
+    if #available(iOS 13.0, *) {
+      cell?.disable(darkmode: disableDarkmode)
+    }
+    
     let suggestion = suggestions[indexPath.row]
-    //cell?.set(address: suggestion.words, countryCode: suggestion.country, nearestPlace: suggestion.nearestPlace, language: language)
     cell?.set(suggestion: suggestion)
     
     return cell!

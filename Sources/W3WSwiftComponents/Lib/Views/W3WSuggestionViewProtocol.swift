@@ -18,6 +18,9 @@ protocol W3WSuggestionViewProtocol : UIView {
   /// indicates if this one should stand out from the rest
   var highlight: Bool { get set }
   
+  /// indicates if we should ignore darkmode
+  var disableDarkmode: Bool { get set }
+
   /// called when the dispaly colours should change, ei, light/dark mode
   func updateColours()
 
@@ -116,33 +119,41 @@ extension W3WSuggestionViewProtocol {
     updateColours()
   }
   
+  
+  /// this set whether cells are set to ignore dark mode.
+  /// this maybe shouldn't be here either, see notes in tableview section
+  public func disable(darkmode: Bool) {
+    disableDarkmode = darkmode
+  }
+  
 
   func updateColours() {
+    
     // set the background colour
-    backgroundColor = W3WSettings.color(named: "TableCellBacking")
+    backgroundColor = W3WSettings.color(named: "TableCellBacking", forMode: disableDarkmode ? .light : W3WColorScheme.colourMode)
 
     // deal with highlight colour in UITableViewCell
     if let cell = self as? UITableViewCell {
       cell.isHighlighted = highlight
-      cell.selectedBackgroundView?.backgroundColor = W3WSettings.color(named: "HighlightBacking")
+      cell.selectedBackgroundView?.backgroundColor = W3WSettings.color(named: "HighlightBacking", forMode: disableDarkmode ? .light : W3WColorScheme.colourMode)
     }
     
     // deal with highlight colour in non-UITableViewCell
     if self.highlight {
-      backgroundColor = W3WSettings.color(named: "HighlightBacking")
+      backgroundColor = W3WSettings.color(named: "HighlightBacking", forMode: disableDarkmode ? .light : W3WColorScheme.colourMode)
     } else {
-      backgroundColor = W3WSettings.color(named: "TableCellBacking")
+      backgroundColor = W3WSettings.color(named: "TableCellBacking", forMode: disableDarkmode ? .light : W3WColorScheme.colourMode)
     }
 
-    wordsLabel?.textColor = W3WSettings.color(named: "AddressTextColor")
+    wordsLabel?.textColor = W3WSettings.color(named: "AddressTextColor", forMode: disableDarkmode ? .light : W3WColorScheme.colourMode)
 
     if let words = suggestion?.words {
       let threeWordAddressText = W3WFormatter(words)
       wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: wordsTextHeight(), slashColor: W3WSettings.color(named: "SlashesColor"), weight: .semibold)
     }
 
-    nearestPlaceLabel?.textColor = W3WSettings.color(named: "NearestPlaceColor")
-    distanceLabel?.textColor = W3WSettings.color(named: "NearestPlaceColor")
+    nearestPlaceLabel?.textColor = W3WSettings.color(named: "NearestPlaceColor", forMode: disableDarkmode ? .light : W3WColorScheme.colourMode)
+    distanceLabel?.textColor = W3WSettings.color(named: "NearestPlaceColor", forMode: disableDarkmode ? .light : W3WColorScheme.colourMode)
   }
   
   

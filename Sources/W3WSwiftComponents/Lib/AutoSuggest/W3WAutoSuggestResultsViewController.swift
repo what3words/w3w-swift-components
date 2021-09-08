@@ -131,10 +131,20 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   }
   
   
-  //func initialiseMicrophone() {
-  //  autoSuggestDataSource.initialiseMicrophone()
-  //}
-  
+  public func disable(darkmode: Bool) {
+    autoSuggestDataSource.disableDarkmode = darkmode
+    
+    if #available(iOS 13.0, *) {
+      overrideUserInterfaceStyle = darkmode ? .light : .unspecified
+      
+      for cell in tableView.visibleCells {
+        if let c = cell as? W3WSuggestionViewProtocol {
+          c.disable(darkmode: darkmode)
+        }
+      }
+    }
+  }
+
 
   func isValid3wa(text: String) -> Bool {
     return autoSuggestDataSource.isInKnownAddressList(text: text)

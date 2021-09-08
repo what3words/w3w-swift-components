@@ -227,8 +227,6 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   func confireuUI() {
     clipsToBounds = true
     
-   // disable(darkmode: true)
-    
     padding = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
     
     updateColours()
@@ -281,11 +279,10 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   public func disable(darkmode: Bool) {
-    if darkmode {
-      if #available(iOS 13.0, *) {
-        overrideUserInterfaceStyle = .light
-      }
+    if #available(iOS 13.0, *) {
+      overrideUserInterfaceStyle = darkmode ? .light : .unspecified
     }
+    autoSuggestViewController.disable(darkmode: darkmode)
   }
   
   
