@@ -372,7 +372,7 @@ struct Clip {
     //MARK: Actions Methods
     public func showList() {
         if parentController == nil {
-            parentController = self.parentViewController
+            parentController = self.w3wParentViewController
             backgroundView.frame = parentController?.view.frame ?? backgroundView.frame
             pointToParent = getConvertedPoint(self, baseView: parentController?.view)
         }

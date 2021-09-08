@@ -286,7 +286,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   /// gets the parent's view controller for presenting the table, crashes the app if there is no parent
   func getParentViewController() -> UIViewController {
-    let parent = delegate?.getParentView().parentViewController
+    let parent = delegate?.getParentView().w3wParentViewController
     
     assert(parent != nil, "W3AutoSuggestResultsViewControllerDelegate not assigned to W3AutoSuggestResultsViewController, or getParentViewController() is not returning a UIView!")
     
