@@ -58,7 +58,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   var microphone: W3WMicrophone!
   
   /// makes sure the autosuggest isn't called too frequently
-  var suggestionsDebouncer: W3WTextFieldDebouncer?
+  var suggestionsDebouncer: W3WTextDebouncer?
   
   /// if true, then this will use convertToCoordinates to return lat/long for every suggestion (calls will return W3WSquare instead of W3WSuggestion)
   var useConvertToCoordinates = false
@@ -149,7 +149,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   /// do initial set up
   func configure() {    
     // set up the debouncer as to not call autosuggest too rapidly
-    suggestionsDebouncer = W3WTextFieldDebouncer(delay: 1.0, handler: { text in self.updateSuggestions(text: text) })
+    suggestionsDebouncer = W3WTextDebouncer(delay: 1.0, handler: { text in self.updateSuggestions(text: text) })
   }
 
   
