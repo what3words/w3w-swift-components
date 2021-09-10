@@ -31,13 +31,13 @@ public extension W3WSettings {
     [
       "SlashesColor"        : [.light: W3WColorScheme.w3wRed],
       "DashesColor"         : [.light: W3WColorScheme.w3wSupportLightGrey],
-      "SeparatorColor"      : [.light: W3WColorScheme.w3wSupportLightGrey],
       "CheckMarkColor"      : [.light: W3WColorScheme.w3wSecondaryGreen],
       "ErrorTextColor"      : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wDarkBlue],
       "ErrorBackground"     : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wSecondaryCoral],
       "WarningTextColor"    : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wDarkBlue],
       "WarningBackground"   : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wSecondaryCoral],
       "BorderColor"         : [.light: W3WColorScheme.w3wSupportMediumGrey],
+      "SeparatorColor"      : [.light: W3WColorScheme.w3wSupportLightGrey,    .dark: W3WColorScheme.w3wSupportMediumGrey],
       "MicTextSecondary"    : [.light: W3WColorScheme.w3wSupportMediumGrey],
       "MicShadow"           : [.light: W3WColorScheme.w3wSupportDarkGrey],
       "CloseIconColor"      : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wSupportMediumGrey],
@@ -62,26 +62,30 @@ public extension W3WSettings {
       "MapPinColor"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wRed]
     ]
 
+  
   /// the colour information for all components
   static internal var colors = W3WColorScheme(colors: colorPalette)
+  
   
   /// set a colour for a colour mode
   static func set(color: UIColor, named: String, forMode: W3WColourMode) {
     colorPalette[named]?[forMode] = color
   }
   
+  
   /// return a color of a particular name, in the current colour mode (dark/light), failing that return in any colour mode, failing that, return black
   static func color(named: String) -> UIColor {
-    if let color = color(named: named, forMode: W3WColorScheme.colourMode) {
-      return color
-    } else {
-      return colorPalette[named]?.first?.value ?? W3WColorScheme.w3wBlack
-    }
+    return color(named: named, forMode: W3WColorScheme.colourMode)
   }
 
-  /// return a color of a particular name, for a specific colour mode
-  static func color(named: String, forMode: W3WColourMode) -> UIColor? {
-    return colorPalette[named]?[forMode]
+  
+  /// return a color of a particular name, for a specific colour mode, if no such colour exists, return the light mode colour, failing that, return any colour for that name, failing that, return black
+  static func color(named: String, forMode: W3WColourMode) -> UIColor {
+    if let color = colorPalette[named]?[forMode] {
+      return color
+    } else {
+      return (colorPalette[named]?[.light] ?? colorPalette[named]?.first?.value) ?? W3WColorScheme.w3wBlack
+    }
   }
   
   
@@ -106,12 +110,4 @@ public extension W3WSettings {
   static let apiErrorText                 = NSLocalizedString("invalid_address_message",  bundle: Bundle.module, comment: "The API didn't have an answer for the given input")
   static let didYouMeanText               = NSLocalizedString("correction_message",       bundle: Bundle.module, comment: "Asks if the user meant to write a different addres that is presented below this text")
   
-  // regex
-  static let regex_3wa_characters         = "^/*([^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]|[.｡。･・︒។։။۔።।]){0,}$"
-  static let regex_3wa_separator          = "[.｡。･・︒។։။۔።।]"
-  static let regex_3wa_mistaken_separator = "[.｡。･・︒។։။۔።। ,\\-_/+'&\\:;|]{1,2}"
-  static let regex_3wa_word               = "\\w+"
-  static let regex_match                  = "^/*" + W3WSettings.regex_3wa_word + W3WSettings.regex_3wa_separator + W3WSettings.regex_3wa_word + W3WSettings.regex_3wa_separator + W3WSettings.regex_3wa_word + "$"
-  static let regex_loose_match            = "^/*" + W3WSettings.regex_3wa_word + W3WSettings.regex_3wa_mistaken_separator + W3WSettings.regex_3wa_word + W3WSettings.regex_3wa_mistaken_separator + W3WSettings.regex_3wa_word + "$"
-
 }

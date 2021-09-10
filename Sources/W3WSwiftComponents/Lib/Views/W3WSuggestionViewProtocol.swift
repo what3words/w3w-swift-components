@@ -122,8 +122,9 @@ extension W3WSuggestionViewProtocol {
   
   /// this set whether cells are set to ignore dark mode.
   /// this maybe shouldn't be here either, see notes in tableview section
-  public func disable(darkmode: Bool) {
-    disableDarkmode = darkmode
+  public func set(darkModeSupport: Bool) {
+    disableDarkmode = !darkModeSupport
+    updateColours()
   }
   
 

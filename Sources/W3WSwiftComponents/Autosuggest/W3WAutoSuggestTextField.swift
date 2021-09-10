@@ -42,6 +42,8 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   /// indicates if the textfield should be cleared when user focus changes
   private var allowInvalid3wa = false
 
+  var disableDarkmode = false
+  
   /// this is the view controller for displaying the suggestions
   var autoSuggestViewController = W3WAutoSuggestResultsViewController()
   
@@ -265,7 +267,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
         
     adjustsFontSizeToFitWidth = false
     
-    layer.borderWidth = 0.5
+    layer.borderWidth = 1.0
     layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
     
 //    DispatchQueue.main.async {
@@ -278,11 +280,15 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  public func disable(darkmode: Bool) {
+  public func set(darkModeSupport: Bool) {
+    disableDarkmode = !darkModeSupport
+    
     if #available(iOS 13.0, *) {
-      overrideUserInterfaceStyle = darkmode ? .light : .unspecified
+      overrideUserInterfaceStyle = darkModeSupport ? .unspecified : .light
     }
-    autoSuggestViewController.disable(darkmode: darkmode)
+    autoSuggestViewController.set(darkModeSupport: darkModeSupport)
+    
+    updateColours()
   }
   
   
@@ -346,10 +352,10 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   func updateColours() {
     DispatchQueue.main.async {
-      self.textColor         = W3WSettings.color(named: "TextfieldText")
-      self.backgroundColor   = W3WSettings.color(named: "TextfieldBackground")
-      self.layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
-      self.attributedPlaceholder = NSAttributedString(string: self.attributedPlaceholder?.string ?? "", attributes: [NSAttributedString.Key.foregroundColor: W3WSettings.color(named: "TextfieldPlaceholder")])
+      self.textColor          = W3WSettings.color(named: "TextfieldText", forMode: self.disableDarkmode ? .light : W3WColorScheme.colourMode)
+      self.backgroundColor     = W3WSettings.color(named: "TextfieldBackground", forMode: self.disableDarkmode ? .light : W3WColorScheme.colourMode)
+      self.layer.borderColor    = W3WSettings.color(named: "BorderColor", forMode: self.disableDarkmode ? .light : W3WColorScheme.colourMode).cgColor
+      self.attributedPlaceholder = NSAttributedString(string: self.attributedPlaceholder?.string ?? "", attributes: [NSAttributedString.Key.foregroundColor: W3WSettings.color(named: "TextfieldPlaceholder", forMode: self.disableDarkmode ? .light : W3WColorScheme.colourMode)])
     }
   }
   

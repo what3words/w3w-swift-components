@@ -70,10 +70,8 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     
     tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
     tableView.separatorStyle = .singleLineEtched
-    tableView.separatorColor = W3WSettings.color(named: "SeparatorColor")
-    
-    tableView.layer.borderWidth = 0.5
-    tableView.layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
+    tableView.layer.borderWidth = 1.0
+    updateColours()
   }
 
 
@@ -131,20 +129,30 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   }
   
   
-  public func disable(darkmode: Bool) {
-    autoSuggestDataSource.disableDarkmode = darkmode
+  public func set(darkModeSupport: Bool) {
+    autoSuggestDataSource.disableDarkmode = !darkModeSupport
     
     if #available(iOS 13.0, *) {
-      overrideUserInterfaceStyle = darkmode ? .light : .unspecified
+      overrideUserInterfaceStyle = darkModeSupport ? .unspecified : .light
       
       for cell in tableView.visibleCells {
         if let c = cell as? W3WSuggestionViewProtocol {
-          c.disable(darkmode: darkmode)
+          c.set(darkModeSupport: darkModeSupport)
         }
       }
     }
+    
+    updateColours()
   }
 
+  
+  /// update the colours
+  func updateColours() {
+    tableView.separatorColor = W3WSettings.color(named: "SeparatorColor", forMode: autoSuggestDataSource.disableDarkmode ? .light : W3WColorScheme.colourMode)
+    tableView.layer.borderColor = W3WSettings.color(named: "BorderColor", forMode: autoSuggestDataSource.disableDarkmode ? .light : W3WColorScheme.colourMode).cgColor
+  }
+  
+  
 
   func isValid3wa(text: String) -> Bool {
     return autoSuggestDataSource.isInKnownAddressList(text: text)

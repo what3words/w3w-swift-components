@@ -131,8 +131,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
 
   /// this set whether cells are set to ignore dark mode.
   /// this maybe shouldn't be here either, see notes in tableview section
-  public func disable(darkmode: Bool) {
-    disableDarkmode = darkmode
+  public func set(darkModeSupport: Bool) {
+    disableDarkmode = !darkModeSupport
   }
 
 
@@ -220,14 +220,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   /// checks if input looks like a 3 word address or not
   func is3wa(text: String) -> Bool {
-    let regex = try! NSRegularExpression(pattern:W3WSettings.regex_match, options: [])
-    let count = regex.numberOfMatches(in: text, options: [], range: NSRange(text.startIndex..<text.endIndex, in:text))
-    if (count > 0) {
-      return true
-    }
-    else {
-      return false
-    }
+    return w3w?.isPossible3wa(text: text) ?? false
   }
   
   
@@ -530,7 +523,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     let cell = tableView.dequeueReusableCell(withIdentifier: W3WSuggestionTableViewCell.cellIdentifier, for: indexPath) as? W3WSuggestionTableViewCell
     
     if #available(iOS 13.0, *) {
-      cell?.disable(darkmode: disableDarkmode)
+      cell?.set(darkModeSupport: !disableDarkmode)
     }
     
     let suggestion = suggestions[indexPath.row]
