@@ -12,8 +12,34 @@ final class w3w_swift_componentsTests: XCTestCase {
     if let apikey = ProcessInfo.processInfo.environment["APIKEY"] {
       api = What3WordsV3(apiKey: apikey)
     } else {
-      print("Environment variable APIKEY must be set")
-      abort()
+      if let apikey = Bundle.main.object(forInfoDictionaryKey: "APIKEY") as? String {
+        api = What3WordsV3(apiKey: apikey)
+
+      } else {
+        
+        print("CommandLine.arguments")
+        for x in CommandLine.arguments {
+          print(x)
+        }
+        
+        print("processInfo.arguments")
+        for x in ProcessInfo.processInfo.arguments {
+          print(x)
+        }
+        
+        print("processInfo.environment.keys")
+        for x in ProcessInfo.processInfo.environment.keys {
+          print(x)
+        }
+        
+        print("processInfo.environment.keys")
+        for x in ProcessInfo.processInfo.environment.keys {
+          print(x)
+        }
+        
+        print("Environment variable APIKEY must be set")
+        abort()
+      }
     }
   }
   
