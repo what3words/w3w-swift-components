@@ -24,9 +24,7 @@ let package = Package(
     .target(
       name: "W3WSwiftComponents",
       dependencies: [.product(name: "W3WSwiftApi", package: "w3w-swift-wrapper")],
-      //resources: [.copy("Resources/flag.water.png"), .copy("Resources/logo.png")]
       resources: [.process("Resources")]
-      //resources: [.copy("Resources")]
     ),
     .testTarget(
       name: "w3w-swift-componentsTests",

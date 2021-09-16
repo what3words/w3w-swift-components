@@ -8,6 +8,9 @@
 import Foundation
 import UIKit
 import W3WSwiftApi
+#if canImport(w3w)
+import w3w
+#endif
 
 
 /// protocol for talking to the tableview and providing it with updates and data
@@ -149,7 +152,16 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   /// do initial set up
   func configure() {    
     // set up the debouncer as to not call autosuggest too rapidly
-    suggestionsDebouncer = W3WTextDebouncer(delay: 1.0, handler: { text in self.updateSuggestions(text: text) })
+    var delay = 1.0
+    
+    // faster delay if the SDK is being used instead of the API
+    #if canImport(w3w)
+    if w3w is What3Words {
+      delay = 0.1
+    }
+    #endif
+
+    suggestionsDebouncer = W3WTextDebouncer(delay: delay, handler: { text in self.updateSuggestions(text: text) })
   }
 
   
