@@ -1,0 +1,19 @@
+version: 2.1
+
+jobs: # a basic unit of work in a run
+  test: # your job name
+    macos:
+      xcode: 12.2.0 # version of Xcode
+    steps:
+      - checkout  # pull down code from
+      - run:
+          name: Run Unit Tests
+          command: |-
+            xcodebuild -scheme w3w-swift-components -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
+            xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
+          
+workflows:
+  version: 2
+  test_build:
+    jobs:
+      - test
