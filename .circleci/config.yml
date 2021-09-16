@@ -9,6 +9,7 @@ jobs: # a basic unit of work in a run
       - run:
           name: Run Unit Tests
           command: |-
+            for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
             xcodebuild -scheme w3w-swift-components -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
             xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
           
