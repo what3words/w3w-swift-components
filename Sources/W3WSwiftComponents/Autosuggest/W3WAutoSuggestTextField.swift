@@ -207,7 +207,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       if autoSuggestViewController.supportsVoice() {
         if voiceIconView == nil {
           self.voiceIconView = W3WVoiceIconView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height)))
-          self.voiceIconView.set(padding: self.frame.size.height * 0.2)
+          self.voiceIconView.set(padding: min(self.frame.size.height * 0.2, W3WSettings.componentsIconPadding))
           self.voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
           DispatchQueue.main.async {
             self.updateIcons()
@@ -256,7 +256,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     if checkView == nil {
       DispatchQueue.main.async {
         self.checkView = W3WCheckIconView()
-        self.checkView.set(padding: self.frame.size.height * 0.2)
+        self.checkView.set(padding: min(self.frame.size.height * 0.2, W3WSettings.componentsIconPadding))
         self.checkView.isHidden = true
         //iconsView.add(left: checkView)
         self.updateIcons()
