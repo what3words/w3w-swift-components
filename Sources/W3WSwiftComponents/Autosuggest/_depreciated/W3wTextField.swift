@@ -6,12 +6,13 @@
 //  Copyright © 2019 CocoaPods. All rights reserved.
 //
 
-import UIKit
+
 import Foundation
 import CoreLocation
 import W3WSwiftApi
 
 #if os(iOS)
+import UIKit
 
 public struct flag {
     static let rows         = 16

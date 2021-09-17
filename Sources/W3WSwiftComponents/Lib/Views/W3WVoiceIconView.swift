@@ -1,6 +1,3 @@
-
-
-
 //
 //  MicrophoneView.swift
 //  UberApiTest
