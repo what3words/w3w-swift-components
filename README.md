@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/what3words/w3w-swift-components/tree/master.svg?style=svg)](https://circleci.com/gh/what3words/w3w-swift-components/tree/master)
 # <img valign='top' src="https://what3words.com/assets/images/w3w_square_red.png" width="64" height="64" alt="what3words">&nbsp;w3w-swift-components
 
 Overview
@@ -67,4 +68,15 @@ If you are using the Voice API on device, you should include Microphone permissi
 
 <img src="Documentation/plist2.png" width="75%">
 
+
+System Settings
+---------------
+
+#### Measurements
+
+The measurement system in these components are set to the user's preference or locale automatically, but you can override this to `.metric`, or `.imperial`:
+
+```swift
+W3WSettings.measurement = .metric
+```
 

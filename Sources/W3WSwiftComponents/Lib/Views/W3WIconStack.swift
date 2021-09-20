@@ -8,21 +8,27 @@
 
 import UIKit
 
+
+/// a view containing a number of icons for display in a textfield
 class W3WIconStack: UIView {
 
   var icons   = [UIView]()
   var spacing = CGFloat(0.0)
   
   func add(left: UIView) {
-    icons.insert(left, at: 0)
-    addSubview(left)
+    if !icons.contains(left) {
+      icons.insert(left, at: 0)
+      addSubview(left)
+    }
     resize()
   }
   
   
   func add(right: UIView) {
-    icons.append(right)
-    addSubview(right)
+    if !icons.contains(right) {
+      icons.append(right)
+      addSubview(right)
+    }
     resize()
   }
   
@@ -41,6 +47,18 @@ class W3WIconStack: UIView {
   }
   
 
+  /// returns the center of the mic icon if there is a mic icon in the list
+  func centerOfMic() -> CGPoint? {
+    for icon in icons {
+      if icon is W3WVoiceIconView {
+        return icon.center
+      }
+    }
+    
+  return nil
+  }
+  
+  
   func resize() {
     // make this view the right size for the number of icons
     let size = frame.size.height

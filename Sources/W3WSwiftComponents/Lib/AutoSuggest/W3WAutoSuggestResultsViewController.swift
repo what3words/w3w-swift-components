@@ -12,7 +12,7 @@ import W3WSwiftApi
 
 
 /// protocol for talking to the textfield, either a W3WAutosuggestTextField, or W3WAutosuggestSearcController at this point
-protocol W3AutoSuggestResultsViewControllerDelegate {
+public protocol W3AutoSuggestResultsViewControllerDelegate {
   func suggestionsLocation(preferedHeight: CGFloat) -> CGRect
   func errorLocation(preferedHeight: CGFloat) -> CGRect
   func getParentView() -> UIView
@@ -26,10 +26,10 @@ protocol W3AutoSuggestResultsViewControllerDelegate {
 
 
 /// presents W3WSuggestions to the user for them to choose one
-class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggestDataSourceDelegate, W3WMicrophoneViewControllerDelegate, W3WOptionAcceptorProtocol {
+public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggestDataSourceDelegate, W3WMicrophoneViewControllerDelegate, W3WOptionAcceptorProtocol {
   
   // the text field's conform to this so we can send updates to them
-  var delegate: W3AutoSuggestResultsViewControllerDelegate?
+  public var delegate: W3AutoSuggestResultsViewControllerDelegate?
   
   /// shows the microphone inside the text field (only works for W3WTextField for now)
   var showMicInTextField = true
@@ -65,15 +65,13 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
   
   /// sets up the UI
-  override func viewWillAppear(_ animated: Bool) {
+  override public func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     
     tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
     tableView.separatorStyle = .singleLineEtched
-    tableView.separatorColor = W3WSettings.componentsSeparatorColor
-    
-    tableView.layer.borderWidth = 0.5
-    tableView.layer.borderColor = W3WSettings.componentsBorderColor.cgColor
+    tableView.layer.borderWidth = 1.0
+    updateColours()
   }
 
 
@@ -82,7 +80,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
 
   
   /// sets the API or SDK and initializes the datasource for making API calls and updating suggestions
-  func set(w3w: W3WProtocolV3) {
+  public func set(_ w3w: W3WProtocolV3) {
     autoSuggestDataSource = W3AutoSuggestDataSource()
     autoSuggestDataSource.set(w3w: w3w)
     autoSuggestDataSource.delegate = self
@@ -95,7 +93,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   /// assigns an array of options to use on autosuggest calls
   /// - Parameters:
   ///     - options: an array of W3WOption
-  func set(options: [W3WOption]) {
+  public func set(options: [W3WOption]) {
     autoSuggestDataSource?.set(options: options)
   }
   
@@ -131,8 +129,33 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   }
   
   
-  func initialiseMicrophone() {
-    autoSuggestDataSource.initialiseMicrophone()
+  public func set(darkModeSupport: Bool) {
+    autoSuggestDataSource.disableDarkmode = !darkModeSupport
+    
+    if #available(iOS 13.0, *) {
+      overrideUserInterfaceStyle = darkModeSupport ? .unspecified : .light
+      
+      for cell in tableView.visibleCells {
+        if let c = cell as? W3WSuggestionViewProtocol {
+          c.set(darkModeSupport: darkModeSupport)
+        }
+      }
+    }
+    
+    updateColours()
+  }
+
+  
+  /// update the colours
+  func updateColours() {
+    tableView.separatorColor = W3WSettings.color(named: "SeparatorColor", forMode: autoSuggestDataSource.disableDarkmode ? .light : W3WColorScheme.colourMode)
+    tableView.layer.borderColor = W3WSettings.color(named: "BorderColor", forMode: autoSuggestDataSource.disableDarkmode ? .light : W3WColorScheme.colourMode).cgColor
+  }
+  
+  
+
+  func isValid3wa(text: String) -> Bool {
+    return autoSuggestDataSource.isInKnownAddressList(text: text)
   }
   
   
@@ -140,7 +163,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
 
   /// called when the user slects a cell
-  override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+  override public func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {
       datasource.update(rowSelected: indexPath.row)
     }
@@ -148,7 +171,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
   
   /// sets the cell height
-  override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+  override public func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
     return cellHeight
   }
   
@@ -157,8 +180,9 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   // MARK: W3AutoSuggestDataSource Pass Through
   
   
-  /// handles changes to the text for the text field, and lets caller knwo if the new input is allowed or not
+  /// handles changes to the text for the text field, and lets caller know if the new input is allowed or not
   func textChanged(currentText:String?, additionalText:String?, newTextPosition:NSRange) -> Bool {
+    self.didYouMeanView?.isHidden = true
     return autoSuggestDataSource?.textChanged(currentText: currentText, additionalText: additionalText, newTextPosition: newTextPosition) ?? false
   }
   
@@ -169,6 +193,10 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
     return autoSuggestDataSource?.groom(text: text) ?? text
   }
   
+  
+  public func updateSuggestions(text: String) {
+    autoSuggestDataSource.updateSuggestions(text: text)
+  }
   
   
   // MARK: W3AutoSuggestDataSourceDelegate
@@ -251,7 +279,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
       }
 
       self.didYouMeanView?.isHidden = false
-      self.didYouMeanView?.set(title: W3WSettings.didYouMeanText, hint: W3WAddress.ensureSlashes(text: didYouMean) ?? NSAttributedString())
+      self.didYouMeanView?.set(title: W3WSettings.didYouMeanText, hint: W3WFormatter.ensureSlashes(text: didYouMean) ?? NSAttributedString())
     }
   }
   
@@ -266,7 +294,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
   /// gets the parent's view controller for presenting the table, crashes the app if there is no parent
   func getParentViewController() -> UIViewController {
-    let parent = delegate?.getParentView().parentViewController
+    let parent = delegate?.getParentView().w3wParentViewController
     
     assert(parent != nil, "W3AutoSuggestResultsViewControllerDelegate not assigned to W3AutoSuggestResultsViewController, or getParentViewController() is not returning a UIView!")
     
@@ -293,8 +321,23 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
     
     tableView.tableFooterView = UIView(frame: CGRect.zero)
     
-    DispatchQueue.main.async {
-      self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0) ?? CGRect.zero
+    if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
+      DispatchQueue.main.async {
+        self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0) ?? CGRect.zero
+      }
+    }
+  }
+  
+  
+  public func updateGeometry() {
+    // update the postion of the tableview if this is a textfield
+    if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
+      tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: min(CGFloat(((self.tableView.dataSource as? W3AutoSuggestDataSource)?.suggestions.count) ?? 0) * self.cellHeight, self.maxTableHeight)) ?? CGRect.zero
+    }
+    
+    // update the position of the hint view if visible
+    if !(didYouMeanView?.isHidden ?? true) {
+      didYouMeanView?.frame = self.delegate?.errorLocation(preferedHeight: self.cellHeight) ?? CGRect.zero
     }
   }
   
@@ -304,32 +347,32 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   
   /// displays a warning
   func set(warning: String?) {
-    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.componentsWarningTintColor]
+    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "WarningTextColor")]
     set(warning: warning == nil ? nil : NSAttributedString(string: warning ?? "?", attributes: attributes))
   }
   
   
   /// displays a formatted text warning
   func set(warning: NSAttributedString?) {
-    showNoticeView(message: warning, tint: W3WSettings.componentsWarningTintColor)
+    showNoticeView(message: warning, textColor: W3WSettings.color(named: "WarningTextColor"), backgroundColor: W3WSettings.color(named: "WarningBackground"))
   }
   
 
   /// displays an error
   func set(error: String?) {
-    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.componentsErrorTintColor]
+    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "ErrorTextColor")]
     set(error: error == nil ? nil : NSAttributedString(string: error ?? "?", attributes: attributes))
   }
   
   
   /// displays a formatted text error
   func set(error: NSAttributedString?) {
-    showNoticeView(message: error, tint: W3WSettings.componentsErrorTintColor)
+    showNoticeView(message: error, textColor: W3WSettings.color(named: "ErrorTextColor"), backgroundColor: W3WSettings.color(named: "ErrorBackground"))
   }
   
   
   /// shows a view contianing a text message
-  func showNoticeView(message: NSAttributedString?, tint: UIColor = W3WSettings.componentsErrorTintColor) {
+  func showNoticeView(message: NSAttributedString?, textColor: UIColor = W3WSettings.color(named: "ErrorTextColor"), backgroundColor: UIColor = W3WSettings.color(named: "ErrorBackground")) {
     DispatchQueue.main.async {
       let frame = self.delegate?.errorLocation(preferedHeight: 32.0) ?? CGRect.zero //.getParentView().frame ?? CGRect.zero
 
@@ -343,8 +386,9 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
       }
 
       self.errorView?.frame = frame
-      self.errorView?.tintColor = tint
-      
+      self.errorView?.tintColor = textColor
+      self.errorView?.backgroundColor = backgroundColor
+
       // if there is a message, unhide the view and make it transparent to begin with and animate it to opacity
       if let e = message {
         self.errorView?.alpha = 0.0
@@ -382,7 +426,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
       if let words = self.delegate?.getCurrentText() {
         for cell in self.tableView.visibleCells {
           if let c = cell as? W3WSuggestionTableViewCell {
-            c.set(highlight: c.threeWordAddressText?.address == words)
+            c.set(highlight: W3WAddress.equal(w1: c.suggestion?.words ?? "", w2: words)) //c.suggestion?.words == words)
           }
         }
       }
@@ -393,7 +437,7 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   /// show the suggestions view
   func showSuggestions() {
 
-    set(error: NSAttributedString?(nil))
+    //set(error: NSAttributedString?(nil))
 
     DispatchQueue.main.async {
             
@@ -516,12 +560,14 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
             mic.set(tinyMode: true)
             let sizeFactor = CGFloat(3.0)
             mic.view.frame = CGRect(x: 0.0, y: 0.0, width: textFieldView.frame.height * sizeFactor, height: textFieldView.frame.height * sizeFactor)
-            //mic.view.center = CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
-            if W3WSettings.leftToRight {
-              mic.view.center = textFieldView.rightView?.center ?? CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
-            } else {
-              mic.view.center = textFieldView.leftView?.center ?? CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
+
+            // find the location of the mic and place the inut animation there
+            var micCenter = textFieldView.rightView?.center ?? CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
+            if let c = textFieldView.icons?.centerOfMic(), let f = textFieldView.icons?.frame {
+              micCenter = CGPoint(x: c.x + f.origin.x, y: c.y + f.origin.y)
             }
+            mic.view.center = micCenter
+            
             textFieldView.clipsToBounds = true
             textFieldView.addSubview(mic.view)
             if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {
@@ -607,7 +653,6 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
         let parent = self.getParentViewController()
         let height = CGFloat(parent.view.frame.size.width)
         let endingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height)
-        //let startingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height - height)
         let viewSize = CGSize(width: parent.view.frame.size.width, height: height)
         
         UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
@@ -623,12 +668,12 @@ class W3WAutoSuggestResultsViewController: UITableViewController, W3WAutoSuggest
   // MARK: W3MicrophoneViewControllerDelegate
   
   /// Microphone view controller close button pressed
-  func closeButtonPressed() {
+  public func closeButtonPressed() {
     self.autoSuggestDataSource.stopListening()
     self.hideMicrophone()
   }
   
-  func voiceButtonPressed() {
+  public func voiceButtonPressed() {
     if self.autoSuggestDataSource.isListening() {
       self.autoSuggestDataSource.stopListening()
       microphoneViewController?.set(engaged: false)

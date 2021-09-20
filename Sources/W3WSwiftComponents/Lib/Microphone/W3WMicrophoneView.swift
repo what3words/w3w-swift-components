@@ -18,8 +18,6 @@ import W3WSwiftApi
 open class W3WMicrophoneView: W3WVoiceIconView {
   
   // preset colours and radius, settable from Interface Builder
-  @IBInspectable var micOnColor: UIColor   = UIColor(red: 0.810, green: 0.217, blue: 0.196, alpha: 1.0)
-  @IBInspectable var micOffColor: UIColor  = UIColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
   @IBInspectable var idealRadius: CGFloat = 40.0
   
   public var microphone: W3WMicrophone?
@@ -75,7 +73,6 @@ open class W3WMicrophoneView: W3WVoiceIconView {
     
     microphone?.volumeUpdate = { volume in self.set(volume: CGFloat(volume)) }
     microphone?.listeningUpdate = { state in self.set(engaged: state == .started) }
-    //microphone?.listeningUpdate.add({ state in self.set(engaged: state == .started) })
   }
   
   
@@ -119,10 +116,9 @@ open class W3WMicrophoneView: W3WVoiceIconView {
     
     // if we are turing on, then start an animation timer
     if engaged {
-      //animationTimer = Timer.scheduledTimer(withTimeInterval: 1.0/framesPerSecond, repeats: true) { timer in self.updateAnimation() }
       animationTimer = Timer.scheduledTimer(timeInterval: 1.0/framesPerSecond, target: self, selector: #selector(self.updateAnimation), userInfo: nil, repeats: true)
       
-      // if we are turning off, then set volume to zero and stop the animation timer
+    // if we are turning off, then set volume to zero and stop the animation timer
     } else {
       self.volume = 0.0
       self.targetVolume = 0.0
@@ -213,11 +209,11 @@ open class W3WMicrophoneView: W3WVoiceIconView {
     let fanSpread = volumeToFanSpread()
     
     // draw the four circles and the icon on top
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.9, colour: engaged ? micOnColor.withAlphaComponent(0.2) : micOffColor) //transparency: 0.2)
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.6, colour: engaged ? micOnColor.withAlphaComponent(0.3) : micOffColor)
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.3, colour: engaged ? micOnColor.withAlphaComponent(0.4) : micOffColor)
-    circle(centre: centre, radius: radius, colour: engaged ? micOnColor : micOffColor)
-    voiceIcon(centre: centre, radius: radius / 2.2, colour: engaged ? micOffColor : micOnColor)
+    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.9, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.2) : W3WSettings.color(named: "MicOffColor"))
+    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.6, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.3) : W3WSettings.color(named: "MicOffColor"))
+    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.3, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.4) : W3WSettings.color(named: "MicOffColor"))
+    circle(centre: centre, radius: radius, colour: engaged ? W3WSettings.color(named: "MicOnColor") : W3WSettings.color(named: "MicOffColor"))
+    voiceIcon(centre: centre, radius: radius / 2.2, colour: engaged ? W3WSettings.color(named: "MicOffColor") : W3WSettings.color(named: "MicOnColor"))
   }
   
   

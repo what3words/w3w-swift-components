@@ -11,39 +11,44 @@ import W3WSwiftApi
 
 
 /// view to display an erro
-class W3WTextErrorView: UIView {
+class W3WTextErrorView: W3WMessageView {
   
-  var label: UILabel?
+  var label: UILabel? = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0)))
   
-  // Init
-  public override init(frame: CGRect) {
-    super.init(frame: frame)
-    setupUI()
-  }
-  
-  
-  public required init(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)!
-    setupUI()
-  }
-
   
   /// initialize the UI
-  func setupUI() {
+  override func setupUI() {
+    updateGeometry()
+    
+    if let l = label {
+      addSubview(l)
+    }
+
+    updateColours()
+  }
+  
+  
+  override func updateColours() {
+    backgroundColor = W3WSettings.color(named: "ErrorBackground")
+    layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
+    layer.borderWidth = 0.5
+    
+    let attributes = [NSAttributedString.Key.foregroundColor : W3WSettings.color(named: "ErrorTextColor")]
+    label?.attributedText = NSAttributedString(string: label?.text ?? "?", attributes: attributes)
+
+    tintColor = .clear
+  }
+  
+  
+  override func updateGeometry() {
     var labelFrame = frame
     labelFrame.origin = CGPoint(x: W3WSettings.componentsIconPadding, y: 0.0)
     labelFrame.size.width -= W3WSettings.componentsIconPadding * 2.0
     
-    label = UILabel(frame: labelFrame)
+    //label = UILabel(frame: labelFrame)
+    label?.frame = labelFrame
     label?.adjustsFontSizeToFitWidth = true
     label?.minimumScaleFactor = 0.5
-    if let l = label {
-      addSubview(l)
-    }
-    
-    backgroundColor = .white
-    layer.borderColor = W3WSettings.componentsBorderColor.cgColor
-    layer.borderWidth = 0.5
   }
   
   
@@ -58,15 +63,5 @@ class W3WTextErrorView: UIView {
     label?.text = error
   }
   
-  
-  /// draws in some diesign elements
-  override func draw(_ rect: CGRect) {
-    let cgContext = UIGraphicsGetCurrentContext()
-    cgContext?.move(to: CGPoint(x: rect.minX, y: rect.minY))
-    cgContext?.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-    cgContext?.setStrokeColor(tintColor.cgColor)
-    cgContext?.setLineWidth(3.0)
-    cgContext?.strokePath()
-  }
-  
+ 
 }

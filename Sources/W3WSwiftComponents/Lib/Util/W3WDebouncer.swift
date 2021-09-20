@@ -9,11 +9,12 @@ import Foundation
 
 
 
+/// calls a closure no faster than a certain frequency
 public class W3WDebouncer {
   private let delay: TimeInterval
   private var timer: Timer?
 
-  var handler: () -> Void
+  public var handler: () -> Void
 
   public init(delay: TimeInterval, handler: @escaping () -> Void) {
     self.delay = delay
@@ -22,7 +23,7 @@ public class W3WDebouncer {
 
 
   public func call() {
-    if #available(iOS 10.0, *) {
+    if #available(iOS 10.0, watchOS 3.0, macOS 10.12, *) {
       timer?.invalidate()
       timer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false, block: { [weak self] _ in  self?.handler()})
     } else {

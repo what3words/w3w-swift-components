@@ -1,6 +1,3 @@
-
-
-
 //
 //  MicrophoneView.swift
 //  UberApiTest
@@ -10,22 +7,19 @@
 //
 
 import UIKit
+import W3WSwiftApi
 
 
 @IBDesignable
 public class W3WCloseIconView: W3WDrawingView {
-  
-  
-  @IBInspectable var colour: UIColor   = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
-
   
   // MARK: Drawing
     
   /// draw the microphone
   public override func make(_ rect: CGRect) {
     let lineWidth = rect.maxX * 0.1
-    roundedLine(p0: CGPoint(x: lineWidth, y: lineWidth), p1: CGPoint(x: rect.maxX - lineWidth, y: rect.maxX - lineWidth), colour: colour, lineWidth: lineWidth)
-    roundedLine(p0: CGPoint(x: rect.maxX - lineWidth, y: lineWidth), p1: CGPoint(x: lineWidth, y: rect.maxY - lineWidth), colour: colour, lineWidth: lineWidth)
+    roundedLine(p0: CGPoint(x: lineWidth, y: lineWidth), p1: CGPoint(x: rect.maxX - lineWidth, y: rect.maxX - lineWidth), colour: W3WSettings.color(named: "CloseIconColor"), lineWidth: lineWidth)
+    roundedLine(p0: CGPoint(x: rect.maxX - lineWidth, y: lineWidth), p1: CGPoint(x: lineWidth, y: rect.maxY - lineWidth), colour: W3WSettings.color(named: "CloseIconColor"), lineWidth: lineWidth)
   }
   
   

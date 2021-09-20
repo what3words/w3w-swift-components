@@ -17,10 +17,17 @@ public enum W3WHorizontalAlignment {
 
 
 
+/// basis for most resolution independant icons throught the system
 open class W3WDrawingView: UIView {
 
+  // MARK: Vars
+  
+  /// inset to draw the icon
   var insets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
   
+
+  // MARK: Init
+
   
   public convenience init() {
     self.init(frame: CGRect(x: 0.0, y: 0.0, width: 32.0, height: 32.0))
@@ -45,6 +52,9 @@ open class W3WDrawingView: UIView {
   }
   
   
+  // MARK: Accessors
+
+
   func set(padding: CGFloat) {
     insets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
   }
@@ -54,6 +64,9 @@ open class W3WDrawingView: UIView {
     set(padding: CGFloat(padding))
   }
   
+  
+  // MARK: Drawing primitives
+
   
   /// draw a circle
   /// - Parameters:
@@ -71,6 +84,12 @@ open class W3WDrawingView: UIView {
   }
   
 
+  /// draw a line with nicely rounded ends
+  /// - Parameters:
+  ///     - p0: the first point
+  ///     - p1: the second point
+  ///     - colour: the colour of the line
+  ///     - lineWidth: the width of the line
   public func roundedLine(p0: CGPoint, p1: CGPoint, colour: UIColor, lineWidth: CGFloat) {
     let path = UIBezierPath()
 
@@ -86,6 +105,10 @@ open class W3WDrawingView: UIView {
   }
   
   
+  /// draw a rectangle
+  /// - Parameters:
+  ///     - rect: the rectangle to draw
+  ///     - colour: the colour of the line
   public func rectangle(rect: CGRect, colour: UIColor) {
     let path = UIBezierPath(rect: rect)
     
@@ -96,6 +119,11 @@ open class W3WDrawingView: UIView {
   }
   
   
+  /// draw the what3words three slashes
+  /// - Parameters:
+  ///     - rect: the rectangle to draw it in
+  ///     - colour: the colour of the line
+  ///     - lineWidth: the width of the lines
   public func slashes(rect: CGRect, colour: UIColor, width: CGFloat? = nil) {
     
     let size = min(rect.width, rect.height) * 0.9
@@ -122,7 +150,7 @@ open class W3WDrawingView: UIView {
   
 
   
-  
+  /// convert this view into a UIImage
   public func asImage() -> UIImage? {
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, 0.0)
     self.drawHierarchy(in: self.bounds, afterScreenUpdates: true)
@@ -133,10 +161,12 @@ open class W3WDrawingView: UIView {
   }
   
   
+  /// usually overwritten to draw a thing using the primitives
   open func make(_ rect: CGRect) {
   }
   
-  /// draw the microphone
+  
+  /// iOS UIView draw function
   open override func draw(_ rect: CGRect) {
     make(rect.inset(by: insets))
   }

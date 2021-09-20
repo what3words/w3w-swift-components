@@ -8,6 +8,9 @@
 import Foundation
 import UIKit
 import W3WSwiftApi
+#if canImport(w3w)
+import w3w
+#endif
 
 
 /// protocol for talking to the tableview and providing it with updates and data
@@ -58,7 +61,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   var microphone: W3WMicrophone!
   
   /// makes sure the autosuggest isn't called too frequently
-  var suggestionsDebouncer: W3WTextFieldDebouncer?
+  var suggestionsDebouncer: W3WTextDebouncer?
   
   /// if true, then this will use convertToCoordinates to return lat/long for every suggestion (calls will return W3WSquare instead of W3WSuggestion)
   var useConvertToCoordinates = false
@@ -66,6 +69,9 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   /// indicates if free form text is being used in text field, or if it is only allowing w3w characters
   private var freeformText = true
 
+  /// indicates if we should ignore darkmode
+  var disableDarkmode = false
+  
   
   func set(w3w: W3WProtocolV3) {
     self.w3w = w3w
@@ -101,6 +107,11 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     options.removeAll(where: { o in
       o.key() == option.key()
     })
+    
+    if option.key() == W3WOptionKey.voiceLanguage {
+      language = option.asString()
+    }
+    
     options.append(option)
   }
 
@@ -119,22 +130,38 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func set(freeformText: Bool) {
     self.freeformText = freeformText
   }
+  
+
+  /// this set whether cells are set to ignore dark mode.
+  /// this maybe shouldn't be here either, see notes in tableview section
+  public func set(darkModeSupport: Bool) {
+    disableDarkmode = !darkModeSupport
+  }
 
 
   /// initialize the microphone and localize two of it's event closures to be used by viewcontrollers associated with this object
   func initialiseMicrophone() {
-    microphone = W3WMicrophone()
-    microphone.volumeUpdate = { volume in self.volumeUpdate(volume) }
-    microphone.listeningUpdate = { state in self.listeningUpdate(state) }
+    if microphone == nil {
+      microphone = W3WMicrophone()
+      microphone.volumeUpdate = { volume in self.volumeUpdate(volume) }
+      microphone.listeningUpdate = { state in self.listeningUpdate(state) }
+    }
   }
-  
-  
+
+
   /// do initial set up
-  func configure() {
-    //initialiseMicrophone()
-    
+  func configure() {    
     // set up the debouncer as to not call autosuggest too rapidly
-    suggestionsDebouncer = W3WTextFieldDebouncer(delay: 1.0, handler: { text in self.updateSuggestions(text: text) })
+    var delay = 1.0
+    
+    // faster delay if the SDK is being used instead of the API
+    #if canImport(w3w)
+    if w3w is What3Words {
+      delay = 0.1
+    }
+    #endif
+
+    suggestionsDebouncer = W3WTextDebouncer(delay: delay, handler: { text in self.updateSuggestions(text: text) })
   }
 
   
@@ -156,7 +183,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
         if let i = u.range(of: "/", options: .backwards) {
           let twa = String(u.suffix(from: i.upperBound)).removingPercentEncoding ?? ""
           if is3wa(text: twa) {
-            delegate?.replace(text: twa)
+            delegate?.replace(text: W3WAddress.ensureLeadingSlashes(twa))
             suggestionsDebouncer?.call(text: twa)
             checkForValid3wa(text: twa)
             return false
@@ -167,7 +194,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     
     if let t = currentText, let n = additionalText {
       let newText = t.replacingCharacters(in: Range(newTextPosition, in: t)!, with: n)
-      removeLeadingTripleSlashesInTextField(text: newText)
       
       allowTypingToContinue = has3waCharacters(text: newText) || freeformText
 
@@ -193,7 +219,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       return false
     }
     
-    //let regex_string = "^/*([^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]|[.｡。･・︒។։။۔።।]){0,}$"
     let regex = try! NSRegularExpression(pattern:W3WSettings.regex_3wa_characters, options: [])
     let count = regex.numberOfMatches(in: text, options: [], range: NSRange(text.startIndex..<text.endIndex, in:text))
     if (count > 0) {
@@ -207,15 +232,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   /// checks if input looks like a 3 word address or not
   func is3wa(text: String) -> Bool {
-    //let regex_string = "^/*[^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}[.｡。･・︒។։။۔።।][^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}[.｡。･・︒។։။۔።।][^0-9`~!@#$%^&*()+\\-_=\\]\\[{\\}\\\\|'<,.>?/\";:£§º©®\\s]{1,}$"
-    let regex = try! NSRegularExpression(pattern:W3WSettings.regex_match, options: [])
-    let count = regex.numberOfMatches(in: text, options: [], range: NSRange(text.startIndex..<text.endIndex, in:text))
-    if (count > 0) {
-      return true
-    }
-    else {
-      return false
-    }
+    return w3w?.isPossible3wa(text: text) ?? false
   }
   
   
@@ -240,7 +257,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     
     var words = [String]()
     for match in matches {
-      print(text[Range(match.range, in: text)!])
       let word = String(text[Range(match.range, in: text)!])
       words.append(word)
     }
@@ -278,7 +294,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func isInKnownAddressList(text: String?) -> Bool {
     var valid = false
     
-    if let words = text {
+    if var words = text {
+      words.removeAll(where: { c in c == "/" })
       valid = knownValidThreeWordAddresses.contains(words)
     }
 
@@ -298,19 +315,6 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   }
   
 
-  /// remove any leading /// from the text - only if it is in three word address format
-  func removeLeadingTripleSlashesInTextField(text: String) {
-    var newText = text
-    
-    if is3wa(text: newText) {
-      if newText.prefix(3) == "///" {
-        newText.removeFirst(3)
-        delegate?.replace(text: newText)
-      }
-    }
-  }
-  
-  
   /// given new text, this calls autosuggest to update the current suggestions
   func updateSuggestions(text: String) {
     if is3wa(text: text) {
@@ -373,6 +377,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   /// start recoring the voice input
   func startListening() {
     
+    initialiseMicrophone()
+    
     if microphone.isRecording() {
       microphone.stop()
     }
@@ -398,7 +404,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   /// if this is currently recording the user's voice
   func isListening() -> Bool {
-    return microphone.isRecording()
+    return microphone?.isRecording() ?? false
   }
   
   
@@ -408,7 +414,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   }
 
   
-  /// if this is voice capable, make sure we have a list of available langauges, if we don't then block execution and go get one
+  /// if this is voice capable, make sure we have a list of available languages, if we don't then block execution and go get one
   func updateVoiceLanguageListIfNessesary() {
     if let w3wApi = w3w as? What3WordsV3 {
       if let _ = w3w as? W3WVoice {
@@ -438,7 +444,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       // check if 'rank' is avilable in the suggestion
       if let s = selection as? W3WRanked {
         if let rank = s.rank {
-      
+          
           // check what kind of suggestion this is, and if it's voice then indicate that
           var sourceApi = W3WSelectionType.text
           if let _ = selection as? W3WVoiceSuggestion {
@@ -479,7 +485,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   
   // MARK: - Table view
-  // wasn't sure if this shouidl go here in the DataSource, or in the TableView.
+  // wasn't sure if this should go here in the DataSource, or in the TableView.
   // this returns UITableViewCells so should probably go in TableView
   // but it also needs to know the data, so should probably go here
   
@@ -515,13 +521,11 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   /// delegate for the tablview
   func numberOfSections(in tableView: UITableView) -> Int {
-    // #warning Incomplete implementation, return the number of sections
     return 1
   }
   
   /// delegate for the tablview
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    // #warning Incomplete implementation, return the number of rows
     return suggestions.count
   }
   
@@ -530,12 +534,18 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: W3WSuggestionTableViewCell.cellIdentifier, for: indexPath) as? W3WSuggestionTableViewCell
     
+    if #available(iOS 13.0, *) {
+      cell?.set(darkModeSupport: !disableDarkmode)
+    }
+    
     let suggestion = suggestions[indexPath.row]
-    cell?.set(address: suggestion.words, countryCode: suggestion.country, nearestPlace: suggestion.nearestPlace, language: language)
+    cell?.set(suggestion: suggestion)
     
     return cell!
   }
 
+  
+  // MARK: Utility
   
   // Establish the various version numbers in order to set an HTTP header
   private func figureOutVersionInfo() -> String {

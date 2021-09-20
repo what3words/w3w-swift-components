@@ -1,72 +1,44 @@
 //
-//  W3WAddress.swift
+//  File.swift
 //  
 //
-//  Created by Dave Duprey on 29/09/2020.
+//  Created by Dave Duprey on 10/05/2021.
 //
 
 import Foundation
-import UIKit
 import W3WSwiftApi
 
 
-/// class for formatting w3w addresses as NSAttributedString
+/// continass functions for formatting three word addresses and comparing them
 class W3WAddress {
   
-  var address: String?
-  
-  init(_ address:String?) {
-    self.address = address
+  /// check three word address string equality, ignoring ///
+  static func equal(w1: String, w2: String) -> Bool {
+    return W3WAddress.removeLeadingSlashes(w1).lowercased() == W3WAddress.removeLeadingSlashes(w2).lowercased()
   }
   
   
-  func withSlashes(fontSize:CGFloat, slashColor: UIColor? = nil) -> NSAttributedString? {
-    return withSlashes(font: pickaFont(size: fontSize), slashColor: slashColor)
-  }
-  
-  
-  func withSlashes(font:UIFont? = nil, slashColor:UIColor? = nil) -> NSAttributedString? {
-    let slashAttributes: [NSAttributedString.Key: Any] = [
-      .foregroundColor: slashColor ?? W3WSettings.componentsSlashesColor,
-      //.font: font ?? pickaFont()
-    ]
-    
-    let slashes = NSMutableAttributedString(string: "///", attributes: slashAttributes)
-    let formattedAddress = NSMutableAttributedString(string: address ?? "")
-    
-    slashes.append(formattedAddress)
-    return slashes
-  }
-  
-  
-  func pickaFont(size: CGFloat? = nil) -> UIFont {
-    var font: UIFont
-
-    if let s = size {
-      if let f = UIFont(name: "SourceSansPro-Regular", size: s) {
-        font = f
-      } else {
-        font = UIFont.systemFont(ofSize: s)
-      }
-    } else {
-      font = UIFont.preferredFont(forTextStyle: .body)
+  /// remove /// from three word addresses
+  static func removeLeadingSlashes(_ w: String) -> String {
+    var x = w;
+    while x.prefix(1) == "/" {
+      _ = x.removeFirst()
+    }
+    while x.last == "/" {
+      _ = x.removeLast()
     }
 
-    return font
+    return x;
   }
   
   
-  public static func ensureSlashes(text: NSAttributedString?) -> NSAttributedString? {
-    let plainString = text?.string
-    return W3WAddress.ensureSlashes(text: plainString)
+  /// make sure a three word address starts with a ///
+  static func ensureLeadingSlashes(_ w: String) -> String {
+    if W3WSettings.leftToRight == true {
+      return "///" + W3WAddress.removeLeadingSlashes(w)
+    } else {
+      return W3WAddress.removeLeadingSlashes(w)
+    }
   }
-  
-  
-  public static func ensureSlashes(text: String?, font: UIFont? = nil) -> NSAttributedString? {
-    let plainAddress = text?.replacingOccurrences(of: "/", with: "")
-    let address = W3WAddress(plainAddress)
-    return address.withSlashes(font: font)
-  }
-
   
 }

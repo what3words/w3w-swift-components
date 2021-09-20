@@ -16,38 +16,130 @@ public protocol W3WMicrophoneViewControllerDelegate {
 }
 
 
+/// a viewcontroller for the W3WMicrophoneView
 open class W3WMicrophoneViewController: UIViewController {
   
+  // MARK: Vars
+  
+  /// delegate to return button events
   public var delegate: W3WMicrophoneViewControllerDelegate?
   
+  /// the microphone for recording
   public var microphone: W3WMicrophone?
   
+  /// close button for this viewcontroller
   var closeButton: UIButton!
+  
+  /// the view that shows the microphone icon
   var microphoneView: W3WMicrophoneView!
+  
+  /// header for top of a large format
   var headerLabel: UILabel!
+
+  /// footer for bottom of a large format
   var footerLabel: UILabel!
+  
+  /// what3words logo for bottom of large format
   var logoImage = UIImageView(image: UIImage(named: "logo", in: Bundle.module, compatibleWith: nil))
   
+  /// keep track of if this is in an error state
   var errorState = false
   
+  /// text size is adjustable
   let textSize:CGFloat = 20.0
+  
+  /// if this is to be used in a small space then this should be true, otherwise if false all interface elements are shown
   var tinyMode = false
   
+  /// indicates if the close button should be shown or not
   var closeButtonEnabled = false
   
   
+    // MARK: Accessors
+  
+  
+  /// set the microphone to use
   public func set(microphone: W3WMicrophone?) {
     self.microphone = microphone
   }
   
   
+  /// if this is to be used in a small space then this should be true, otherwise if false all interface elements are shown
   public func set(tinyMode: Bool) {
     self.tinyMode = tinyMode
   }
   
   
+  /// recording text
+  func setRecordingText() {
+    if !errorState {
+      headerLabel?.text = "Say a 3 word address"
+      footerLabel?.text = ""
+    }
+  }
+  
+  
+  /// paused text
+  func setPausedText() {
+    if !errorState {
+      headerLabel?.text = "Tap to speak"
+      footerLabel?.text = "eg: ”limit.broom.flip“"
+    }
+  }
+  
+  
+  /// error text
+  public func set(errorText: String) {
+    errorState = true
+    set(engaged: false)
+    headerLabel?.text = "Error"
+    footerLabel?.text = errorText
+  }
+  
+  
+  /// background shadow
+  func set(shadow: Bool) {
+    DispatchQueue.main.async {
+      if shadow {
+        self.microphoneView?.layer.shadowColor = W3WSettings.color(named: "MicShadow").cgColor
+        self.microphoneView?.layer.shadowOpacity = 0.25
+        self.microphoneView?.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
+        self.microphoneView?.layer.shadowRadius = 1
+      } else {
+        self.microphoneView?.layer.shadowColor = UIColor.clear.cgColor
+        self.microphoneView?.layer.shadowOpacity = 0
+        self.microphoneView?.layer.shadowOffset = .zero // CGSize(width: 2.0, height: 2.0)
+        self.microphoneView?.layer.shadowRadius = 0
+      }
+    }
+  }
+  
+  
+  /// switch design to recording or stopped
+  func set(engaged: Bool) {
+    set(shadow: !engaged)
+    microphoneView?.set(engaged: engaged)
+    
+    if engaged {
+      setRecordingText()
+    } else {
+      setPausedText()
+    }
+  }
+  
+  
+  /// sets the volume of the microphone
+  public func set(volume: CGFloat) {
+    microphoneView?.set(volume: volume)
+  }
+  
+  
+  // MARK: UIViewController Stuff
+  
+  
+  /// initiaize the views
   public override func viewWillAppear(_ animated: Bool) {
-    self.view.backgroundColor = UIColor(red: 0.975, green: 0.975, blue: 0.975, alpha: 1.0)
+    self.view.backgroundColor = W3WSettings.color(named: "MicBackground")
     
     if microphoneView == nil {
       microphoneView = W3WMicrophoneView(frame: CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.width), microphone: microphone)
@@ -67,11 +159,27 @@ open class W3WMicrophoneViewController: UIViewController {
   }
   
   
+  /// reset when view disappears
   public override func viewDidDisappear(_ animated: Bool) {
     errorState = false
   }
   
   
+  
+  /// reorganize subviews
+  public override func viewWillLayoutSubviews() {
+    if tinyMode {
+      tinyModeLayout()
+    } else {
+      largeModeLayout()
+    }
+  }
+  
+
+  
+  // MARK: Layout
+  
+  /// setup for tiny mode
   func tinyModeSetup() {
     self.view.backgroundColor = .clear
     
@@ -86,8 +194,9 @@ open class W3WMicrophoneViewController: UIViewController {
   }
   
   
+  /// setup for large mode
   func largeModeSetup() {
-    self.view.backgroundColor = UIColor(red: 0.975, green: 0.975, blue: 0.975, alpha: 1.0)
+    self.view.backgroundColor = W3WSettings.color(named: "MicBackground")
     
     let size = self.view.frame.size.width / 2.0
     microphoneView.frame = CGRect(x: size / 2.0, y: size / 2.0, width: size, height: size)
@@ -101,7 +210,7 @@ open class W3WMicrophoneViewController: UIViewController {
     }
     headerLabel.center = CGPoint(x: size, y: microphoneView.center.y / 3.0)
     headerLabel.textAlignment = .center
-    headerLabel.textColor = UIColor.black
+    headerLabel.textColor = W3WSettings.color(named: "MicTextColor") 
     headerLabel.font = UIFont.systemFont(ofSize: textSize, weight: .light)
     view.addSubview(headerLabel)
     
@@ -110,7 +219,7 @@ open class W3WMicrophoneViewController: UIViewController {
     }
     footerLabel.center = CGPoint(x: size, y: self.view.frame.height - microphoneView.center.y / 3.0)
     footerLabel.textAlignment = .center
-    footerLabel.textColor = UIColor.gray
+    footerLabel.textColor = W3WSettings.color(named: "MicTextSecondary")
     footerLabel.font = UIFont.systemFont(ofSize: textSize * 0.8, weight: .light)
     footerLabel.minimumScaleFactor = 0.5
     footerLabel.adjustsFontSizeToFitWidth = true
@@ -134,6 +243,7 @@ open class W3WMicrophoneViewController: UIViewController {
   }
   
   
+  /// layout for tiny mode
   func tinyModeLayout() {
     let size = min(self.view.frame.size.width, self.view.frame.size.height)
     microphoneView.frame = CGRect(x: 0.0, y: 0.0, width: size, height: size)
@@ -143,6 +253,7 @@ open class W3WMicrophoneViewController: UIViewController {
   }
   
   
+  /// layout for large mode
   func largeModeLayout() {
     let size = self.view.frame.size.width / 2.0
     microphoneView?.frame = CGRect(x: size / 2.0, y: size / 2.0, width: size, height: size)
@@ -155,7 +266,8 @@ open class W3WMicrophoneViewController: UIViewController {
     placeLogo()
   }
   
-  
+
+  /// only shows the logo if there is space
   func placeLogo() {
     // don't show logo if it will be patially covered
     let bottomOfLogo = CGPoint(x: view.frame.size.width / 2.0, y: view.frame.size.height - W3WSettings.componentsLogoSize * 1.5)
@@ -168,84 +280,23 @@ open class W3WMicrophoneViewController: UIViewController {
   }
   
   
-  public override func viewWillLayoutSubviews() {
-    if tinyMode {
-      tinyModeLayout()
-    } else {
-      largeModeLayout()
-    }
-  }
+  // MARK: Events
   
   
+  /// called when the button is pressed
   @objc func pressed() {
     delegate?.closeButtonPressed()
   }
   
   
-  func setRecordingText() {
-    if !errorState {
-      headerLabel?.text = "Say a 3 word address"
-      footerLabel?.text = ""
-    }
-  }
-  
-  
-  func setPausedText() {
-    if !errorState {
-      headerLabel?.text = "Tap to speak"
-      footerLabel?.text = "eg: ”limit.broom.flip“"
-    }
-  }
-  
-  
-  public func set(errorText: String) {
-    errorState = true
-    set(engaged: false)
-    headerLabel?.text = "Error"
-    footerLabel?.text = errorText
-  }
-  
-  
-  func set(shadow: Bool) {
-    DispatchQueue.main.async {
-      if shadow {
-        self.microphoneView?.layer.shadowColor = UIColor.darkGray.cgColor
-        self.microphoneView?.layer.shadowOpacity = 0.25
-        self.microphoneView?.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-        self.microphoneView?.layer.shadowRadius = 1
-      } else {
-        self.microphoneView?.layer.shadowColor = UIColor.clear.cgColor
-        self.microphoneView?.layer.shadowOpacity = 0
-        self.microphoneView?.layer.shadowOffset = .zero // CGSize(width: 2.0, height: 2.0)
-        self.microphoneView?.layer.shadowRadius = 0
-      }
-    }
-  }
-  
-  
-  func set(engaged: Bool) {
-    set(shadow: !engaged)
-    microphoneView?.set(engaged: engaged)
-    
-    if engaged {
-      setRecordingText()
-    } else {
-      setPausedText()
-    }
-  }
-  
-  
-  public func set(volume: CGFloat) {
-    microphoneView?.set(volume: volume)
-  }
-  
-  
+  /// microphone button tapped
   func microphoneTapped() {
     errorState = false
     delegate?.voiceButtonPressed()
   }
   
   
+  /// react to microphone view events
   func update(microphoneState: W3WVoiceListeningState) {
     switch microphoneState {
     case .started:

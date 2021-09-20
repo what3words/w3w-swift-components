@@ -12,7 +12,9 @@ import W3WSwiftApi
 /// A text field, based on UITextField with a what3words autocomplete function
 @IBDesignable
 open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
-
+  
+  // MARK: Vars
+  
   /// callback for when the user choses a suggestion
   public var suggestionSelected: W3WSuggestionResponse = { _ in }
 
@@ -40,21 +42,40 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   /// indicates if the textfield should be cleared when user focus changes
   private var allowInvalid3wa = false
 
+  var disableDarkmode = false
+  
   /// this is the view controller for displaying the suggestions
   var autoSuggestViewController = W3WAutoSuggestResultsViewController()
   
   /// views for all the icons that may appear
-  var slashesView: W3WSlashesView!
+  var slashesView: UIView! // W3WSlashesView!
   var voiceIconView: W3WVoiceIconView!
   var checkView: W3WCheckIconView!
-  var iconsView: W3WIconStack!
+  var icons: W3WIconStack?
   
-  var slashesSize:CGFloat    = W3WSettings.componentsSlashesIconSize
-  var slashesPadding:CGFloat = W3WSettings.componentsSlashesPadding
+  var iconSize:CGFloat    = W3WSettings.componentsSlashesIconSize
+  var iconPadding:CGFloat = W3WSettings.componentsSlashesPadding
   
   var leftPadding:CGFloat  = 16.0
   var rightPadding:CGFloat = 16.0
-
+  var padding = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 16.0)
+  
+  
+  // MARK: Init
+  
+  
+  public init() {
+    super.init(frame: CGRect(origin: .zero, size: CGSize(width: W3WSettings.componentsTextFieldWidth, height: W3WSettings.componentsTextFieldHeight)))
+    self.delegate = self
+  }
+  
+  
+  public init(_ w3w: W3WProtocolV3, frame: CGRect? = nil) {
+    super.init(frame: frame ?? CGRect(origin: .zero, size: CGSize(width: W3WSettings.componentsTextFieldWidth, height: W3WSettings.componentsTextFieldHeight)))
+    set(w3w)
+    self.delegate = self
+  }
+  
   
   public override init(frame: CGRect) {
     super.init(frame: frame)
@@ -68,14 +89,24 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
+  // MARK: Accessors
+  
+  
+  // let the child view controller know size is changing
+  override public var frame: CGRect {
+    didSet {
+      autoSuggestViewController.updateGeometry()
+    }
+  }
   
   /// assign a what3words engine, or API to this  component.  language is optional and defaults to English: "en"
   /// - Parameters:
   ///     - w3w: the what3words API or SDK
-  ///     - language: a ISO two letter langauge code
-  public func set(_ w3w: W3WProtocolV3, language: String = "en") {
-    autoSuggestViewController.set(w3w: w3w)
-    configure()
+  ///     - language: a ISO two letter language code
+  public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
+    autoSuggestViewController.delegate = self
+    autoSuggestViewController.set(w3w)
+    set(options: [W3WOption.voiceLanguage(autoSuggestViewController.autoSuggestDataSource.language)])
     confireuUI()
     
     // this can affect voice ability, reset the voice icon
@@ -91,9 +122,43 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
 
 
-  /// sets the langauge to use when returning three word addresses
+  /// set the color of the text in all AutosuggestTextFields globally
   /// - Parameters:
-  ///     - language: a ISO two letter langauge code
+  ///     - textColor: the color for the text
+  ///     - darkMode: the color for the text when the device is in "dark mode"
+  public func set(textColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: textColor, named: "TextfieldText", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldText", forMode: .dark)
+    updateColours()
+  }
+  
+  
+  /// set the color of the textfield background in all AutosuggestTextFields globally
+  /// - Parameters:
+  ///     - backgroundColor: the color for the textfield background
+  ///     - darkMode: the color for the textfield background when the device is in "dark mode"
+  public func set(backgroundColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: backgroundColor, named: "TextfieldBackground", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldBackground", forMode: .dark)
+    updateColours()
+  }
+  
+  
+  /// set the color of the textfield background in all AutosuggestTextFields globally
+  /// - Parameters:
+  ///     - backgroundColor: the color for the textfield background
+  ///     - darkMode: the color for the textfield background when the device is in "dark mode"
+  public func set(placeholderColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: placeholderColor, named: "TextfieldPlaceholder", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldPlaceholder", forMode: .dark)
+    updateColours()
+  }
+  
+
+  
+  /// sets the language to use when returning three word addresses
+  /// - Parameters:
+  ///     - language: a ISO two letter language code
   public func set(language l: String) {
     autoSuggestViewController.autoSuggestDataSource.language = l
     
@@ -140,101 +205,74 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
 
     if voiceEnabled && autoSuggestViewController.supportsVoice() {
       if autoSuggestViewController.supportsVoice() {
-        self.autoSuggestViewController.initialiseMicrophone()
         if voiceIconView == nil {
-          voiceIconView = W3WVoiceIconView()
-          voiceIconView.set(padding: frame.size.height * 0.2)
-          voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
-          iconsView.add(right: voiceIconView)
+          self.voiceIconView = W3WVoiceIconView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height)))
+          self.voiceIconView.set(padding: min(self.frame.size.height * 0.2, W3WSettings.componentsIconPadding))
+          self.voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
+          DispatchQueue.main.async {
+            self.updateIcons()
+          }
         }
-//        DispatchQueue.main.async {
-//          self.voiceIconView?.isHidden = false
-//        }
       }
-
-    } else {
-//      DispatchQueue.main.async {
-//        self.voiceIconView?.isHidden = true
-//      }
     }
-
-  }
-
-  
-  public func set(leftPadding: CGFloat) {
-    self.leftPadding = leftPadding
   }
 
   
   public func set(rightPadding: CGFloat) {
     self.rightPadding = rightPadding
+    self.padding      = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
   }
 
   
-  /// makes nessesary initialization, called by init()s
-  func configure() {
-    autoSuggestViewController.delegate = self
-    set(options: [W3WOption.voiceLanguage(autoSuggestViewController.autoSuggestDataSource.language)])
-  }
-  
-  
+     
   /// initializes the UI
   func confireuUI() {
     clipsToBounds = true
     
-    if backgroundColor == nil {
-      backgroundColor = .white
-    }
+    padding = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
+    
+    updateColours()
     
     if W3WSettings.leftToRight {
       textAlignment = .left
+      semanticContentAttribute = UISemanticContentAttribute.forceLeftToRight
     } else {
       textAlignment = .right
+      semanticContentAttribute = UISemanticContentAttribute.forceRightToLeft
     }
 
     if font == nil {
       font = UIFont.systemFont(ofSize: frame.size.height * 0.618)
-    } else {
-      font = font?.withSize(frame.size.height * 0.618)
     }
-    
-    self.slashesPadding = (self.frame.size.height - self.slashesSize) / 2.0
+
+    self.iconPadding = (self.frame.size.height - self.iconSize) / 2.0
 
     if slashesView == nil {
-      slashesView = W3WSlashesView(frame: CGRect(x: slashesPadding, y: slashesPadding, width: frame.size.height, height: frame.size.height))
+      slashesView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.309, height: self.frame.size.height))
     }
-    if W3WSettings.leftToRight {
-      slashesView.set(padding: 2.0)
-    } else {
-      slashesView.set(padding: 8.0)
-    }
-    
-    if iconsView == nil {
-      iconsView = W3WIconStack(frame: CGRect(x: 0.0, y: 0.0, width: 0.0, height: frame.size.height))
-      iconsView.spacing = frame.size.height * -0.2
-    }
-    
-    assignLeadingAndTrailingIcons(leading: slashesView, trailing: iconsView)
+
+    updateIcons()
     
     if checkView == nil {
-      checkView = W3WCheckIconView()
-      checkView.set(padding: frame.size.height * 0.2)
-      checkView.isHidden = true
-      iconsView.add(left: checkView)
+      DispatchQueue.main.async {
+        self.checkView = W3WCheckIconView()
+        self.checkView.set(padding: min(self.frame.size.height * 0.2, W3WSettings.componentsIconPadding))
+        self.checkView.isHidden = true
+        //iconsView.add(left: checkView)
+        self.updateIcons()
+      }
     }
 
     keyboardType = .URL
         
     adjustsFontSizeToFitWidth = false
     
-    layer.borderWidth = 0.5
-    layer.borderColor = W3WSettings.componentsBorderColor.cgColor
+    layer.borderWidth = 1.0
+    layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
     
-    DispatchQueue.main.async {
-      self.slashesView.frame = CGRect(x: self.slashesPadding, y: self.slashesPadding, width: self.slashesSize, height: self.slashesSize)
-      self.voiceIconView?.frame = CGRect(x: self.slashesPadding, y: self.slashesPadding, width: self.slashesSize, height: self.slashesSize)
-      self.checkView?.frame = CGRect(x: 0.0, y: 0.0, width: self.frame.size.height * 0.8, height: self.frame.size.height * 0.8)
-    }
+//    DispatchQueue.main.async {
+//      self.voiceIconView?.frame = CGRect(x: self.iconPadding, y: self.iconPadding, width: self.iconSize, height: self.iconSize)
+//    }
     
     if placeholder == nil {
       placeholder = W3WSettings.componentsPlaceholderText
@@ -242,30 +280,82 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  override public func leftViewRect(forBounds bounds: CGRect) -> CGRect {
-    return CGRect(x: leftPadding, y: frame.size.height * 0.1, width: frame.size.height * 0.8, height: frame.size.height * 0.8)
-  }
-  
-  
-  override public func rightViewRect(forBounds bounds: CGRect) -> CGRect {
-    if W3WSettings.leftToRight {
-      return CGRect(x: frame.size.width - frame.size.height * 0.8 - rightPadding, y: 0.0, width: frame.size.height, height: frame.size.height)
-    } else {
-      return CGRect(x: frame.size.width - frame.size.height * 0.8 - rightPadding * 0.75, y: 0.0, width: frame.size.height, height: frame.size.height)
+  public func set(darkModeSupport: Bool) {
+    disableDarkmode = !darkModeSupport
+    
+    if #available(iOS 13.0, *) {
+      overrideUserInterfaceStyle = darkModeSupport ? .unspecified : .light
     }
+    autoSuggestViewController.set(darkModeSupport: darkModeSupport)
+    
+    updateColours()
   }
   
   
-  func assignLeadingAndTrailingIcons(leading: UIView, trailing: UIView) {
+  func updateIcons() {
     self.leftViewMode = .always
     self.rightViewMode = .always
 
-    if W3WSettings.leftToRight {
-      self.leftView = leading
-      self.rightView = trailing
+    // make icon placeholder
+    if icons == nil {
+      icons = W3WIconStack(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height)))
+    }
+    let iconHeight = (self.frame.width / self.frame.height > 5) ? self.frame.height : self.frame.width / 5.0
+    icons?.frame = CGRect(origin: icons?.frame.origin ?? .zero, size: CGSize(width: iconHeight, height: iconHeight))
+    icons?.resize()
+    
+    // if there is a checkmark, put it in
+    if checkView != nil {
+      icons?.add(left: checkView)
+    }
+    
+    // if there is a voice icon, put it in
+    voiceIconView?.frame = CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height))
+    if voiceIconView != nil {
+      icons?.add(left: voiceIconView)
+    }
+
+    // assign the things to the correct sides of the textfield
+    self.leftView  = slashesView
+    self.rightView = icons
+  }
+
+  
+  
+  func update(checkmark: Bool) {
+    // show green check on valid 3wa
+    if checkmark {
+      self.checkView?.isHidden = false
+      self.voiceIconView?.isHidden = true
+      
+      // show voice icon if voice is enabled and supported by the w3w engine
+    } else if self.voiceEnabled && self.autoSuggestViewController.supportsVoice() {
+      self.checkView?.isHidden = true
+      self.voiceIconView?.isHidden = false
+      
+      // word is not a valied 3wa and voice is not available - show no icon
     } else {
-      self.leftView = trailing
-      self.rightView = leading
+      self.checkView?.isHidden = true
+      self.voiceIconView?.isHidden = true
+    }
+    
+    self.updateIcons()
+  }
+  
+  
+  
+  public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    updateColours()
+  }
+  
+  
+  
+  func updateColours() {
+    DispatchQueue.main.async {
+      self.textColor          = W3WSettings.color(named: "TextfieldText", forMode: self.disableDarkmode ? .light : W3WColorScheme.colourMode)
+      self.backgroundColor     = W3WSettings.color(named: "TextfieldBackground", forMode: self.disableDarkmode ? .light : W3WColorScheme.colourMode)
+      self.layer.borderColor    = W3WSettings.color(named: "BorderColor", forMode: self.disableDarkmode ? .light : W3WColorScheme.colourMode).cgColor
+      self.attributedPlaceholder = NSAttributedString(string: self.attributedPlaceholder?.string ?? "", attributes: [NSAttributedString.Key.foregroundColor: W3WSettings.color(named: "TextfieldPlaceholder", forMode: self.disableDarkmode ? .light : W3WColorScheme.colourMode)])
     }
   }
   
@@ -273,11 +363,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   /// puts all subviews into their place
   public override func layoutSubviews() {
     super.layoutSubviews()
-    
-    iconsView?.resize()
-    if let sv = slashesView, let iv = iconsView {
-      assignLeadingAndTrailingIcons(leading: sv, trailing: iv)
-    }
+    updateIcons()
   }
   
   
@@ -296,49 +382,39 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   /// called when new suggestions are avialable
   /// - Parameters:
   ///     - suggestions: the new suggestions
-  func update(suggestions: [W3WSuggestion]) {
+  public func update(suggestions: [W3WSuggestion]) {
   }
   
   
   /// called when the user selects a suggestion
   /// - Parameters:
   ///     - selected: the suggestion chosen by the user
-  func update(selected: W3WSuggestion) {
+  public func update(selected: W3WSuggestion) {
     if let words = selected.words {
-      update(text: words)
+      update(text: W3WAddress.ensureLeadingSlashes(words))
       suggestionSelected(selected)
       textChanged(words)
       dismissKeyboard()
+      DispatchQueue.main.async {
+        self.update(checkmark: self.autoSuggestViewController.isValid3wa(text: self.text ?? ""))
+      }
     }
   }
   
   
   /// notifies when and if the address in the text field is a known three word address
-  /// shows the green check mark on the right of the field
-  func update(valid3wa: Bool) {
-    DispatchQueue.main.async {
-      
-      // show green check on valid 3wa
-      if valid3wa {
-        self.checkView?.isHidden = false
-        self.voiceIconView?.isHidden = true
-        
-      // show voice icon if voice is enabled and supported by the w3w engine
-      } else if self.voiceEnabled && self.autoSuggestViewController.supportsVoice() {
-        self.checkView?.isHidden = true
-        self.voiceIconView?.isHidden = false
-        
-      // word is not a valied 3wa and voice is not available - show no icon
-      } else {
-        self.checkView?.isHidden = true
-        self.voiceIconView?.isHidden = true
+  /// removes the green check mark on the right of the field if the word isn't valid
+  public func update(valid3wa: Bool) {
+    if !valid3wa {
+      DispatchQueue.main.async {
+        self.update(checkmark: valid3wa)
       }
     }
   }
   
   
   /// called when an error happens
-  func update(error: W3WAutosuggestComponentError) {
+  public func update(error: W3WAutosuggestComponentError) {
     onError(error)
   }
   
@@ -380,7 +456,8 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     if !allowInvalid3wa && !autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: text ?? "") {
       if !autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: text) {
         text = ""
-        autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
+        //autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
+        autoSuggestViewController.updateSuggestions(text: "")
         autoSuggestViewController.autoSuggestDataSource.update(error: .noValidAdressFound)
       }
     }
@@ -392,11 +469,18 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
+  public func textFieldDidBeginEditing(_ textField: UITextField) {
+    if textField.text == "" {
+      textField.text = W3WAddress.ensureLeadingSlashes(textField.text ?? "")
+    }
+  }
+  
+  
   // MARK: W3AutoSuggestResultsViewControllerDelegate
   
   
   /// instructs the suggestions view on a good place to position itself
-  func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
+  public func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
     var origin = frame.origin
     origin.y += frame.size.height + W3WSettings.componentsTableTopMargin
     
@@ -407,7 +491,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   /// tells the suggestions view a good place for the error notice
-  func errorLocation(preferedHeight: CGFloat) -> CGRect {
+  public func errorLocation(preferedHeight: CGFloat) -> CGRect {
     var f = frame
     f.origin.y += f.size.height
     f.size.height = preferedHeight
@@ -418,19 +502,19 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
 
   
   /// gives the suggestions view self's view so it can place itself on it
-  func getParentView() -> UIView {
+  public func getParentView() -> UIView {
     return self
   }
   
   
   /// returns the text currently being displayed
-  func getCurrentText() -> String? {
+  public func getCurrentText() -> String? {
     return text
   }
   
 
   /// replaces the text in the text field
-  func replace(text: String) {
+  public func replace(text: String) {
     DispatchQueue.main.async {
       self.text = text
     }
@@ -442,9 +526,6 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   /// called when the text field contents change
   public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    //addressSelected(self.text ?? "")
-    //resignFirstResponder()
-    
     if let words = self.text {
       if autoSuggestViewController.autoSuggestDataSource.is3wa(text: words) {
         DispatchQueue.main.async {
@@ -454,6 +535,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
             self.resignFirstResponder()
             self.autoSuggestViewController.hideSuggestions()
             //self.text = ""
+            self.update(checkmark: self.autoSuggestViewController.isValid3wa(text: words))
           }
         }
       }

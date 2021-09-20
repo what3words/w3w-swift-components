@@ -1,6 +1,3 @@
-
-
-
 //
 //  MicrophoneView.swift
 //  UberApiTest
@@ -13,13 +10,13 @@ import UIKit
 import W3WSwiftApi
 
 
-
+/// draws the what3words ///
 @IBDesignable
 public class W3WSlashesView: W3WDrawingView {
   
   public var alignment = W3WHorizontalAlignment.center
   
-  @IBInspectable var slashColour = W3WSettings.componentsSlashesColor    //: UIColor   = UIColor(red: 0.810, green: 0.217, blue: 0.196, alpha: 1.0)
+  @IBInspectable var slashColour = W3WSettings.color(named: "SlashesColor")
   
   // MARK: Drawing
     

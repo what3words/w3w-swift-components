@@ -14,7 +14,7 @@ import UIKit
 
 
 extension UIView {
-  var parentViewController: UIViewController? {
+  var w3wParentViewController: UIViewController? {
     var parentResponder: UIResponder? = self
     while parentResponder != nil {
       parentResponder = parentResponder!.next
@@ -32,8 +32,8 @@ extension UIView {
 extension UIColor {
 
   // allow instantiation of a UIColor from a html/css type hex string
-  convenience init(hex: String) {
-    let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
+  convenience init(w3whex: String) {
+    let hex = w3whex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
     var int = UInt64()
     Scanner(string: hex).scanHexInt64(&int)
     let a, r, g, b: UInt64
@@ -52,10 +52,10 @@ extension UIColor {
 
   
   // allow instantiation of a UIColor from a hexadecimal number and optional alpha value
-  convenience init(hex: Int, alpha: CGFloat = 1.0) {
-    let red   = CGFloat((hex >> 16) & 0xFF)
-    let green = CGFloat((hex >> 8) & 0xFF)
-    let blue  = CGFloat(hex & 0xFF)
+  convenience init(w3whex: Int, alpha: CGFloat = 1.0) {
+    let red   = CGFloat((w3whex >> 16) & 0xFF)
+    let green = CGFloat((w3whex >> 8) & 0xFF)
+    let blue  = CGFloat(w3whex & 0xFF)
 
     self.init(
       red: red / 255.0,
@@ -67,4 +67,20 @@ extension UIColor {
   
 }
 
+
+// MARK: NSAttributedString
+
+
+public extension NSAttributedString {
+
+  /// construct a formatted string with coloured leading slashes
+  convenience init(threeWordAddress: String, font: UIFont? = nil) {
+    if let atributedString = W3WFormatter.ensureSlashes(text: threeWordAddress, font: font) {
+      self.init(attributedString: atributedString)
+    } else {
+      self.init(string: threeWordAddress)
+    }
+  }
+  
+}
 

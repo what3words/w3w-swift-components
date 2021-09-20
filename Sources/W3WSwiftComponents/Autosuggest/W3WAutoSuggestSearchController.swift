@@ -53,6 +53,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
     }
   }
 
+  
   public init() {
     super.init(searchResultsController: autoSuggestViewController)
   }
@@ -66,9 +67,9 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// assign a what3words engine, or API to this  component.  language is optional and defaults to English: "en"
   /// - Parameters:
   ///     - w3w: the what3words API or SDK
-  ///     - language: a ISO two letter langauge code
-  public func set(_ w3w: W3WProtocolV3, language: String = "en") {
-    autoSuggestViewController.set(w3w: w3w)
+  ///     - language: a ISO two letter language code
+  public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
+    autoSuggestViewController.set(w3w)
     configure()
     
     // this can affect voice ability, reset the voice icon
@@ -84,9 +85,9 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   }
 
 
-  /// sets the langauge to use when returning three word addresses
+  /// sets the language to use when returning three word addresses
   /// - Parameters:
-  ///     - language: a ISO two letter langauge code
+  ///     - language: a ISO two letter language code
   public func set(language l: String) {
     language = l
     
@@ -132,7 +133,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
     self.voiceEnabled = voice
     
     if voice && autoSuggestViewController.supportsVoice() {
-      self.autoSuggestViewController.initialiseMicrophone()
+      //self.autoSuggestViewController.initialiseMicrophone()
       showVoiceIcon()
     }
   }
@@ -150,15 +151,16 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// shows the voice icon
   func showVoiceIcon() {
     if autoSuggestViewController.supportsVoice() {
-      var height = self.searchBar.frame.size.height * 0.333
+      var height = self.searchBar.frame.size.height
       if #available(iOS 13.0, *) {
-        height    = searchBar[keyPath: \.searchTextField].font?.pointSize ?? self.searchBar.frame.size.height * 0.8
+        height    = searchBar[keyPath: \.searchTextField].font?.pointSize ?? self.searchBar.frame.size.height
       }
-      let voiceIconView = W3WVoiceIconView(frame: CGRect(x: 0.0, y: 0.0, width: height + rightPadding, height: height))
+      //let voiceIconView = W3WVoiceIconView(frame: CGRect(x: 0.0, y: 0.0, width: height + rightPadding, height: height))
       //voiceIconView.insets = UIEdgeInsets(top: 1.0, left: 1.0, bottom: 1.0, right:1.0)
       //voiceIconView.alignment = .leading
       //voiceIconView.set(padding: self.searchBar.frame.size.height * 0.3)
-      voiceIconView.set(padding: 1.0)
+      //voiceIconView.set(padding: 0.0)
+      let voiceIconView = W3WVoiceIconView(frame: CGRect(x: 0.0, y: 0.0, width: height, height: height))
       
       self.searchBar.showsBookmarkButton = true
       self.searchBar.setImage(voiceIconView.asImage(), for: .bookmark, state: .normal)
@@ -183,14 +185,38 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
       self.slashesSize    = self.searchBar.frame.size.height * 0.333
     }
 
-    let slashesView = W3WSlashesView(frame: CGRect(x: 0.0, y: 0.0, width: slashesSize + leftPadding, height: slashesSize))
-    slashesView.alignment = .trailing
-    self.searchBar.setImage(slashesView.asImage(), for: .search, state: .normal)
-    
+    //let slashesView = W3WSlashesView(frame: CGRect(x: 0.0, y: 0.0, width: slashesSize + leftPadding, height: slashesSize))
+    //slashesView.alignment = .trailing
+    //self.searchBar.setImage(slashesView.asImage(), for: .search, state: .normal)
+    self.searchBar.showsSearchResultsButton = false
+
+    if #available(iOS 13.0, *) {
+      if W3WSettings.leftToRight {
+        self.searchBar.searchTextField.textAlignment = .left
+        self.searchBar.searchTextField.semanticContentAttribute = UISemanticContentAttribute.forceLeftToRight
+      } else {
+        self.searchBar.searchTextField.textAlignment = .right
+        self.searchBar.searchTextField.semanticContentAttribute = UISemanticContentAttribute.forceRightToLeft
+      }
+    } else {
+      if W3WSettings.leftToRight {
+        self.searchBar.semanticContentAttribute = .forceLeftToRight
+      } else {
+        self.searchBar.semanticContentAttribute = .forceRightToLeft
+      }
+    }
+
+
+    // remove the left side icon
+    if #available(iOS 13.0, *) {
+      self.searchBar.searchTextField.leftViewMode = .never
+      self.searchBar.setPositionAdjustment(UIOffset(horizontal: -20, vertical: 0), for: .search)
+    }
+
     if voiceEnabled {
       showVoiceIcon()
     }
-    
+
     self.searchBar.placeholder = W3WSettings.componentsPlaceholderText
   }
   
@@ -209,7 +235,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// called when new suggestions are avialable
   /// - Parameters:
   ///     - suggestions: the new suggestions
-  func update(suggestions: [W3WSuggestion]) {
+  public func update(suggestions: [W3WSuggestion]) {
     if let suggestion = suggestions.first as? W3WVoiceSuggestion {
       if let words = suggestion.words {
         //self.searchBar.text = words
@@ -222,9 +248,9 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// called when the user selects a suggestion
   /// - Parameters:
   ///     - selected: the suggestion chosen by the user
-  func update(selected: W3WSuggestion) {
+  public func update(selected: W3WSuggestion) {
     if let words = selected.words {
-      update(text: words)
+      update(text: W3WAddress.ensureLeadingSlashes(words))
       suggestionSelected(selected)
       textChanged(words)
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -235,12 +261,12 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   /// notifies when and if the address in the text field is a known three word address
-  func update(valid3wa: Bool) {
+  public func update(valid3wa: Bool) {
   }
   
   
   /// called when an error happens
-  func update(error: W3WAutosuggestComponentError) {
+  public func update(error: W3WAutosuggestComponentError) {
     onError(error)
   }
   
@@ -249,7 +275,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   /// instructs the suggestions view on a good place to position itself
-  func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
+  public func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
     let origin = self.view.frame.origin
     let size   = CGSize(width: self.searchBar.frame.size.width, height: preferedHeight)
     
@@ -258,7 +284,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   /// tells the suggestions view a good place for the error notice
-  func errorLocation(preferedHeight: CGFloat) -> CGRect {
+  public func errorLocation(preferedHeight: CGFloat) -> CGRect {
     var frame = self.searchBar.superview?.subviews.first?.subviews.first?.frame ?? CGRect.zero
     frame.origin.y += frame.size.height
     frame.size.height = preferedHeight
@@ -268,19 +294,19 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
 
   
   /// gives the suggestions view self's view so it can place itself on it
-  func getParentView() -> UIView {
+  public func getParentView() -> UIView {
     return self.view
   }
   
   
   /// returns the text currently being displayed
-  func getCurrentText() -> String? {
+  public func getCurrentText() -> String? {
     return searchBar.text
   }
 
   
   /// replaces the text in the text field
-  func replace(text: String) {
+  public func replace(text: String) {
     DispatchQueue.main.async {
       self.searchBar.text = text
     }
@@ -288,6 +314,14 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   // MARK: UISearchBarDelegate Protocol
+  
+  
+
+  public func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    if searchBar.text == "" {
+      searchBar.text = W3WAddress.ensureLeadingSlashes(searchBar.text ?? "")
+    }
+  }
   
   
   /// called when the text field contents change
@@ -353,7 +387,8 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
       if searchBar.text != "" {
         if !autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: searchBar.text) {
           searchBar.text = ""
-          autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
+          //autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
+          autoSuggestViewController.updateSuggestions(text: "")
           autoSuggestViewController.autoSuggestDataSource.update(error: .noValidAdressFound)
         }
       }
@@ -384,6 +419,17 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// Called when the search bar becomes the first responder or when the user makes changes inside the search bar.
   public func updateSearchResults(for searchController: UISearchController) {
   }
+
+  
+  public override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    autoSuggestViewController.updateGeometry()
+    autoSuggestViewController.tableView.layoutIfNeeded()
+    autoSuggestViewController.tableView.layoutSubviews()
+  }
+
+  
+  
   
 }
 
