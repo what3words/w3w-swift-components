@@ -51,7 +51,7 @@ public class W3WObjcAutoSuggestTextField: W3WAutoSuggestTextField {
   /// Sets a closure that gets called when the user selects an address
   public func setSuggestionCallback(_ callback: @escaping (W3WObjcSuggestion) -> ()) {
     self.suggestionSelected = { suggestion in
-      let s = W3WObjcSuggestion(words: suggestion.words, country: suggestion.country, nearestPlace: suggestion.nearestPlace, distanceToFocus: NSNumber(nonretainedObject: suggestion.distanceToFocus), language: suggestion.language)
+      let s = W3WObjcSuggestion(suggestion: suggestion)
       callback(s)
     }
   }
@@ -110,7 +110,7 @@ public class W3WObjcAutoSuggestSearchController: W3WAutoSuggestSearchController 
   /// Sets a closure that gets called when the user selects an address
   public func setSuggestionCallback(_ callback: @escaping (W3WObjcSuggestion) -> ()) {
     self.suggestionSelected = { suggestion in
-      let s = W3WObjcSuggestion(words: suggestion.words, country: suggestion.country, nearestPlace: suggestion.nearestPlace, distanceToFocus: NSNumber(nonretainedObject: suggestion.distanceToFocus), language: suggestion.language)
+      let s = W3WObjcSuggestion(suggestion: suggestion)
       callback(s)
     }
   }

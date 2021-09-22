@@ -47,9 +47,19 @@
   // print out any error
   [textfield setErrorCallback: ^(NSError *error) {
     NSLog(@"Error: %@", error.localizedDescription);
+    [self show_error:error];
   }];
   
 }
+
+- (void)show_error:(NSError *)error
+  {
+  UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Error" message:error.description preferredStyle:UIAlertControllerStyleAlert];
+  [alert addAction:[UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleCancel handler:NULL]];
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self presentViewController:alert animated:YES completion:NULL];
+  });
+  }
 
 
 @end

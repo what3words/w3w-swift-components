@@ -10,6 +10,11 @@ For information on using this package with Objective-C read [this](https://githu
 
 If you are upgrading from any version 1.x.x, see the [upgrade guide](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/UpgradeFromV1.md).
 
+Compatibility
+-------------
+
+These components work with **iOS 9.0** or higher.
+
 
 AutoSuggest Text Field
 ---------------------- 
