@@ -11,7 +11,7 @@ If you use voice search, then these options will be automatically applied to tha
 Option Types
 ------------
 
-You may specify options as an array of `W3WOption`, or using the `W3WOptions` factory: 
+You may specify options as an array of `W3WOption`, or using the `W3WOptions` builder: 
 
 ```
 let options = [
@@ -28,7 +28,7 @@ let options = W3WOptions().focus(CLLocationCoordinate2D(latitude: 50.0, longitud
 Set()
 -------------------
 
-Whether you choose an option array or the factory pattern, you can set them like this:
+Whether you choose an option array or the builder pattern, you can set them like this:
 
 ```
 w3wComponent.set(options: [W3WOption.clipToCountry("GB")])

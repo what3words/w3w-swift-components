@@ -16,8 +16,11 @@ Compatibility
 These components work with **iOS 9.0** or higher.
 
 
-AutoSuggest Text Field
----------------------- 
+Components
+----------
+
+### AutoSuggest Text Field
+
 <img src="Documentation/autosuggest.png" width="200" style="float: right; padding: 16px;">
 Full documentation can be found at [Documentation/autosuggest.md](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/autosuggest.md).
 
@@ -28,9 +31,9 @@ An iOS UIKit example project can be found at [Examples/TextField/TextField.xcode
 
 This conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any addresses the user choses, as well as to set options.
 
-
-AutoSuggest Search Controller
 ---------------------- 
+
+### AutoSuggest Search Controller
 <img src="Documentation/searchcontroller.png" width="200"  style="float: right; padding: 16px;">
 Full documentation can be found  at [Documentation/autosuggest.md](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/autosuggest.md).
 

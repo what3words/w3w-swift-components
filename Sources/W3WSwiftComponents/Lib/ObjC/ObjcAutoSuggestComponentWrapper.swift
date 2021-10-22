@@ -50,7 +50,7 @@ public class W3WObjcAutoSuggestTextField: W3WAutoSuggestTextField {
   
   /// Sets a closure that gets called when the user selects an address
   public func setSuggestionCallback(_ callback: @escaping (W3WObjcSuggestion) -> ()) {
-    self.suggestionSelected = { suggestion in
+    self.onSelected = { suggestion in
       let s = W3WObjcSuggestion(suggestion: suggestion)
       callback(s)
     }
