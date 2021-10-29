@@ -59,7 +59,8 @@ public extension W3WSettings {
       
       "MapGridColor"        : [.light: W3WColorScheme.w3wSupportMediumGrey,   .dark: W3WColorScheme.w3wSupportMediumGrey],
       "MapSquareColor"      : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wSupportLightGrey],
-      "MapPinColor"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wRed]
+      "MapPinColor"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wRed],
+      "MapCircleColor"      : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wRed]
     ]
 
   

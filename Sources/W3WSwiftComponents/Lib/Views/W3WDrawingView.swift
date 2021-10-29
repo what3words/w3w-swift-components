@@ -141,7 +141,7 @@ open class W3WDrawingView: UIView {
     // draw the three slashes in the middle
     let x_offset = size * (6.0 / 32.0) //0.13
     let y_offset = size * 0.5 // 0.4
-    let spacing  = size * (11.0 / 32.0) //0.3
+    let spacing  = size * (14.0 / 32.0) //0.3
     
     roundedLine(p0: CGPoint(x: centre.x + x_offset - spacing, y: centre.y - y_offset), p1: CGPoint(x: centre.x - x_offset - spacing, y: centre.y + y_offset), colour: colour, lineWidth: lineWidth)
     roundedLine(p0: CGPoint(x: centre.x + x_offset,           y: centre.y - y_offset), p1: CGPoint(x: centre.x - x_offset,           y: centre.y + y_offset), colour: colour, lineWidth: lineWidth)
