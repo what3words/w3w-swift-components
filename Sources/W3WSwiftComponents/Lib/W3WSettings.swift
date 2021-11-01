@@ -126,4 +126,23 @@ public extension W3WSettings {
     return translation.replacingOccurrences(of: "${PARAM}", with: "%@")
   }
   
+  
+  // MARK: Geometry
+
+  static var uiIndent             = CGFloat(8.0)
+  static let pinSize   = CGFloat(40.0)
+  static let pinOffset = CGFloat(5.0)
+  static let mapSquareLineThickness = CGFloat(2.0)
+  static let mapGridLineThickness    = CGFloat(0.5)
+  
+  
+  // MARK: Geography
+  
+  static let mapDefaultZoomPointsPerSquare          = CGFloat(32.0)
+  static let mapGridInvisibleAtPointsPerSquare      = CGFloat(11.0)
+  static let mapGridOpaqueAtPointsPerSquare         = CGFloat(11.001)
+  static let mapAnnotationTransitionPointsPerSquare = CGFloat(12.0)
+  
+
+  
 }
