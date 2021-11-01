@@ -15,16 +15,14 @@ public class W3WAnnotation: MKPointAnnotation {
   
   var square: W3WSquare?
   var style: W3WMarkerStyle = .circle
-  var boxStyle: W3WMarkerBoxStyle = .outline
   var colour: UIColor?
 
   
-  public init(square: W3WSquare, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public init(square: W3WSquare, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     super.init()
     
     self.colour = color
     self.style = style
-    self.boxStyle = boxStyle
     
     if let words = square.words {
       if W3WSettings.leftToRight {
@@ -81,7 +79,3 @@ public enum W3WMarkerStyle {
 }
 
 
-public enum W3WMarkerBoxStyle {
-  case outline
-  case solid
-}

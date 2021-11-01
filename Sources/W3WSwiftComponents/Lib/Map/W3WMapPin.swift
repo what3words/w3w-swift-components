@@ -21,13 +21,11 @@ public class W3WMapPin: W3WDrawingView {
   
   var text: String?
   var style: W3WMarkerStyle = .pin
-  var boxStyle: W3WMarkerBoxStyle = .outline
   var colour: UIColor?
 
-  public init(frame: CGRect, text: String?, style: W3WMarkerStyle = .pin, boxStyle: W3WMarkerBoxStyle = .outline, color: UIColor? = nil) {
+  public init(frame: CGRect, text: String?, style: W3WMarkerStyle = .pin, color: UIColor? = nil) {
     super.init(frame: frame)
     self.text = text
-    self.boxStyle = boxStyle
     self.style = style
     self.colour = color
     instantiateUIElements()

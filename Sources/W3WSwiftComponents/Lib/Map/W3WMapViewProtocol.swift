@@ -241,11 +241,11 @@ extension W3WMapViewProtocol {
   
   
   /// put a what3words annotation on the map showing the address, and optionally center the map around it
-  public func show(_ square: W3WSquare, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public func show(_ square: W3WSquare, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     W3WThread.runInBackground {
       if let s = self.ensureSquareHasCoordinates(square: square) {
         
-        self.addAnnotation(square: s, color: color, style: style, boxStyle: boxStyle)
+        self.addAnnotation(square: s, color: color, style: style)
         
         let center = self.region.center
         //var span   = self.region.span
@@ -268,39 +268,39 @@ extension W3WMapViewProtocol {
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ suggestion: W3WSuggestion, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public func show(_ suggestion: W3WSuggestion, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     if let words = suggestion.words {
-      show(words, camera: camera, color: color, style: style, boxStyle: boxStyle)
+      show(words, camera: camera, color: color, style: style)
     }
   }
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ words: String, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public func show(_ words: String, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     checkConfiguration()
     w3wMapData?.w3w?.convertToCoordinates(words: words) { square, error in
       self.dealWithAnyApiError(error: error)
       if let s = square {
-        self.show(s, camera: camera, color: color, style: style, boxStyle: boxStyle)
+        self.show(s, camera: camera, color: color, style: style)
       }
     }
   }
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ coordinates: CLLocationCoordinate2D, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public func show(_ coordinates: CLLocationCoordinate2D, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     checkConfiguration()
     w3wMapData?.w3w?.convertTo3wa(coordinates: coordinates, language: w3wMapData?.language ?? W3WSettings.defaultLanguage) { square, error in
       self.dealWithAnyApiError(error: error)
       if let s = square {
-        self.show(s, camera: camera, color: color, style: style, boxStyle: boxStyle)
+        self.show(s, camera: camera, color: color, style: style)
       }
     }
   }
   
   
   
-  public func show(_ squares: [W3WSquare], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public func show(_ squares: [W3WSquare], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     W3WThread.runInBackground {
       let goodSquares = self.ensureSquaresHaveCoordinates(squares: squares)
       var middle = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
@@ -311,7 +311,7 @@ extension W3WMapViewProtocol {
       var maxLng = -Double.infinity
       
       for square in goodSquares {
-        self.addAnnotation(square: square, color: color, style: style, boxStyle: boxStyle)
+        self.addAnnotation(square: square, color: color, style: style)
         if let c = square.coordinates {
           middle.latitude += c.latitude
           middle.longitude += c.longitude
@@ -340,25 +340,25 @@ extension W3WMapViewProtocol {
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ suggestions: [W3WSuggestion], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public func show(_ suggestions: [W3WSuggestion], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     W3WThread.runInBackground {
-      self.show(self.convertToSquaresWithCoordinates(suggestions: suggestions), camera: camera, color: color, style: style, boxStyle: boxStyle)
+      self.show(self.convertToSquaresWithCoordinates(suggestions: suggestions), camera: camera, color: color, style: style)
     }
   }
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ words: [String], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public func show(_ words: [String], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     W3WThread.runInBackground {
-      self.show(self.convertToSquaresWithCoordinates(words: words), camera: camera, color: color, style: style, boxStyle: boxStyle)
+      self.show(self.convertToSquaresWithCoordinates(words: words), camera: camera, color: color, style: style)
     }
   }
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ coordinates: [CLLocationCoordinate2D], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  public func show(_ coordinates: [CLLocationCoordinate2D], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     W3WThread.runInBackground {
-      self.show(self.convertToSquares(coordinates: coordinates), camera: camera, color: color, style: style, boxStyle: boxStyle)
+      self.show(self.convertToSquares(coordinates: coordinates), camera: camera, color: color, style: style)
     }
   }
   
@@ -475,7 +475,7 @@ extension W3WMapViewProtocol {
   /// add an annotation to the map given a square this compensates for missing words or missing
   /// coordiantes, and does nothing if neither is present
   /// this is the one that actually does the work.  The other addAnnotations calls end up calling this one.
-  func addAnnotation(square: W3WSquare, color: UIColor? = nil, style: W3WMarkerStyle = .circle, boxStyle: W3WMarkerBoxStyle = .outline) {
+  func addAnnotation(square: W3WSquare, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     W3WThread.runOnMain {
       
       //if self.findPin(square) == nil {
@@ -484,7 +484,7 @@ extension W3WMapViewProtocol {
           if let s = self.ensureSquareHasCoordinates(square: square) {
             W3WThread.runOnMain {
               self.hide(square)
-              self.addAnnotation(W3WAnnotation(square: s, color: color, style: style, boxStyle: boxStyle))
+              self.addAnnotation(W3WAnnotation(square: s, color: color, style: style))
             }
           }
         }
@@ -508,7 +508,7 @@ extension W3WMapViewProtocol {
     }
     
     // make the image
-    let pin = W3WMapPin(frame: aframe, text: annotation.square?.words, style: annotation.style, boxStyle: annotation.boxStyle, color: annotation.colour)
+    let pin = W3WMapPin(frame: aframe, text: annotation.square?.words, style: annotation.style, color: annotation.colour)
     let pinImage = pin.asImage()
     
     let annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
