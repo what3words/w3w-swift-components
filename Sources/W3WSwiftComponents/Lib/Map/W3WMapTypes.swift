@@ -27,8 +27,11 @@ public class W3WAnnotation: MKPointAnnotation {
     self.boxStyle = boxStyle
     
     if let words = square.words {
-      title = "///" + words
-      //subtitle = square.nearestPlace
+      if W3WSettings.leftToRight {
+        title = "///" + words
+      } else {
+        title = words + "///"
+      }
     }
     
     if let coordinates = square.coordinates {
