@@ -11,8 +11,8 @@ jobs: # a basic unit of work in a run
           name: Run Unit Tests  # xcode's 'swift test' doesn't yet allow specifying iOS only, and this package does not work on macOS, so all we do here for the time being is build the app to check it at least can compile.  
           command: |-
             for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
-            #xcodebuild -scheme w3w-swift-components -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
-            xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
+            xcodebuild -scheme w3w-swift-components -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
+            #xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
           
 workflows:
   version: 2
