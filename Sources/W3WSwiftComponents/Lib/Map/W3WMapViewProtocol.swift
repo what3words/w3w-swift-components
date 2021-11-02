@@ -343,7 +343,9 @@ extension W3WMapViewProtocol {
             middle.longitude = (maxLng - minLng) / 2.0 + minLng
 
             if camera != .none {
-              self.set(center: middle, latitudeSpanDegrees: (maxLat - minLat) * 1.5, longitudeSpanDegrees: (maxLng - minLng) * 1.5)
+              let latSpan  = min(max(-90.0,  (maxLat - minLat) * 1.5), 90.0)
+              let longSpan = min(max(-180.0, (maxLng - minLng) * 1.5), 180.0)
+              self.set(center: middle, latitudeSpanDegrees: latSpan, longitudeSpanDegrees: longSpan)
             }
           }
         }
