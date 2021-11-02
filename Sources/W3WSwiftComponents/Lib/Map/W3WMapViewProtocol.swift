@@ -241,26 +241,28 @@ extension W3WMapViewProtocol {
   
   
   /// put a what3words annotation on the map showing the address, and optionally center the map around it
-  public func show(_ square: W3WSquare, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    W3WThread.runInBackground {
-      if let s = self.ensureSquareHasCoordinates(square: square) {
-        
-        self.addAnnotation(square: s, color: color, style: style)
-        
-        let center = self.region.center
-        //var span   = self.region.span
-        
-        // just center the map without zooming
-        if camera == .center {
-          self.set(center: s.coordinates ?? center)
+  public func show(_ square: W3WSquare?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+    if let sq = square {
+      W3WThread.runInBackground {
+        if let s = self.ensureSquareHasCoordinates(square: sq) {
           
-          // center and zoom into the square
-        } else if camera == .zoom {
-          let resolution = UIScreen.main.bounds
-          let minPointsInView = min(resolution.width, resolution.height)
-          let squaresToShow = minPointsInView / W3WSettings.mapDefaultZoomPointsPerSquare
-          let metersToShow = Double(squaresToShow * 3.0)
-          self.set(center: s.coordinates ?? center, latitudeSpanMeters: metersToShow, longitudeSpanMeters: metersToShow)
+          self.addAnnotation(square: s, color: color, style: style)
+          
+          let center = self.region.center
+          //var span   = self.region.span
+          
+          // just center the map without zooming
+          if camera == .center {
+            self.set(center: s.coordinates ?? center)
+            
+            // center and zoom into the square
+          } else if camera == .zoom {
+            let resolution = UIScreen.main.bounds
+            let minPointsInView = min(resolution.width, resolution.height)
+            let squaresToShow = minPointsInView / W3WSettings.mapDefaultZoomPointsPerSquare
+            let metersToShow = Double(squaresToShow * 3.0)
+            self.set(center: s.coordinates ?? center, latitudeSpanMeters: metersToShow, longitudeSpanMeters: metersToShow)
+          }
         }
       }
     }
@@ -268,70 +270,76 @@ extension W3WMapViewProtocol {
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ suggestion: W3WSuggestion, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    if let words = suggestion.words {
+  public func show(_ suggestion: W3WSuggestion?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+    if let words = suggestion?.words {
       show(words, camera: camera, color: color, style: style)
     }
   }
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ words: String, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    checkConfiguration()
-    w3wMapData?.w3w?.convertToCoordinates(words: words) { square, error in
-      self.dealWithAnyApiError(error: error)
-      if let s = square {
-        self.show(s, camera: camera, color: color, style: style)
+  public func show(_ words: String?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+    if let w = words {
+      checkConfiguration()
+      w3wMapData?.w3w?.convertToCoordinates(words: w) { square, error in
+        self.dealWithAnyApiError(error: error)
+        if let s = square {
+          self.show(s, camera: camera, color: color, style: style)
+        }
       }
     }
   }
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ coordinates: CLLocationCoordinate2D, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    checkConfiguration()
-    w3wMapData?.w3w?.convertTo3wa(coordinates: coordinates, language: w3wMapData?.language ?? W3WSettings.defaultLanguage) { square, error in
-      self.dealWithAnyApiError(error: error)
-      if let s = square {
-        self.show(s, camera: camera, color: color, style: style)
+  public func show(_ coordinates: CLLocationCoordinate2D?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+    if let c = coordinates {
+      checkConfiguration()
+      w3wMapData?.w3w?.convertTo3wa(coordinates: c, language: w3wMapData?.language ?? W3WSettings.defaultLanguage) { square, error in
+        self.dealWithAnyApiError(error: error)
+        if let s = square {
+          self.show(s, camera: camera, color: color, style: style)
+        }
       }
     }
   }
   
   
   
-  public func show(_ squares: [W3WSquare], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    W3WThread.runInBackground {
-      let goodSquares = self.ensureSquaresHaveCoordinates(squares: squares)
-      var middle = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
-      var count  = 0
-      var minLat = Double.infinity
-      var minLng = Double.infinity
-      var maxLat = -Double.infinity
-      var maxLng = -Double.infinity
-      
-      for square in goodSquares {
-        self.addAnnotation(square: square, color: color, style: style)
-        if let c = square.coordinates {
-          middle.latitude += c.latitude
-          middle.longitude += c.longitude
-          count += 1
-          
-          if minLat > c.latitude  { minLat = c.latitude }
-          if minLng > c.longitude { minLng = c.longitude }
-          if maxLat < c.latitude  { maxLat = c.latitude }
-          if maxLng < c.longitude { maxLng = c.longitude }
+  public func show(_ squares: [W3WSquare]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+    if let s = squares {
+      W3WThread.runInBackground {
+        let goodSquares = self.ensureSquaresHaveCoordinates(squares: s)
+        var middle = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+        var count  = 0
+        var minLat = Double.infinity
+        var minLng = Double.infinity
+        var maxLat = -Double.infinity
+        var maxLng = -Double.infinity
+        
+        for square in goodSquares {
+          self.addAnnotation(square: square, color: color, style: style)
+          if let c = square.coordinates {
+            middle.latitude += c.latitude
+            middle.longitude += c.longitude
+            count += 1
+            
+            if minLat > c.latitude  { minLat = c.latitude }
+            if minLng > c.longitude { minLng = c.longitude }
+            if maxLat < c.latitude  { maxLat = c.latitude }
+            if maxLng < c.longitude { maxLng = c.longitude }
+          }
         }
-      }
-      
-      if count > 1 {
-        //middle.latitude = middle.latitude / Double(count)
-        //middle.longitude = middle.longitude / Double(count)
-        middle.latitude  = (maxLat - minLat) / 2.0 + minLat
-        middle.longitude = (maxLng - minLng) / 2.0 + minLng
+        
+        if count > 1 {
+          //middle.latitude = middle.latitude / Double(count)
+          //middle.longitude = middle.longitude / Double(count)
+          middle.latitude  = (maxLat - minLat) / 2.0 + minLat
+          middle.longitude = (maxLng - minLng) / 2.0 + minLng
 
-        if camera != .none {
-          self.set(center: middle, latitudeSpanDegrees: (maxLat - minLat) * 1.5, longitudeSpanDegrees: (maxLng - minLng) * 1.5)
+          if camera != .none {
+            self.set(center: middle, latitudeSpanDegrees: (maxLat - minLat) * 1.5, longitudeSpanDegrees: (maxLng - minLng) * 1.5)
+          }
         }
       }
     }
@@ -340,25 +348,39 @@ extension W3WMapViewProtocol {
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ suggestions: [W3WSuggestion], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    W3WThread.runInBackground {
-      self.show(self.convertToSquaresWithCoordinates(suggestions: suggestions), camera: camera, color: color, style: style)
+//  public func show(_ suggestions: [W3WSuggestion], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+//    W3WThread.runInBackground {
+//      self.show(self.convertToSquaresWithCoordinates(suggestions: suggestions), camera: camera, color: color, style: style)
+//    }
+//  }
+  
+  
+  /// put a what3words annotation on the map showing the address
+  public func show(_ suggestions: [W3WSuggestion]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+    if let s = suggestions {
+      W3WThread.runInBackground {
+        self.show(self.convertToSquaresWithCoordinates(suggestions: s), camera: camera, color: color, style: style)
+      }
     }
   }
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ words: [String], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    W3WThread.runInBackground {
-      self.show(self.convertToSquaresWithCoordinates(words: words), camera: camera, color: color, style: style)
+  public func show(_ words: [String]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+    if let w = words {
+      W3WThread.runInBackground {
+        self.show(self.convertToSquaresWithCoordinates(words: w), camera: camera, color: color, style: style)
+      }
     }
   }
   
   
   /// put a what3words annotation on the map showing the address
-  public func show(_ coordinates: [CLLocationCoordinate2D], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    W3WThread.runInBackground {
-      self.show(self.convertToSquares(coordinates: coordinates), camera: camera, color: color, style: style)
+  public func show(_ coordinates: [CLLocationCoordinate2D]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
+    if let c = coordinates {
+      W3WThread.runInBackground {
+        self.show(self.convertToSquares(coordinates: c), camera: camera, color: color, style: style)
+      }
     }
   }
   
@@ -376,44 +398,46 @@ extension W3WMapViewProtocol {
   //
   
   /// remove a what3words annotation from the map if it is present
-  public func hide(_ suggestion: W3WSuggestion) {
-    if let words = suggestion.words {
+  public func hide(_ suggestion: W3WSuggestion?) {
+    if let words = suggestion?.words {
       hide(words)
     }
   }
   
   
   /// remove a what3words annotation from the map if it is present
-  public func hide(_ words: String) {
-    checkConfiguration()
-    w3wMapData?.w3w?.convertToCoordinates(words: words) { square, error in
-      self.dealWithAnyApiError(error: error)
-      if let s = square {
-        self.hide(s)
+  public func hide(_ words: String?) {
+    if let w = words {
+      checkConfiguration()
+      w3wMapData?.w3w?.convertToCoordinates(words: w) { square, error in
+        self.dealWithAnyApiError(error: error)
+        if let s = square {
+          self.hide(s)
+        }
       }
     }
   }
   
   
   /// remove what3words annotations from the map if they are present
-  public func hide(_ squares: [W3WSquare]) {
-    for square in squares {
+  public func hide(_ squares: [W3WSquare]?) {
+    for square in squares ?? [] {
       hide(square)
     }
   }
   
   
   /// remove what3words annotations from the map if they are present
-  public func hide(_ suggestions: [W3WSuggestion]) {
-    for suggestion in suggestions {
+  public func hide(_ suggestions: [W3WSuggestion]?) {
+    for suggestion in suggestions ?? [] {
       hide(suggestion)
     }
   }
   
   
   /// remove what3words annotations from the map if they are present
-  public func hide(_ words: [String]) {
-    for word in words {
+  public func hide(_ words: [String]?) {
+    for word in words ?? [] {
       hide(word)
     }
   }
@@ -423,10 +447,12 @@ extension W3WMapViewProtocol {
   /// remove a what3words annotation from the map if it is present
   /// this is the one that actually does the work.  The other remove calls
   /// end up calling this one.
-  public func hide(_ square: W3WSquare) {
-    if let annotation = findPin(square) {
-      removeAnnotation(annotation)
-      hideOutline(square)
+  public func hide(_ square: W3WSquare?) {
+    if let s = square {
+      if let annotation = findPin(s) {
+        removeAnnotation(annotation)
+        hideOutline(s)
+      }
     }
   }
   
@@ -458,10 +484,10 @@ extension W3WMapViewProtocol {
   //  }
   
   
-  func findPin(_ square: W3WSquare) -> W3WAnnotation? {
+  func findPin(_ square: W3WSquare?) -> W3WAnnotation? {
     for annotation in annotations {
       if let a = annotation as? W3WAnnotation {
-        if a.square?.words == square.words || (a.square?.coordinates?.latitude == square.coordinates?.latitude && a.square?.coordinates?.longitude == square.coordinates?.longitude) {
+        if a.square?.words == square?.words || (a.square?.coordinates?.latitude == square?.coordinates?.latitude && a.square?.coordinates?.longitude == square?.coordinates?.longitude) {
           return a
         }
       }
