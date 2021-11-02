@@ -242,11 +242,11 @@ extension W3WMapViewProtocol {
   
   /// put a what3words annotation on the map showing the address, and optionally center the map around it
   public func show(_ square: W3WSquare?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    if let sq = square {
-      W3WThread.runInBackground {
-        if let s = self.ensureSquareHasCoordinates(square: sq) {
-          
-          W3WThread.runOnMain {
+    W3WThread.runOnMain {
+      if let sq = square {
+        W3WThread.runInBackground {
+          if let s = self.ensureSquareHasCoordinates(square: sq) {
+            
             self.addAnnotation(square: s, color: color, style: style)
             
             let center = self.region.center
@@ -281,12 +281,14 @@ extension W3WMapViewProtocol {
   
   /// put a what3words annotation on the map showing the address
   public func show(_ words: String?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    if let w = words {
-      checkConfiguration()
-      w3wMapData?.w3w?.convertToCoordinates(words: w) { square, error in
-        self.dealWithAnyApiError(error: error)
-        if let s = square {
-          self.show(s, camera: camera, color: color, style: style)
+    W3WThread.runOnMain {
+      if let w = words {
+        self.checkConfiguration()
+        self.w3wMapData?.w3w?.convertToCoordinates(words: w) { square, error in
+          self.dealWithAnyApiError(error: error)
+          if let s = square {
+            self.show(s, camera: camera, color: color, style: style)
+          }
         }
       }
     }
@@ -295,12 +297,14 @@ extension W3WMapViewProtocol {
   
   /// put a what3words annotation on the map showing the address
   public func show(_ coordinates: CLLocationCoordinate2D?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    if let c = coordinates {
-      checkConfiguration()
-      w3wMapData?.w3w?.convertTo3wa(coordinates: c, language: w3wMapData?.language ?? W3WSettings.defaultLanguage) { square, error in
-        self.dealWithAnyApiError(error: error)
-        if let s = square {
-          self.show(s, camera: camera, color: color, style: style)
+    W3WThread.runOnMain {
+      if let c = coordinates {
+        self.checkConfiguration()
+        self.w3wMapData?.w3w?.convertTo3wa(coordinates: c, language: self.w3wMapData?.language ?? W3WSettings.defaultLanguage) { square, error in
+          self.dealWithAnyApiError(error: error)
+          if let s = square {
+            self.show(s, camera: camera, color: color, style: style)
+          }
         }
       }
     }
@@ -309,17 +313,17 @@ extension W3WMapViewProtocol {
   
   
   public func show(_ squares: [W3WSquare]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    if let s = squares {
-      W3WThread.runInBackground {
-        let goodSquares = self.ensureSquaresHaveCoordinates(squares: s)
-        var middle = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
-        var count  = 0
-        var minLat = Double.infinity
-        var minLng = Double.infinity
-        var maxLat = -Double.infinity
-        var maxLng = -Double.infinity
-
-        W3WThread.runOnMain {
+    W3WThread.runOnMain {
+      if let s = squares {
+        W3WThread.runInBackground {
+          let goodSquares = self.ensureSquaresHaveCoordinates(squares: s)
+          var middle = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
+          var count  = 0
+          var minLat = Double.infinity
+          var minLng = Double.infinity
+          var maxLat = -Double.infinity
+          var maxLng = -Double.infinity
+          
           for square in goodSquares {
             self.addAnnotation(square: square, color: color, style: style)
             if let c = square.coordinates {
@@ -337,7 +341,7 @@ extension W3WMapViewProtocol {
           if count > 1 {
             middle.latitude  = (maxLat - minLat) / 2.0 + minLat
             middle.longitude = (maxLng - minLng) / 2.0 + minLng
-            
+
             if camera != .none {
               self.set(center: middle, latitudeSpanDegrees: (maxLat - minLat) * 1.5, longitudeSpanDegrees: (maxLng - minLng) * 1.5)
             }
@@ -350,9 +354,11 @@ extension W3WMapViewProtocol {
   
   /// put a what3words annotation on the map showing the address
   public func show(_ suggestions: [W3WSuggestion]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    if let s = suggestions {
-      W3WThread.runInBackground {
-        self.show(self.convertToSquaresWithCoordinates(suggestions: s), camera: camera, color: color, style: style)
+    W3WThread.runOnMain {
+      if let s = suggestions {
+        W3WThread.runInBackground {
+          self.show(self.convertToSquaresWithCoordinates(suggestions: s), camera: camera, color: color, style: style)
+        }
       }
     }
   }
@@ -360,9 +366,11 @@ extension W3WMapViewProtocol {
   
   /// put a what3words annotation on the map showing the address
   public func show(_ words: [String]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    if let w = words {
-      W3WThread.runInBackground {
-        self.show(self.convertToSquaresWithCoordinates(words: w), camera: camera, color: color, style: style)
+    W3WThread.runOnMain {
+      if let w = words {
+        W3WThread.runInBackground {
+          self.show(self.convertToSquaresWithCoordinates(words: w), camera: camera, color: color, style: style)
+        }
       }
     }
   }
@@ -370,9 +378,11 @@ extension W3WMapViewProtocol {
   
   /// put a what3words annotation on the map showing the address
   public func show(_ coordinates: [CLLocationCoordinate2D]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-    if let c = coordinates {
-      W3WThread.runInBackground {
-        self.show(self.convertToSquares(coordinates: c), camera: camera, color: color, style: style)
+    W3WThread.runOnMain {
+      if let c = coordinates {
+        W3WThread.runInBackground {
+          self.show(self.convertToSquares(coordinates: c), camera: camera, color: color, style: style)
+        }
       }
     }
   }
