@@ -246,22 +246,24 @@ extension W3WMapViewProtocol {
       W3WThread.runInBackground {
         if let s = self.ensureSquareHasCoordinates(square: sq) {
           
-          self.addAnnotation(square: s, color: color, style: style)
-          
-          let center = self.region.center
-          //var span   = self.region.span
-          
-          // just center the map without zooming
-          if camera == .center {
-            self.set(center: s.coordinates ?? center)
+          W3WThread.runOnMain {
+            self.addAnnotation(square: s, color: color, style: style)
             
-            // center and zoom into the square
-          } else if camera == .zoom {
-            let resolution = UIScreen.main.bounds
-            let minPointsInView = min(resolution.width, resolution.height)
-            let squaresToShow = minPointsInView / W3WSettings.mapDefaultZoomPointsPerSquare
-            let metersToShow = Double(squaresToShow * 3.0)
-            self.set(center: s.coordinates ?? center, latitudeSpanMeters: metersToShow, longitudeSpanMeters: metersToShow)
+            let center = self.region.center
+            //var span   = self.region.span
+            
+            // just center the map without zooming
+            if camera == .center {
+              self.set(center: s.coordinates ?? center)
+              
+              // center and zoom into the square
+            } else if camera == .zoom {
+              let resolution = UIScreen.main.bounds
+              let minPointsInView = min(resolution.width, resolution.height)
+              let squaresToShow = minPointsInView / W3WSettings.mapDefaultZoomPointsPerSquare
+              let metersToShow = Double(squaresToShow * 3.0)
+              self.set(center: s.coordinates ?? center, latitudeSpanMeters: metersToShow, longitudeSpanMeters: metersToShow)
+            }
           }
         }
       }
@@ -316,43 +318,34 @@ extension W3WMapViewProtocol {
         var minLng = Double.infinity
         var maxLat = -Double.infinity
         var maxLng = -Double.infinity
-        
-        for square in goodSquares {
-          self.addAnnotation(square: square, color: color, style: style)
-          if let c = square.coordinates {
-            middle.latitude += c.latitude
-            middle.longitude += c.longitude
-            count += 1
-            
-            if minLat > c.latitude  { minLat = c.latitude }
-            if minLng > c.longitude { minLng = c.longitude }
-            if maxLat < c.latitude  { maxLat = c.latitude }
-            if maxLng < c.longitude { maxLng = c.longitude }
-          }
-        }
-        
-        if count > 1 {
-          //middle.latitude = middle.latitude / Double(count)
-          //middle.longitude = middle.longitude / Double(count)
-          middle.latitude  = (maxLat - minLat) / 2.0 + minLat
-          middle.longitude = (maxLng - minLng) / 2.0 + minLng
 
-          if camera != .none {
-            self.set(center: middle, latitudeSpanDegrees: (maxLat - minLat) * 1.5, longitudeSpanDegrees: (maxLng - minLng) * 1.5)
+        W3WThread.runOnMain {
+          for square in goodSquares {
+            self.addAnnotation(square: square, color: color, style: style)
+            if let c = square.coordinates {
+              middle.latitude += c.latitude
+              middle.longitude += c.longitude
+              count += 1
+              
+              if minLat > c.latitude  { minLat = c.latitude }
+              if minLng > c.longitude { minLng = c.longitude }
+              if maxLat < c.latitude  { maxLat = c.latitude }
+              if maxLng < c.longitude { maxLng = c.longitude }
+            }
+          }
+          
+          if count > 1 {
+            middle.latitude  = (maxLat - minLat) / 2.0 + minLat
+            middle.longitude = (maxLng - minLng) / 2.0 + minLng
+            
+            if camera != .none {
+              self.set(center: middle, latitudeSpanDegrees: (maxLat - minLat) * 1.5, longitudeSpanDegrees: (maxLng - minLng) * 1.5)
+            }
           }
         }
       }
     }
   }
-  
-  
-  
-  /// put a what3words annotation on the map showing the address
-//  public func show(_ suggestions: [W3WSuggestion], camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
-//    W3WThread.runInBackground {
-//      self.show(self.convertToSquaresWithCoordinates(suggestions: suggestions), camera: camera, color: color, style: style)
-//    }
-//  }
   
   
   /// put a what3words annotation on the map showing the address
@@ -384,18 +377,7 @@ extension W3WMapViewProtocol {
     }
   }
   
-  
-  
-  //  /// remove a what3words annotation from the map if it is present
-  //  /// this is the one that actually does the work.  The other remove calls
-  //  /// end up calling this one.
-  //  public func hide(_ square: W3WSquare) {
-  //    if let annotation = find(square) {
-  //      removeAnnotation(annotation)
-  //      hideOutline(annotation.square)
-  //    }
-  //  }
-  //
+
   
   /// remove a what3words annotation from the map if it is present
   public func hide(_ suggestion: W3WSuggestion?) {
@@ -469,20 +451,7 @@ extension W3WMapViewProtocol {
     }
   }
   
-  
 
-  
-  
-  //  /// remove what3words annotations from the map if they are present
-  //  public func hideAll() {
-  //    for annotation in annotations {
-  //      if let w3wAnnotation = annotation as? W3WAnnotation {
-  //        removeAnnotation(w3wAnnotation)
-  //        hideOutline(w3wAnnotation.square)
-  //      }
-  //    }
-  //  }
-  
   
   func findPin(_ square: W3WSquare?) -> W3WAnnotation? {
     for annotation in annotations {
@@ -503,18 +472,14 @@ extension W3WMapViewProtocol {
   /// this is the one that actually does the work.  The other addAnnotations calls end up calling this one.
   func addAnnotation(square: W3WSquare, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     W3WThread.runOnMain {
-      
-      //if self.findPin(square) == nil {
-        
-        W3WThread.runInBackground {
-          if let s = self.ensureSquareHasCoordinates(square: square) {
-            W3WThread.runOnMain {
-              self.hide(square)
-              self.addAnnotation(W3WAnnotation(square: s, color: color, style: style))
-            }
+      W3WThread.runInBackground {
+        if let s = self.ensureSquareHasCoordinates(square: square) {
+          W3WThread.runOnMain {
+            self.hide(square)
+            self.addAnnotation(W3WAnnotation(square: s, color: color, style: style))
           }
         }
-      //}
+      }
     }
   }
   
