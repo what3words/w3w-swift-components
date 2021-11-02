@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     textField.set(voice: true)
 
     // assign a code block to execute when the user has selected an address
-    textField.suggestionSelected = { suggestion in
+    textField.onSuggestionSelected = { suggestion in
       print("User chose:", suggestion.words ?? "")
     }
 

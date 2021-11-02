@@ -15,9 +15,9 @@ import W3WSwiftApi
 open class W3WAutoSuggestSearchController: UISearchController, UISearchTextFieldDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
   
   /// callback for when the user choses a suggestion
-  lazy public var onSelected: W3WSuggestionResponse = { suggestion in self.suggestionSelected(suggestion) }
+  lazy public var onSuggestionSelected: W3WSuggestionResponse = { suggestion in self.suggestionSelected(suggestion) }
   
-  /// To be DEPRECIATED: use onSelected instead - old callback for when the user choses a suggestion, to be depreciate
+  /// To be DEPRECIATED: use onSuggestionSelected instead - old callback for when the user choses a suggestion, to be depreciate
   public var suggestionSelected: W3WSuggestionResponse = { _ in }
   
   /// if freeFormText is enabled, this will be called everytime the text field is edited
@@ -264,7 +264,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   public func update(selected: W3WSuggestion) {
     if let words = selected.words {
       update(text: W3WAddress.ensureLeadingSlashes(words))
-      onSelected(selected)
+      onSuggestionSelected(selected)
       textChanged(words)
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
         self.isActive = false
@@ -345,7 +345,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
         if autoSuggestViewController.autoSuggestDataSource.is3wa(text: words) {
           DispatchQueue.main.async {
             if self.autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: words) {
-              self.onSelected(W3WApiSuggestion(words: words))
+              self.onSuggestionSelected(W3WApiSuggestion(words: words))
               self.textChanged(words)
             }
           }

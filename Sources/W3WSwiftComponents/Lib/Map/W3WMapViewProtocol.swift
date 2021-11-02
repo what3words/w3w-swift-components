@@ -519,30 +519,6 @@ extension W3WMapViewProtocol {
     annotationView.centerOffset = pin.getOffset()
     annotationView.canShowCallout = true
     
-    //let addressView = W3WSuggestionView(frame: CGRect(x: 0.0, y: 0.0, width: 150.0, height: 32.0))
-    //addressView.set(suggestion: annotation.square!)
-    //annotationView.leftCalloutAccessoryView = addressView
-    //annotationView.detailCalloutAccessoryView = addressView
-    
-//    let myView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 32.0, height: 32.0))
-//    myView.backgroundColor = .green
-//    annotationView.leftCalloutAccessoryView = myView
-//    let myView2 = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 32.0, height: 32.0))
-//    myView2.backgroundColor = .red
-//    annotationView.rightCalloutAccessoryView = myView2
-//    let myView3 = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 32.0, height: 32.0))
-//    myView3.backgroundColor = .blue
-//    annotationView.detailCalloutAccessoryView = myView3
-//    //calloutView.backgroundColor = .green
-//    //annotationView.detailCalloutAccessoryView = calloutView
-//    myView.backgroundColor = .green
-//    //let widthConstraint = NSLayoutConstraint(item: myView, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 20)
-//    //myView.addConstraint(widthConstraint)
-//    //let heightConstraint = NSLayoutConstraint(item: myView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 10)
-//    //myView.addConstraint(heightConstraint)
-//    annotationView.leftCalloutAccessoryView = myView
-//    //annotationView.canShowCallout = true
-    
     return annotationView
   }
   

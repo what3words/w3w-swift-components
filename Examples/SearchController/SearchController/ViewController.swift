@@ -29,7 +29,7 @@ class ViewController: UIViewController {
     search.set(voice: true)
     
     // assign a code block to execute when a suggestion is chosen
-    search.suggestionSelected = { suggestion in
+    search.onSuggestionSelected = { suggestion in
       print("Selected: ", suggestion.words ?? "none")
     }
     

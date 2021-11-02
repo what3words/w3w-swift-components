@@ -56,7 +56,7 @@ textField.set(api)
 | v1 | v2 |
 |----|----|
 |setAPIKey(APIKey:String)|set(What3WordsV3)|
-|didSelect| suggestionSelected |
+|didSelect| onSuggestionSelected |
 
 ##### set(What3WordsV3):
 
@@ -65,10 +65,10 @@ let api = What3WordsV3(apiKey: "YourApiKey")
 textField.set(api)
 ```
 
-##### suggestionSelected:
+##### onSuggestionSelected:
 
 ```swift
-textField.suggestionSelected = { suggestion in
+textField.onSuggestionSelected = { suggestion in
   print("User chose:", suggestion.words ?? "")
 }
 ```

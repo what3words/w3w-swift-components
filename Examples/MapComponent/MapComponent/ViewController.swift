@@ -34,7 +34,7 @@ class ViewController: W3WMapViewController {
     attach(textField: textField)
     
     // when an autosuggest suggestion is selected from the text field, show it on the map and clear previous selections
-    textField.onSelected = { suggestion in
+    textField.onSuggestionSelected = { suggestion in
       self.hideAll()
       self.show(suggestion, camera: .zoom)
     }

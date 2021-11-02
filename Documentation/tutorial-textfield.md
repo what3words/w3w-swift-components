@@ -65,7 +65,7 @@ Add the following to `viewDidLoad()`:
     textField.set(options: W3WOption.focus(CLLocationCoordinate2D(latitude: 51.4243877, longitude: -0.34745)))
     
     // assign a code block to execute when the user has selected an address
-    textField.suggestionSelected = { suggestion in
+    textField.onSuggestionSelected = { suggestion in
       print(suggestion.words ?? "")
     }
     

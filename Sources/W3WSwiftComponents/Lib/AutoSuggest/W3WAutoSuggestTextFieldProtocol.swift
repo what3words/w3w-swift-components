@@ -15,8 +15,8 @@ public typealias W3WAutoSuggestTextFieldErrorResponse = (W3WAutosuggestComponent
 
 /// interface for text field type components
 public protocol W3WAutoSuggestTextFieldProtocol: AnyObject, W3WOptionAcceptorProtocol {
-  var onSelected: W3WSuggestionResponse { get set }
-  var suggestionSelected: W3WSuggestionResponse { get set }  /// DEPRECIATED: use onSelected instead - old callback for when the user choses a suggestion, to be depreciate
+  var onSuggestionSelected: W3WSuggestionResponse { get set }
+  var suggestionSelected: W3WSuggestionResponse { get set }  /// DEPRECIATED: use onSuggestionSelected instead - old callback for when the user choses a suggestion, to be depreciate
   var textChanged: W3WTextChangedResponse { get set }
   var onError: W3WAutoSuggestTextFieldErrorResponse { get set }
   func set(_ w3w: W3WProtocolV3, language: String)
