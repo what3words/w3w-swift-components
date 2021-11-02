@@ -12,8 +12,9 @@ final class w3w_swift_componentsTests: XCTestCase {
     if let apikey = ProcessInfo.processInfo.environment["APIKEY"] {
       api = What3WordsV3(apiKey: apikey)
     } else {
-      print("Environment variable APIKEY must be set")
-      abort()
+      //print("Environment variable APIKEY must be set")
+      //abort()
+      api = What3WordsV3(apiKey: "MHEMTTU0") // apikey restricted to calls from certain IP address, so don't get any ideas... ya hear.
     }
   }
   
@@ -25,6 +26,11 @@ final class w3w_swift_componentsTests: XCTestCase {
     let vc = UIViewController()
     let field = W3WAutoSuggestTextField(api)
     vc.view.addSubview(field)
+    
+    field.onError = { error in
+      XCTAssertNil(error)
+      print("Error: ", error)
+    }
     
     let twa = "filled.count.soa"
     _ = field.textField(field, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: twa)
@@ -45,6 +51,11 @@ final class w3w_swift_componentsTests: XCTestCase {
     let field = W3WAutoSuggestSearchController()
     field.set(api)
     
+    field.onError = { error in
+      XCTAssertNil(error)
+      print("Error: ", error)
+    }
+
     let twa = "filled.count.soa"
     _ = field.searchBar(field.searchBar, shouldChangeTextIn: NSRange(location: 0, length: 0), replacementText: twa)
     
