@@ -1,6 +1,7 @@
 import XCTest
 @testable import W3WSwiftComponents
 import W3WSwiftApi
+import CoreLocation
 
 final class w3w_swift_componentsTests: XCTestCase {
   
