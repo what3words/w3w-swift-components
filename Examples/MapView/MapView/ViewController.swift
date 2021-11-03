@@ -53,9 +53,7 @@ class ViewController: UIViewController {
     //    self.showError(error: e)
     //  }
     //
-    //  DispatchQueue.main.async { // only able to access mapView from the main queue...
-    //    self.mapView.show(suggestions ?? [])
-    //  }
+    //  self.mapView.show(suggestions)
     //}
   }
   
