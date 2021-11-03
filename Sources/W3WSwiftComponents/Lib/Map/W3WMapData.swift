@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 06/08/2021.
 //
+#if !os(macOS)
 
 import Foundation
 import MapKit
@@ -21,8 +22,8 @@ public struct W3WMapData {
   @available(iOS 13, *)
   lazy var gridRenderer: W3WMapGridRenderer? = nil
   
-  /// allows other things like button s to be placed on the map
-  var subViews = W3WSubviewManager()
+//  /// allows other things like button s to be placed on the map
+//  var subViews = W3WSubviewManager()
   
   /// highighted individual squares on the map
   var squares = [W3WSquare]()
@@ -62,86 +63,8 @@ public struct W3WMapData {
     self.language = language
   }
   
-
-//  func convertToSquaresWithCoordinates(suggestions: [W3WSuggestion]) -> [W3WSquare] {
-//    var squares = [W3WSquare]()
-//    
-//    for suggestion in suggestions {
-//      squares.append(W3WApiSquare(words: suggestion.words))
-//    }
-//    
-//    return ensureSquaresHaveCoordinates(squares: squares)
-//  }
-//  
-//  
-//  func convertToSquaresWithCoordinates(words: [String]) -> [W3WSquare] {
-//    var squares = [W3WSquare]()
-//    
-//    for word in words {
-//      squares.append(W3WApiSquare(words: word))
-//    }
-//    
-//    return ensureSquaresHaveCoordinates(squares: squares)
-//  }
-//  
-//  
-//  func convertToSquares(coordinates: [CLLocationCoordinate2D]) -> [W3WSquare] {
-//    var squares = [W3WSquare]()
-//    
-//    for coordinate in coordinates {
-//      squares.append(W3WApiSquare(coordinates: coordinate))
-//    }
-//    
-//    return ensureSquaresHaveCoordinates(squares: squares)
-//  }
-//  
-//  
-//  func ensureSquareHasCoordinates(square: W3WSquare) -> W3WSquare? {
-//    let s = ensureSquaresHaveCoordinates(squares: [square])
-//    return s.first
-//  }
-//  
-//  
-//  func ensureSquaresHaveCoordinates(squares: [W3WSquare]) -> [W3WSquare] {
-//    if W3WThread.isMain() {
-//      print(#function, " must NOT be called on main thread")
-//      abort()
-//    }
-//    
-//    var goodSquares = [W3WSquare]()
-//    
-//    let tasks = DispatchGroup()
-//    
-//    for square in squares {
-//      if square.coordinates == nil {
-//        if let words = square.words {
-//          tasks.enter()
-//          self.w3w?.convertToCoordinates(words: words) { result, error in
-//            if let s = result {
-//              goodSquares.append(s)
-//            }
-//            tasks.leave()
-//          }
-//        }
-//      } else if square.words == nil {
-//        if let coordinates = square.coordinates {
-//          tasks.enter()
-//          self.w3w?.convertTo3wa(coordinates: coordinates, language: language) { result, error in
-//            if let s = result {
-//              goodSquares.append(s)
-//            }
-//            tasks.leave()
-//          }
-//        }
-//      } else {
-//        goodSquares.append(square)
-//      }
-//    }
-//    
-//    tasks.wait()
-//    
-//    return goodSquares
-//  }
-
   
 }
+
+
+#endif

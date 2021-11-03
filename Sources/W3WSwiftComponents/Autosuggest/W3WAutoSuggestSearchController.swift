@@ -5,6 +5,8 @@
 //  Created by Dave Duprey on 04/07/2020.
 //
 
+#if !os(macOS)
+
 import Foundation
 import UIKit
 import W3WSwiftApi
@@ -453,3 +455,4 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
 }
 
 
+#endif

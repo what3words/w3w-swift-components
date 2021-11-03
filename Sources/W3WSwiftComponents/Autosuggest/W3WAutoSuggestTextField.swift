@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 04/07/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -560,3 +561,5 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
 }
+
+#endif

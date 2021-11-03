@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 06/09/2021.
 //
+#if !os(macOS)
 
 import Foundation
 import MapKit
@@ -144,3 +145,6 @@ public class W3WMapHelper: NSObject, W3WMapViewProtocol, MKMapViewDelegate {
   
 
 }
+
+
+#endif

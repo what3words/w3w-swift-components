@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 18/08/2021.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -77,3 +78,5 @@ public class W3WMapTypeButton: UIButton {
   
   
 }
+
+#endif

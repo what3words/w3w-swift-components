@@ -10,6 +10,7 @@ final class w3w_swift_componentsTests: XCTestCase {
     super.setUp()
     
     if let apikey = ProcessInfo.processInfo.environment["APIKEY"] {
+      print("API KEY FOUND: ", apikey)
       api = What3WordsV3(apiKey: apikey)
     } else {
       print("Environment variable APIKEY must be set")
@@ -17,6 +18,21 @@ final class w3w_swift_componentsTests: XCTestCase {
     }
   }
   
+  
+  func testApi() {
+    let expectation = self.expectation(description: "Convert To 3wa")
+    api.convertTo3wa(coordinates: CLLocationCoordinate2D(latitude: 51.521238, longitude: -0.203607), language: "en") { (place, error) in
+      
+      XCTAssertEqual(place?.words, "index.home.raft")
+      XCTAssertNil(error)
+      
+      expectation.fulfill()
+    }
+    waitForExpectations(timeout: 3.0, handler: nil)
+  }
+  
+  
+  #if !os(macOS)
 
   
   func testTextfield() {
@@ -68,4 +84,6 @@ final class w3w_swift_componentsTests: XCTestCase {
   }
   
 
+  #endif
+  
 }

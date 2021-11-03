@@ -4,11 +4,11 @@
 //
 //  Created by Dave Duprey on 04/07/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
 import W3WSwiftApi
-//import W3WSwiftComponents
 
 
 /// protocol for talking to the textfield, either a W3WAutosuggestTextField, or W3WAutosuggestSearcController at this point
@@ -687,3 +687,4 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
 }
 
 
+#endif

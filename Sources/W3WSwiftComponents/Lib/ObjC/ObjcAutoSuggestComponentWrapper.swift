@@ -9,6 +9,7 @@
 //
 //  Created by Dave Duprey on 24/03/2021.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -135,3 +136,5 @@ public class W3WObjcAutoSuggestSearchController: W3WAutoSuggestSearchController 
 
 }
 
+
+#endif

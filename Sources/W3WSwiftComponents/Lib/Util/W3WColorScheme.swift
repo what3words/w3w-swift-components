@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 19/07/2021.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -85,3 +86,5 @@ public struct W3WColorScheme {
   }
   
 }
+
+#endif

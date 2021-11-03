@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 04/07/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -583,3 +584,4 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
 }
 
 
+#endif

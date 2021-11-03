@@ -5,6 +5,7 @@
 //  Created by Dave Duprey on 13/07/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
+#if !os(macOS)
 
 import UIKit
 
@@ -173,3 +174,5 @@ open class W3WDrawingView: UIView {
 
   
 }
+
+#endif

@@ -5,6 +5,8 @@
 //  Created by Lshiva on 17/05/2020.
 //  Copyright © 2020 what3words. All rights reserved.
 //
+#if !os(macOS)
+
 
 import Foundation
 import UIKit
@@ -84,3 +86,5 @@ public extension NSAttributedString {
   
 }
 
+
+#endif

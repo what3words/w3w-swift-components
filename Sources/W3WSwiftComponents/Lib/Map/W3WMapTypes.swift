@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 06/12/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import MapKit
@@ -79,3 +80,4 @@ public enum W3WMarkerStyle {
 }
 
 
+#endif

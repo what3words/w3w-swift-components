@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 17/08/2021.
 //
+#if !os(macOS)
 
 import Foundation
 import MapKit
@@ -786,3 +787,6 @@ extension W3WMapViewProtocol {
   }
   
 }
+
+
+#endif

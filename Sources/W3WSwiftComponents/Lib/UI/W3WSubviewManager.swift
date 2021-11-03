@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 18/08/2021.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -155,3 +156,6 @@ class W3WSubviewManager {
   }
   
 }
+
+
+#endif

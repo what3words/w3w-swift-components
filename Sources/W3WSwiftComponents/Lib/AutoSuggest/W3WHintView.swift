@@ -5,6 +5,8 @@
 //  Created by Dave Duprey on 25/11/2020.
 //
 
+#if !os(macOS)
+
 import Foundation
 import UIKit
 import W3WSwiftApi
@@ -108,3 +110,5 @@ class W3WHintView: W3WMessageView {
   
 
 }
+
+#endif

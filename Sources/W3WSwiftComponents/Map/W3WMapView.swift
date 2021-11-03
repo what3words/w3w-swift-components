@@ -5,13 +5,15 @@
 //  Created by Dave Duprey on 31/05/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
+#if !os(macOS)
+#if !os(watchOS)
+
 
 import UIKit
 import MapKit
 import W3WSwiftApi
 
 
-#if !os(watchOS)
 
 
 // MARK:- W3MapView
@@ -239,4 +241,5 @@ open class W3WMapView: MKMapView, W3WMapViewProtocol, MKMapViewDelegate {
 
 
 
+#endif
 #endif

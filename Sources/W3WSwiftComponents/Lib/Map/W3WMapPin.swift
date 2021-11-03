@@ -8,6 +8,7 @@
 //  Created by Dave Duprey on 07/02/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
+#if !os(macOS)
 
 import UIKit
 import W3WSwiftApi
@@ -106,3 +107,5 @@ public class W3WMapPin: W3WDrawingView {
   
 }
 
+
+#endif

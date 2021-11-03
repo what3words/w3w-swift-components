@@ -5,9 +5,12 @@
 //  Created by Dave Duprey on 29/09/2020.
 //
 
+import Foundation
 import W3WSwiftApi
-import UIKit
 
+#if !os(macOS)
+import UIKit
+#endif
 
 /// mertic imperial or default from the system
 public enum W3WMesurementSystem {
@@ -26,7 +29,9 @@ public extension W3WSettings {
   static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? W3WSettings.defaultLanguage) == Locale.LanguageDirection.leftToRight)
   
   // MARK: Colours
-  
+
+  #if !os(macOS)
+
   static internal var colorPalette:W3WColorPalette =
     [
       "SlashesColor"        : [.light: W3WColorScheme.w3wRed],
@@ -89,6 +94,7 @@ public extension W3WSettings {
     }
   }
   
+  #endif
   
   // MARK: Text
   
