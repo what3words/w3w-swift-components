@@ -10,7 +10,6 @@ final class w3w_swift_componentsTests: XCTestCase {
     super.setUp()
     
     if let apikey = ProcessInfo.processInfo.environment["APIKEY"] {
-      print("API KEY FOUND: ", apikey)
       api = What3WordsV3(apiKey: apikey)
     } else {
       print("Environment variable APIKEY must be set")
