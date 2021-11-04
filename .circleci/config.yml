@@ -15,8 +15,8 @@ jobs: # a basic unit of work in a run
             swift test --enable-code-coverage
             xcrun llvm-cov show .build/debug/w3w-swift-componentsPackageTests.xctest/Contents/MacOS/w3w-swift-componentsPackageTests  -instr-profile .build/debug/codecov/default.profdata > .build/cov.txt
             sonar-scanner -Dsonar.projectKey=what3words_w3w-swift-components -Dsonar.organization=what3words -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN -Dsonar.sources=Sources -Dsonar.swift.coverage.reportPath=.build/cov.txt
-            xcodebuild -scheme w3w-swift-components -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
-            #xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
+            ./.circleci/getkey.sh
+            xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
           
 workflows:
   version: 2

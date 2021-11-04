@@ -12,10 +12,24 @@ final class w3w_swift_componentsTests: XCTestCase {
     
     if let apikey = ProcessInfo.processInfo.environment["APIKEY"] {
       api = What3WordsV3(apiKey: apikey)
+    } else if let apikey = getApikeyFromFile() {
+      api = What3WordsV3(apiKey: apikey)
     } else {
       print("Environment variable APIKEY must be set")
       abort()
     }
+  }
+
+  
+  func getApikeyFromFile() -> String? {
+    var apikey: String? = nil
+    
+    let url = URL(fileURLWithPath: "/tmp/key.txt")
+    if let key = try? String(contentsOf: url, encoding: .utf8) {
+      apikey = key.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    return apikey
   }
   
   
