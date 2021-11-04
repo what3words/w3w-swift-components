@@ -131,19 +131,6 @@ public class W3WMapHelper: NSObject, W3WMapViewProtocol, MKMapViewDelegate {
     }
   }
 
-  
-//  public func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
-//  }
-  
-  
-//  
-//  /// update the lines and stuff after any reload of map data
-//  public func mapViewDidFinishLoadingMap(_ mapView: MKMapView) {
-//    redrawAll()
-//  }
-//  
-  
-
 }
 
 

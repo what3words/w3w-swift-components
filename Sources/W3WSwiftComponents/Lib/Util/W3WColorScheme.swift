@@ -73,8 +73,8 @@ public struct W3WColorScheme {
     
     // Now we need to convert it to the RGB colorspace. UIColor.white / UIColor.black are greyscale and not RGB.
     // If you don't do this then you will crash when accessing components index 2 below when evaluating greyscale colors.
-    let RGBCGColor = originalCGColor.converted(to: CGColorSpaceCreateDeviceRGB(), intent: .defaultIntent, options: nil)
-    guard let components = RGBCGColor?.components else {
+    let RgbCgColor = originalCGColor.converted(to: CGColorSpaceCreateDeviceRGB(), intent: .defaultIntent, options: nil)
+    guard let components = RgbCgColor?.components else {
       return false
     }
     guard components.count >= 3 else {

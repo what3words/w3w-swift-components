@@ -56,20 +56,20 @@ class W3WSubviewManager {
     //DispatchQueue.main.async {
     UIView.animate(withDuration: 0.3, animations: {
 
-      var y_line = insets.top // W3WSettings.uiIndent * 2.0 + insets.top
+      var yLine = insets.top // W3WSettings.uiIndent * 2.0 + insets.top
       
-      var lowest_y = y_line
+      var lowestY = yLine
       var xl = W3WSettings.uiIndent * 2.0 + insets.left
       for subView in self.views[.topLeft] ?? [] {
         if !subView.isHidden {
           subView.frame = CGRect(
             x: xl,
-            y: y_line,
+            y: yLine,
             width: subView.frame.width,
             height: subView.frame.height)
           xl += subView.frame.width + W3WSettings.uiIndent * 2.0
-          if lowest_y < subView.frame.height + W3WSettings.uiIndent * 2.0 + insets.top {
-            lowest_y = subView.frame.height + W3WSettings.uiIndent * 2.0 + insets.top
+          if lowestY < subView.frame.height + W3WSettings.uiIndent * 2.0 + insets.top {
+            lowestY = subView.frame.height + W3WSettings.uiIndent * 2.0 + insets.top
           }
         }
       }
@@ -79,17 +79,17 @@ class W3WSubviewManager {
         if !subView.isHidden {
           subView.frame = CGRect(
             x: xr - subView.frame.width,
-            y: y_line,
+            y: yLine,
             width: subView.frame.width,
             height: subView.frame.height)
           xr -= (subView.frame.width + W3WSettings.uiIndent * 2.0)
-          if lowest_y < subView.frame.height + W3WSettings.uiIndent * 2.0 + insets.top {
-            lowest_y = subView.frame.height + W3WSettings.uiIndent * 2.0 + insets.top
+          if lowestY < subView.frame.height + W3WSettings.uiIndent * 2.0 + insets.top {
+            lowestY = subView.frame.height + W3WSettings.uiIndent * 2.0 + insets.top
           }
         }
       }
       
-      y_line = lowest_y + W3WSettings.uiIndent * 2.0
+      yLine = lowestY + W3WSettings.uiIndent * 2.0
       
       for subView in self.views[.topCenter] ?? [] {
         if !subView.isHidden {
@@ -97,7 +97,7 @@ class W3WSubviewManager {
           if view.frame.width > view.frame.height {
             width = view.frame.size.height - (W3WSettings.uiIndent * 4.0)
           }
-          subView.frame = CGRect(x: W3WSettings.uiIndent * 2.0 + insets.left, y: y_line, width: width, height: 40.0)
+          subView.frame = CGRect(x: W3WSettings.uiIndent * 2.0 + insets.left, y: yLine, width: width, height: 40.0)
         }
       }
 

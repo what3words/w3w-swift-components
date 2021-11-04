@@ -229,12 +229,6 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
   @objc func tapped(_ gestureRecognizer : UITapGestureRecognizer) {
     checkConfiguration()
         
-//    if let _ = self.findPin(s) {
-//      self.onMarkerSelected(s)
-//    } else if let _ = self.findSquare(s) {
-//      self.onMarkerSelected(s)
-//    }
-
     let location = gestureRecognizer.location(in: w3wMapView)
     let coordinates = w3wMapView.convert(location, toCoordinateFrom: w3wMapView)
     mapHelper?.w3wMapData?.w3w?.convertTo3wa(coordinates: coordinates, language: mapHelper?.w3wMapData?.language ?? W3WSettings.defaultLanguage) { square, error in

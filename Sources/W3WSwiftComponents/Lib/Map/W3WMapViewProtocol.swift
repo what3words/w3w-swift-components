@@ -57,16 +57,6 @@ extension W3WMapViewProtocol {
         
       w3wMapData?.lastZoomPointsPerSquare = squareSize
     }
-    
-    
-//    if let lastSpanLevel = w3wMapData?.lastSpanLevel {
-//      let spanLevel = min(w3wMapView.region.span.longitudeDelta, w3wMapView.region.span.latitudeDelta)
-//      let infectionSpan = W3WSettings.annotationTransitionSpan
-//      if lastSpanLevel < infectionSpan && spanLevel > infectionSpan || lastSpanLevel > infectionSpan && spanLevel < infectionSpan {
-//        redrawPins()
-//      }
-//      w3wMapData?.lastSpanLevel = min(w3wMapView.region.span.longitudeDelta, w3wMapView.region.span.latitudeDelta)
-//    }
   }
   
   
@@ -313,42 +303,25 @@ extension W3WMapViewProtocol {
   
   
   
+  /// put a what3words annotation on the map showing the address
   public func show(_ squares: [W3WSquare]?, camera: W3WCenterAndZoom = .zoom, color: UIColor? = nil, style: W3WMarkerStyle = .circle) {
     W3WThread.runOnMain {
       if let s = squares {
         W3WThread.runInBackground {
           let goodSquares = self.ensureSquaresHaveCoordinates(squares: s)
-          var middle = CLLocationCoordinate2D(latitude: 0.0, longitude: 0.0)
-          var count  = 0
-          var minLat = Double.infinity
-          var minLng = Double.infinity
-          var maxLat = -Double.infinity
-          var maxLng = -Double.infinity
+
+          let area = W3WAreaMath()
           
           for square in goodSquares {
             self.addAnnotation(square: square, color: color, style: style)
             if let c = square.coordinates {
-              middle.latitude += c.latitude
-              middle.longitude += c.longitude
-              count += 1
-              
-              if minLat > c.latitude  { minLat = c.latitude }
-              if minLng > c.longitude { minLng = c.longitude }
-              if maxLat < c.latitude  { maxLat = c.latitude }
-              if maxLng < c.longitude { maxLng = c.longitude }
+              area.add(coordinates: c)
             }
           }
-          
-          if count > 1 {
-            middle.latitude  = (maxLat - minLat) / 2.0 + minLat
-            middle.longitude = (maxLng - minLng) / 2.0 + minLng
 
-            if camera != .none {
-              let latSpan  = min(max(-90.0,  (maxLat - minLat) * 1.5), 90.0)
-              let longSpan = min(max(-180.0, (maxLng - minLng) * 1.5), 180.0)
-              self.set(center: middle, latitudeSpanDegrees: latSpan, longitudeSpanDegrees: longSpan)
-            }
-          }
+          let center = area.getCenter()
+          let (latSpan, longSpan) = area.getSpan()
+          self.set(center: center, latitudeSpanDegrees: latSpan, longitudeSpanDegrees: longSpan)
         }
       }
     }
@@ -567,7 +540,7 @@ extension W3WMapViewProtocol {
   /// set the map center to a coordinate, and set the minimum visible area
   func set(center: CLLocationCoordinate2D, latitudeSpanMeters: Double, longitudeSpanMeters: Double) {
     W3WThread.runOnMain {
-      let coordinateRegion = MKCoordinateRegion(center: center, latitudinalMeters: longitudeSpanMeters, longitudinalMeters: longitudeSpanMeters)
+      let coordinateRegion = MKCoordinateRegion(center: center, latitudinalMeters: latitudeSpanMeters, longitudinalMeters: longitudeSpanMeters)
       self.setRegion(coordinateRegion, animated: true)
     }
   }
@@ -610,10 +583,7 @@ extension W3WMapViewProtocol {
   
   
   func showOutline(_ square: W3WSquare) {
-    if let _ = findSquare(square) {
-      return
-      
-    } else {
+    if findSquare(square) == nil {
       W3WThread.runInBackground {
         if let s = self.ensureSquareHasCoordinates(square: square) {
           self.w3wMapData?.squares.append(s)
@@ -738,39 +708,58 @@ extension W3WMapViewProtocol {
     
     let tasks = DispatchGroup()
     
+    // for each square, make sure it is complete with coordinates and words
     for square in squares {
-      if square.coordinates == nil {
-        if let words = square.words {
-          tasks.enter()
-          self.w3wMapData?.w3w?.convertToCoordinates(words: words) { result, error in
-            self.dealWithAnyApiError(error: error)
-            if let s = result {
-              goodSquares.append(s)
-            }
-            tasks.leave()
-          }
+      tasks.enter()
+      complete(square: square) { completeSquare in
+        if let s = completeSquare {
+          goodSquares.append(s)
         }
-      } else if square.words == nil {
-        if let coordinates = square.coordinates {
-          tasks.enter()
-          self.w3wMapData?.w3w?.convertTo3wa(coordinates: coordinates, language: self.w3wMapData?.language ?? W3WSettings.defaultLanguage) { result, error in
-            self.dealWithAnyApiError(error: error)
-            if let s = result {
-              goodSquares.append(s)
-            }
-            tasks.leave()
-          }
-        }
-      } else {
-        goodSquares.append(square)
+        tasks.leave()
       }
     }
-    
+
+    // wait for all the squares to be completed
     tasks.wait()
     
     return goodSquares
   }
 
+  
+  /// check a square and fill out it's words or coordinates as needed, then return a completed square via completion block
+  func complete(square: W3WSquare, completion: @escaping (W3WSquare?) -> ()) {
+
+    // if the square has words but no coordinates
+    if square.coordinates == nil {
+      if let words = square.words {
+        self.w3wMapData?.w3w?.convertToCoordinates(words: words) { result, error in
+          self.dealWithAnyApiError(error: error)
+          completion(result)
+        }
+        
+      // else if the square has no words and no coordinates then it is useless and we omit it
+      } else {
+        completion(nil)
+      }
+      
+    // else if the square has coordinates but no words
+    } else if square.words == nil {
+      if let coordinates = square.coordinates {
+        self.w3wMapData?.w3w?.convertTo3wa(coordinates: coordinates, language: self.w3wMapData?.language ?? W3WSettings.defaultLanguage) { result, error in
+          self.dealWithAnyApiError(error: error)
+          completion(result)
+        }
+        
+      // else if the square has no words and no coordinates then it is useless and we omit it
+      } else {
+        completion(nil)
+      }
+      
+    // else the square already has coordinates and words
+    } else {
+      completion(square)
+    }
+  }
   
   
   /// force a redrawing of all highlighted squares

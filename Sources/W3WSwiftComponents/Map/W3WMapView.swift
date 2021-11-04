@@ -71,18 +71,8 @@ open class W3WMapView: MKMapView, W3WMapViewProtocol, MKMapViewDelegate {
     } else {
       w3wMapData = W3WMapData(What3WordsV3(apiKey: ""))
     }
-    
-//    DispatchQueue.main.async {
-//      self.layoutSubviews()
-//    }
   }
   
-  
-//  open override func layoutSubviews() {
-//    w3wMapData?.subViews.layout(in: w3wMapView)
-//  }
-
-
   
   override public var delegate: MKMapViewDelegate? {
     didSet {
