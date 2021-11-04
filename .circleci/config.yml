@@ -12,11 +12,11 @@ jobs: # a basic unit of work in a run
           command: |-
             for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
             brew install sonar-scanner
-            swift test --enable-code-coverage
-            xcrun llvm-cov show .build/debug/w3w-swift-componentsPackageTests.xctest/Contents/MacOS/w3w-swift-componentsPackageTests  -instr-profile .build/debug/codecov/default.profdata > .build/cov.txt
-            sonar-scanner -Dsonar.projectKey=what3words_w3w-swift-components -Dsonar.organization=what3words -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN -Dsonar.sources=Sources -Dsonar.swift.coverage.reportPath=.build/cov.txt
             ./.circleci/getkey.sh
-            xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
+            xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' -enableCodeCoverage YES SYMROOT=$(PWD)/.build
+            PROFDATA_FILE=$(find . -name '*.profdata')
+            xcrun llvm-cov show .build/Build/Products/Debug-iphonesimulator/w3w-swift-componentsTests.xctest/w3w-swift-componentsTests -instr-profile $PROFDATA_FILE > .build/cov.txt
+            sonar-scanner -Dsonar.projectKey=what3words_w3w-swift-components -Dsonar.organization=what3words -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN -Dsonar.sources=Sources -Dsonar.swift.coverage.reportPath=.build/cov.txt
           
 workflows:
   version: 2
