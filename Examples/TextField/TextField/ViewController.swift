@@ -46,9 +46,11 @@ class ViewController: UIViewController {
   
   /// display an error using a UIAlertController, error messages conform to CustomStringConvertible
   func showError(error: Error) {
-    let alert = UIAlertController(title: "Error", message: String(describing: error), preferredStyle: .alert)
-    alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-    DispatchQueue.main.async { self.present(alert, animated: true) }
+    DispatchQueue.main.async {
+      let alert = UIAlertController(title: "Error", message: String(describing: error), preferredStyle: .alert)
+      alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+      self.present(alert, animated: true)
+    }
   }
 
 }

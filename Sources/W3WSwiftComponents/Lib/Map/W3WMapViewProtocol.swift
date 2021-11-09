@@ -321,7 +321,12 @@ extension W3WMapViewProtocol {
 
           let center = area.getCenter()
           let (latSpan, longSpan) = area.getSpan()
-          self.set(center: center, latitudeSpanDegrees: latSpan, longitudeSpanDegrees: longSpan)
+
+          if camera == .zoom {
+            self.set(center: center, latitudeSpanDegrees: latSpan, longitudeSpanDegrees: longSpan)
+          } else if camera == .center {
+            self.set(center: center)
+          }
         }
       }
     }
