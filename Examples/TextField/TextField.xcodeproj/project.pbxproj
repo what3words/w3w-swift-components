@@ -14,7 +14,26 @@
 		010ED15525700E00009386EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 010ED15425700E00009386EE /* Assets.xcassets */; };
 		010ED15825700E00009386EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 010ED15625700E00009386EE /* LaunchScreen.storyboard */; };
 		01F0C1B725C9A81200BA600D /* W3WSwiftComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 01F0C1B625C9A81200BA600D /* W3WSwiftComponents */; };
+		072746CA26EBBD5F006429F9 /* TextFieldUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072746C926EBBD5F006429F9 /* TextFieldUITests.swift */; };
+		079EA688273151BC00657054 /* ClippingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079EA687273151BC00657054 /* ClippingSettings.swift */; };
+		079EA68E273C0F1900657054 /* ClippingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079EA68B2735780E00657054 /* ClippingType.swift */; };
+		07C79CC8270F50220042FD53 /* BasePage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C79CC7270F50220042FD53 /* BasePage.swift */; };
+		07C79CCC270F561D0042FD53 /* BaseTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C79CCB270F561D0042FD53 /* BaseTest.swift */; };
+		07C79CCE270F56DE0042FD53 /* TextFieldPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07C79CCD270F56DE0042FD53 /* TextFieldPage.swift */; };
+		07E6DD5C2743EC4400E5FADA /* ErrorScenarios.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E6DD5A2743EC4400E5FADA /* ErrorScenarios.swift */; };
+		07E6DD5E274529E200E5FADA /* TestSearchInOtherLanguages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E6DD5D274529E200E5FADA /* TestSearchInOtherLanguages.swift */; };
+		07F4C437273D882C00617BE6 /* TestSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07F4C436273D882C00617BE6 /* TestSettings.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		072746CC26EBBD5F006429F9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 010ED14025700DFE009386EE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 010ED14725700DFE009386EE;
+			remoteInfo = TextField;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		010ED14825700DFE009386EE /* TextField.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextField.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -25,6 +44,17 @@
 		010ED15425700E00009386EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		010ED15725700E00009386EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		010ED15925700E00009386EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		072746C726EBBD5F006429F9 /* TextFieldUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextFieldUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		072746C926EBBD5F006429F9 /* TextFieldUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldUITests.swift; sourceTree = "<group>"; };
+		072746CB26EBBD5F006429F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		079EA687273151BC00657054 /* ClippingSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClippingSettings.swift; sourceTree = "<group>"; };
+		079EA68B2735780E00657054 /* ClippingType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClippingType.swift; sourceTree = "<group>"; };
+		07C79CC7270F50220042FD53 /* BasePage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePage.swift; sourceTree = "<group>"; };
+		07C79CCB270F561D0042FD53 /* BaseTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTest.swift; sourceTree = "<group>"; };
+		07C79CCD270F56DE0042FD53 /* TextFieldPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldPage.swift; sourceTree = "<group>"; };
+		07E6DD5A2743EC4400E5FADA /* ErrorScenarios.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorScenarios.swift; sourceTree = "<group>"; };
+		07E6DD5D274529E200E5FADA /* TestSearchInOtherLanguages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSearchInOtherLanguages.swift; sourceTree = "<group>"; };
+		07F4C436273D882C00617BE6 /* TestSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,6 +66,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		072746C426EBBD5F006429F9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -43,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				010ED14A25700DFE009386EE /* TextField */,
+				072746C826EBBD5F006429F9 /* TextFieldUITests */,
 				010ED14925700DFE009386EE /* Products */,
 			);
 			sourceTree = "<group>";
@@ -51,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				010ED14825700DFE009386EE /* TextField.app */,
+				072746C726EBBD5F006429F9 /* TextFieldUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -65,8 +104,41 @@
 				010ED15425700E00009386EE /* Assets.xcassets */,
 				010ED15625700E00009386EE /* LaunchScreen.storyboard */,
 				010ED15925700E00009386EE /* Info.plist */,
+				079EA687273151BC00657054 /* ClippingSettings.swift */,
+				079EA68B2735780E00657054 /* ClippingType.swift */,
+				07F4C436273D882C00617BE6 /* TestSettings.swift */,
 			);
 			path = TextField;
+			sourceTree = "<group>";
+		};
+		072746C826EBBD5F006429F9 /* TextFieldUITests */ = {
+			isa = PBXGroup;
+			children = (
+				07E6DD60274A65A300E5FADA /* PagesObjects */,
+				07E6DD5F274A642200E5FADA /* Tests */,
+				072746CB26EBBD5F006429F9 /* Info.plist */,
+			);
+			path = TextFieldUITests;
+			sourceTree = "<group>";
+		};
+		07E6DD5F274A642200E5FADA /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				07C79CCB270F561D0042FD53 /* BaseTest.swift */,
+				07E6DD5A2743EC4400E5FADA /* ErrorScenarios.swift */,
+				072746C926EBBD5F006429F9 /* TextFieldUITests.swift */,
+				07E6DD5D274529E200E5FADA /* TestSearchInOtherLanguages.swift */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		07E6DD60274A65A300E5FADA /* PagesObjects */ = {
+			isa = PBXGroup;
+			children = (
+				07C79CC7270F50220042FD53 /* BasePage.swift */,
+				07C79CCD270F56DE0042FD53 /* TextFieldPage.swift */,
+			);
+			path = PagesObjects;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -92,17 +164,39 @@
 			productReference = 010ED14825700DFE009386EE /* TextField.app */;
 			productType = "com.apple.product-type.application";
 		};
+		072746C626EBBD5F006429F9 /* TextFieldUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 072746CE26EBBD5F006429F9 /* Build configuration list for PBXNativeTarget "TextFieldUITests" */;
+			buildPhases = (
+				072746C326EBBD5F006429F9 /* Sources */,
+				072746C426EBBD5F006429F9 /* Frameworks */,
+				072746C526EBBD5F006429F9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				072746CD26EBBD5F006429F9 /* PBXTargetDependency */,
+			);
+			name = TextFieldUITests;
+			productName = TextFieldUITests;
+			productReference = 072746C726EBBD5F006429F9 /* TextFieldUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		010ED14025700DFE009386EE /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1210;
+				LastSwiftUpdateCheck = 1250;
 				LastUpgradeCheck = 1210;
 				TargetAttributes = {
 					010ED14725700DFE009386EE = {
 						CreatedOnToolsVersion = 12.1;
+					};
+					072746C626EBBD5F006429F9 = {
+						CreatedOnToolsVersion = 12.5;
+						TestTargetID = 010ED14725700DFE009386EE;
 					};
 				};
 			};
@@ -116,13 +210,14 @@
 			);
 			mainGroup = 010ED13F25700DFE009386EE;
 			packageReferences = (
-				01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "w3w-swift-components" */,
+				01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "." */,
 			);
 			productRefGroup = 010ED14925700DFE009386EE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
 				010ED14725700DFE009386EE /* TextField */,
+				072746C626EBBD5F006429F9 /* TextFieldUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -138,6 +233,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		072746C526EBBD5F006429F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -145,13 +247,37 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				07F4C437273D882C00617BE6 /* TestSettings.swift in Sources */,
+				079EA688273151BC00657054 /* ClippingSettings.swift in Sources */,
 				010ED15025700DFE009386EE /* ViewController.swift in Sources */,
 				010ED14C25700DFE009386EE /* AppDelegate.swift in Sources */,
 				010ED14E25700DFE009386EE /* SceneDelegate.swift in Sources */,
+				079EA68E273C0F1900657054 /* ClippingType.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		072746C326EBBD5F006429F9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				07E6DD5E274529E200E5FADA /* TestSearchInOtherLanguages.swift in Sources */,
+				07C79CCE270F56DE0042FD53 /* TextFieldPage.swift in Sources */,
+				07C79CCC270F561D0042FD53 /* BaseTest.swift in Sources */,
+				07E6DD5C2743EC4400E5FADA /* ErrorScenarios.swift in Sources */,
+				072746CA26EBBD5F006429F9 /* TextFieldUITests.swift in Sources */,
+				07C79CC8270F50220042FD53 /* BasePage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		072746CD26EBBD5F006429F9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 010ED14725700DFE009386EE /* TextField */;
+			targetProxy = 072746CC26EBBD5F006429F9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		010ED15125700DFE009386EE /* Main.storyboard */ = {
@@ -327,6 +453,46 @@
 			};
 			name = Release;
 		};
+		072746CF26EBBD5F006429F9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YC9564MTQY;
+				INFOPLIST_FILE = TextFieldUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = test.TextFieldUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TextField;
+			};
+			name = Debug;
+		};
+		072746D026EBBD5F006429F9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = YC9564MTQY;
+				INFOPLIST_FILE = TextFieldUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = test.TextFieldUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = TextField;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -348,14 +514,23 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		072746CE26EBBD5F006429F9 /* Build configuration list for PBXNativeTarget "TextFieldUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				072746CF26EBBD5F006429F9 /* Debug */,
+				072746D026EBBD5F006429F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "w3w-swift-components" */ = {
+		01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "." */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "../../";
+			repositoryURL = ../../;
 			requirement = {
-				branch = master;
+				branch = tests;
 				kind = branch;
 			};
 		};
@@ -364,7 +539,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		01F0C1B625C9A81200BA600D /* W3WSwiftComponents */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "w3w-swift-components" */;
+			package = 01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "." */;
 			productName = W3WSwiftComponents;
 		};
 /* End XCSwiftPackageProductDependency section */
