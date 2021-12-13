@@ -12,7 +12,23 @@ import UIKit
 /// There is only the water flag.  All other country flags have been removed
 public class W3WFlags {
   
-  static let water = UIImage(named: "flag.water", in: Bundle.module, compatibleWith: nil)
+  /// image of water
+  // complicated implementation to allow for watchOS and iOS
+  static var water: UIImage? {
+    get {
+      #if os(iOS)
+      return UIImage(named: "flag.water", in: Bundle.module, compatibleWith: nil)
+      #endif
+
+      #if os(watchOS)
+      if #available(watchOS 6.0, *) {
+        return UIImage(named: "flag.water", in: Bundle.module, with: nil)
+      } else {
+        return UIImage()
+      }
+      #endif
+    }
+  }
   
   public init() { }
   

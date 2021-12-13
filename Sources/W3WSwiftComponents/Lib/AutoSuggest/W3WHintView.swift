@@ -5,7 +5,7 @@
 //  Created by Dave Duprey on 25/11/2020.
 //
 
-#if !os(macOS)
+#if !os(macOS) && !os(watchOS)
 
 import Foundation
 import UIKit

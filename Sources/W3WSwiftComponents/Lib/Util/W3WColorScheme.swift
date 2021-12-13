@@ -60,11 +60,15 @@ public struct W3WColorScheme {
   
   // will be used for dark mode - not quite ready yet
   static var colourMode: W3WColourMode {
+#if !os(watchOS)
     if #available(iOS 12, *) {
        return UIScreen.main.traitCollection.userInterfaceStyle == .light ? W3WColourMode.light : W3WColourMode.dark
     } else {
       return W3WColourMode.light
     }
+#else
+    return W3WColourMode.light
+#endif
   }
  
   

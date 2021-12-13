@@ -5,6 +5,8 @@
 //  Created by Dave Duprey on 17/08/2021.
 //
 
+#if !os(watchOS)
+
 import Foundation
 import MapKit
 
@@ -25,3 +27,5 @@ public protocol W3WMapKitCompatibility {
   func setCenter(_ coordinate: CLLocationCoordinate2D, animated: Bool)
 }
 
+
+#endif

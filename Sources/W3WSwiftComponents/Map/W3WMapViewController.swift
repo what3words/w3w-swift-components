@@ -5,8 +5,7 @@
 //  Created by Dave Duprey on 31/05/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
-#if !os(macOS)
-#if !os(watchOS)
+#if !os(macOS) && !os(watchOS)
 
 import UIKit
 import MapKit
@@ -309,4 +308,4 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
 
 
 #endif
-#endif
+

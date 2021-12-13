@@ -4,7 +4,7 @@
 //
 //  Created by Dave Duprey on 06/08/2021.
 //
-#if !os(macOS)
+#if !os(macOS) && !os(watchOS)
 
 import Foundation
 import MapKit
