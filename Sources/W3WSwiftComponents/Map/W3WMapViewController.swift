@@ -34,9 +34,9 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
   // MARK:- Init
   
   
-  public convenience init(_ w3w: W3WProtocolV3) {
+  public convenience init(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
     self.init()
-    set(w3w)
+    set(w3w, language: language)
   }
   
   
@@ -54,7 +54,7 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
   
   /// This must be called to allow the map to make what3words calls
   public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
-    mapHelper = W3WMapHelper(w3w, map: w3wMapView)
+    mapHelper = W3WMapHelper(w3w, map: w3wMapView, language: language)
     
     // let map helper take care of the delegate callbacks
     w3wMapView.delegate = mapHelper

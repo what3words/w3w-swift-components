@@ -44,15 +44,15 @@ open class W3WMapView: MKMapView, W3WMapViewProtocol, MKMapViewDelegate {
   }
   
   
-  public init(_ w3w: W3WProtocolV3) {
+  public init(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
     super.init(frame: CGRect.zero)
-    configure(w3w: w3w)
+    configure(w3w: w3w, language: language)
   }
   
   
-  public init(frame: CGRect, w3w: W3WProtocolV3) {
+  public init(frame: CGRect, w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
     super.init(frame: frame)
-    configure(w3w: w3w)
+    configure(w3w: w3w, language: language)
   }
 
   
@@ -62,13 +62,13 @@ open class W3WMapView: MKMapView, W3WMapViewProtocol, MKMapViewDelegate {
   }
   
 
-  func configure(w3w: W3WProtocolV3? = nil) {
+  func configure(w3w: W3WProtocolV3? = nil, language: String = W3WSettings.defaultLanguage) {
     delegate = self
     
     if let w = w3w {
-      w3wMapData = W3WMapData(w)
+      w3wMapData = W3WMapData(w, language: language)
     } else {
-      w3wMapData = W3WMapData(What3WordsV3(apiKey: ""))
+      w3wMapData = W3WMapData(What3WordsV3(apiKey: ""), language: language)
     }
   }
   
