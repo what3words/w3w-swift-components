@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 28/09/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -27,3 +28,5 @@ public class W3WFlags {
 
 }
 
+
+#endif

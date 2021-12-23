@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/what3words/w3w-swift-components/tree/master.svg?style=svg)](https://circleci.com/gh/what3words/w3w-swift-components/tree/master)
 # <img valign='top' src="https://what3words.com/assets/images/w3w_square_red.png" width="64" height="64" alt="what3words">&nbsp;w3w-swift-components
 
 Overview
@@ -9,9 +10,17 @@ For information on using this package with Objective-C read [this](https://githu
 
 If you are upgrading from any version 1.x.x, see the [upgrade guide](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/UpgradeFromV1.md).
 
+Compatibility
+-------------
 
-AutoSuggest Text Field
----------------------- 
+These components work with **iOS 9.0** or higher.
+
+
+Components
+----------
+
+### AutoSuggest Text Field
+
 <img src="Documentation/autosuggest.png" width="200" style="float: right; padding: 16px;">
 Full documentation can be found at [Documentation/autosuggest.md](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/autosuggest.md).
 
@@ -22,9 +31,9 @@ An iOS UIKit example project can be found at [Examples/TextField/TextField.xcode
 
 This conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any addresses the user choses, as well as to set options.
 
-
-AutoSuggest Search Controller
 ---------------------- 
+
+### AutoSuggest Search Controller
 <img src="Documentation/searchcontroller.png" width="200"  style="float: right; padding: 16px;">
 Full documentation can be found  at [Documentation/autosuggest.md](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/autosuggest.md).
 
@@ -34,6 +43,61 @@ An iOS UIKit example project can be found at [Examples/TextField/TextField.xcode
 `W3WAutoSuggestSearchController` is a `UISearchController` that will suggest three word addresses as the user types.  This allows embedding this functionality in things such as`UINavigationController` and `MKMap`
 
 This also conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any addresses the user choses, as well as to set options.
+
+<a name="maphelper"></a>
+Map Helper
+-------------------
+`W3WMapHelper` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/map.md](./Documentation/map.md)
+
+An iOS UIKit example project can be found at [Examples/MapHelper/MapHelper.xcodeproj](Examples/MapHelper/MapHelper.xcodeproj)
+
+```
+let api = What3WordsV3(apiKey: "YourApiKey")
+let mapHelper = W3WMapHelper(api, map: yourMKMapView)
+```
+
+If your app already has a ViewController that has a map, `W3WMapHelper` provides convenience functions to add to your `MKMapViewDelegate` functions for what3words grid and pin annotations to appear on your map. The example linked to above shows where you would place the calls, and how to instantiate the `W3WMapHelper`.
+
+<a name="mapview"></a>
+Map View
+--------
+<img src="Documentation/map.png" width="100"  style="float: right; padding: 16px;">
+`W3WMapView` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/map.md](./Documentation/map.md)
+
+An iOS UIKit example project can be found at [Examples/MapView/MapView.xcodeproj](Examples/MapView/MapView.xcodeproj)
+
+```
+let api = What3WordsV3(apiKey: "YourApiKey")
+let mapview = W3WMapView(api)
+```
+
+We created `W3WMapView` as a quick and dirty way to quickly get what3words functionality into your app.  
+
+Simply replace your MKMapView with W3WMapView, and your app should behave the same as before except it will draw what3words grid lines, and have some new functions available, like `show("filled.count.soap")`. 
+
+It's derived from `MKMapView` but Apple does not reccomend deriving new objects from MKMapView presumably because it's interface could change in the future, so view this as a quick and dirty way to get the functionality into your app. 
+
+The better approach would be to use `W3WMapHelper` which is designed to fit nicely into your `MKMapViewDelegate` conforming class, presumably a `UIViewController`.
+
+
+<a name="mapviewcontroller"></a>
+Map Component
+-------------
+<img src="Documentation/mapcomponent.png" width="100"  style="float: right; padding: 16px;">
+`W3WMapViewController` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/map.md](./Documentation/map.md)
+
+The iOS UIKit example project can be found at [Examples/MapComponent/MapComponent.xcodeproj](Examples/MapComponent/MapComponent.xcodeproj)
+
+```
+let api = What3WordsV3(apiKey: "YourApiKey")
+let vc = W3WMapViewController(api)
+```
+
+This demonstrates `W3WMapViewController` which is a high level component that has easy to use what3words functionality.   
+
+If you already have a map in your application then you will want to use `W3WMapHelper` instead.  Find the example called [MapHelper](Examples/MapView/MapView.xcodeproj).  
+
+If you have no map in your app and want to quickly include one with some default behaviours then this one might be for you.
 
 
 <a name="installation"></a>

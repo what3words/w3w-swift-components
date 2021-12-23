@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 25/11/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -65,3 +66,6 @@ class W3WTextErrorView: W3WMessageView {
   
  
 }
+
+
+#endif

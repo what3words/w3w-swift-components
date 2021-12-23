@@ -5,8 +5,19 @@
 //  Created by Dave Duprey on 29/09/2020.
 //
 
+import Foundation
 import W3WSwiftApi
+
+#if !os(macOS)
 import UIKit
+#endif
+
+/// mertic imperial or default from the system
+public enum W3WMesurementSystem {
+  case metric
+  case imperial
+  case system
+}
 
 
 /// mertic imperial or default from the system
@@ -19,14 +30,25 @@ public enum W3WMesurementSystem {
 
 public extension W3WSettings {
 
+<<<<<<< HEAD
   static let W3WSwiftComponentsVersion = "2.2.0"
+=======
+  static let W3WSwiftComponentsVersion = "2.2.1"
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
   
   // mutable settings
   static var measurement = W3WMesurementSystem.system
   static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? W3WSettings.defaultLanguage) == Locale.LanguageDirection.leftToRight)
   
+<<<<<<< HEAD
   // MARK:- Colours
   
+=======
+  // MARK: Colours
+
+  #if !os(macOS)
+
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
   static internal var colorPalette:W3WColorPalette =
     [
       "SlashesColor"        : [.light: W3WColorScheme.w3wRed],
@@ -59,6 +81,7 @@ public extension W3WSettings {
       
       "MapGridColor"        : [.light: W3WColorScheme.w3wSupportMediumGrey,   .dark: W3WColorScheme.w3wSupportMediumGrey],
       "MapSquareColor"      : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wSupportLightGrey],
+<<<<<<< HEAD
       "MapPinColor"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wRed]
     ]
 
@@ -72,6 +95,22 @@ public extension W3WSettings {
     colorPalette[named]?[forMode] = color
   }
   
+=======
+      "MapPinColor"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wRed],
+      "MapCircleColor"      : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wRed]
+    ]
+
+  
+  /// the colour information for all components
+  static internal var colors = W3WColorScheme(colors: colorPalette)
+  
+  
+  /// set a colour for a colour mode
+  static func set(color: UIColor, named: String, forMode: W3WColourMode) {
+    colorPalette[named]?[forMode] = color
+  }
+  
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
   
   /// return a color of a particular name, in the current colour mode (dark/light), failing that return in any colour mode, failing that, return black
   static func color(named: String) -> UIColor {
@@ -88,6 +127,10 @@ public extension W3WSettings {
     }
   }
   
+<<<<<<< HEAD
+=======
+  #endif
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
   
   // MARK: Text
   
@@ -102,6 +145,7 @@ public extension W3WSettings {
   static let componentsLogoSize           = CGFloat(64.0)
   static let componentsTextFieldWidth     = CGFloat(300.0)
   static let componentsTextFieldHeight    = CGFloat(48.0)
+<<<<<<< HEAD
 
   // display text
   static let componentsPlaceholderText    = NSLocalizedString("input_hint",               bundle: Bundle.module, comment: "e.g. ///lock.spout.radar")
@@ -109,5 +153,48 @@ public extension W3WSettings {
   static let technicalErrorText           = NSLocalizedString("error_message", 	          bundle: Bundle.module, comment: "There was some technical problem")
   static let apiErrorText                 = NSLocalizedString("invalid_address_message",  bundle: Bundle.module, comment: "The API didn't have an answer for the given input")
   static let didYouMeanText               = NSLocalizedString("correction_message",       bundle: Bundle.module, comment: "Asks if the user meant to write a different addres that is presented below this text")
+=======
+
+  // display text
+  static let componentsPlaceholderText    = diviseTranslation(tag: "input_hint",              backup: "e.g. ///index.home.raft")
+  static let componentsNearFormatText     = diviseTranslation(tag: "near",                    backup: "near ${PARAM}")
+  static let technicalErrorText           = diviseTranslation(tag: "error_message",           backup: "An error occurred. Please try later.")
+  static let apiErrorText                 = diviseTranslation(tag: "invalid_address_message", backup: "No valid what3words address found")
+  static let didYouMeanText               = diviseTranslation(tag: "correction_message",      backup: "Did you mean?")
+
+  static func diviseTranslation(tag: String, backup: String) -> String {
+    var translation = NSLocalizedString(tag, bundle: Bundle.module, comment: backup)
+    
+    // near is a special case, if a translation is not available then we drop 'near' and just return the value, usually 'nearestPlace'
+    if translation == "near" {
+      translation = "${PARAM}"
+      
+    // if the translation is missing then use the default
+    } else if translation == tag {
+      translation = backup
+    }
+    
+    return translation.replacingOccurrences(of: "${PARAM}", with: "%@")
+  }
+  
+  
+  // MARK: Geometry
+
+  static var uiIndent             = CGFloat(8.0)
+  static let pinSize   = CGFloat(40.0)
+  static let pinOffset = CGFloat(5.0)
+  static let mapSquareLineThickness = CGFloat(2.0)
+  static let mapGridLineThickness    = CGFloat(0.5)
+  
+  
+  // MARK: Geography
+  
+  static let mapDefaultZoomPointsPerSquare          = CGFloat(32.0)
+  static let mapGridInvisibleAtPointsPerSquare      = CGFloat(11.0)
+  static let mapGridOpaqueAtPointsPerSquare         = CGFloat(11.001)
+  static let mapAnnotationTransitionPointsPerSquare = CGFloat(12.0)
+  
+
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
   
 }

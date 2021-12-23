@@ -4,6 +4,10 @@
 //
 //  Created by Dave Duprey on 04/05/2021.
 //
+<<<<<<< HEAD
+=======
+#if !os(macOS)
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
 
 import UIKit
 import W3WSwiftApi
@@ -341,3 +345,8 @@ extension W3WSuggestionViewProtocol {
 }
 
 
+<<<<<<< HEAD
+=======
+
+#endif
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986

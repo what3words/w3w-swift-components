@@ -96,10 +96,10 @@ navController.navigationItem.searchController = textField
 
 ### Employ
 
-To be informed when the user chooses a suggestion from the list, assign a closure to `suggestionSelected`.  It is called with a struct that conforms to the `W3WSuggestion` protocol.  
+To be informed when the user chooses a suggestion from the list, assign a closure to `onSuggestionSelected`.  It is called with a struct that conforms to the `W3WSuggestion` protocol.  
 
 ```swift
-textField.suggestionSelected = { suggestion in
+textField.onSuggestionSelected = { suggestion in
   print("User chose:", suggestion.words ?? "")
 }
 ```
@@ -151,7 +151,7 @@ override func viewDidLoad() {
   let coords = CLLocationCoordinate2D(latitude: 51.4243877, longitude: -0.34745)
   textField.set(options: W3WOption.focus(coords))
 
-  textField.suggestionSelected = { suggestion in
+  textField.onSuggestionSelected = { suggestion in
     print("User chose:", suggestion.words ?? "")
   }
 
@@ -178,14 +178,14 @@ Both components conform to our `W3WAutoSuggestTextFieldProtocol` for returning a
 * `func set(options: [W3WOption])` - sets [autosuggest options](options.md)
 * `func set(options: W3WOption)` - sets one [autosuggest option](options.md)
   
-#### var suggestionSelected
+#### var onSuggestionSelected
 
-`var suggestionSelected: (W3WSuggestion) -> ()`
+`var onSuggestionSelected: (W3WSuggestion) -> ()`
 
 Use this to assign a closure to be executed when a user chooses a W3WSuggestion.  Example:
 
 ```
-textField.suggestionSelected = { suggestion in
+textField.onSuggestionSelected = { suggestion in
   print("User chose:", suggestion.words ?? "")
 }
 ```  

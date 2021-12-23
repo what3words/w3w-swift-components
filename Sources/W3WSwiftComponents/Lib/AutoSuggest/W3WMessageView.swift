@@ -4,6 +4,10 @@
 //
 //  Created by Dave Duprey on 11/08/2021.
 //
+<<<<<<< HEAD
+=======
+#if !os(macOS)
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
 
 import Foundation
 import UIKit
@@ -54,3 +58,8 @@ class W3WMessageView: UIView {
   
   
 }
+<<<<<<< HEAD
+=======
+
+#endif
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986

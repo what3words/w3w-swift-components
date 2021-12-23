@@ -1,6 +1,9 @@
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
 //
 //  MicrophoneView.swift
 //  UberApiTest
@@ -8,6 +11,10 @@
 //  Created by Dave Duprey on 07/02/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
+<<<<<<< HEAD
+=======
+#if !os(macOS)
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
 
 import UIKit
 import W3WSwiftApi
@@ -54,3 +61,7 @@ public class W3WDashes: W3WDrawingView {
   
 }
 
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986

@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 04/07/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -16,8 +17,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   // MARK: Vars
   
   /// callback for when the user choses a suggestion
-  public var suggestionSelected: W3WSuggestionResponse = { _ in }
+  lazy public var onSuggestionSelected: W3WSuggestionResponse = { suggestion in self.suggestionSelected(suggestion) }
 
+  /// To be DEPRECIATED: use onSelected instead - old callback for when the user choses a suggestion, to be depreciate
+  public var suggestionSelected: W3WSuggestionResponse = { _ in }
+  
   /// if freeFormText is enabled, this will be called everytime the text field is edited
   public var textChanged: W3WTextChangedResponse = { _ in }
 
@@ -121,7 +125,53 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     autoSuggestViewController.set(options: options)
   }
 
+  
+  /// intelligently changes the text in the field, adjusting icons to suit
+  /// - Parameters:
+  ///     - displayText: the text to display
+  public func set(display: W3WSuggestion?) {
+    if let suggestion = display {
+      let t = W3WFormatter.ensureSlashes(text: suggestion.words)
+      text = t?.string
+      autoSuggestViewController.hideSuggestions()
+    }
+  }
+  
 
+  /// set the color of the text in all AutosuggestTextFields globally
+  /// - Parameters:
+  ///     - textColor: the color for the text
+  ///     - darkMode: the color for the text when the device is in "dark mode"
+  public func set(textColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: textColor, named: "TextfieldText", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldText", forMode: .dark)
+    updateColours()
+  }
+  
+  
+  /// set the color of the textfield background in all AutosuggestTextFields globally
+  /// - Parameters:
+  ///     - backgroundColor: the color for the textfield background
+  ///     - darkMode: the color for the textfield background when the device is in "dark mode"
+  public func set(backgroundColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: backgroundColor, named: "TextfieldBackground", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldBackground", forMode: .dark)
+    updateColours()
+  }
+  
+  
+  /// set the color of the textfield background in all AutosuggestTextFields globally
+  /// - Parameters:
+  ///     - backgroundColor: the color for the textfield background
+  ///     - darkMode: the color for the textfield background when the device is in "dark mode"
+  public func set(placeholderColor: UIColor, darkMode: UIColor) {
+    W3WSettings.set(color: placeholderColor, named: "TextfieldPlaceholder", forMode: .light)
+    W3WSettings.set(color: darkMode, named: "TextfieldPlaceholder", forMode: .dark)
+    updateColours()
+  }
+  
+
+<<<<<<< HEAD
   /// set the color of the text in all AutosuggestTextFields globally
   /// - Parameters:
   ///     - textColor: the color for the text
@@ -158,6 +208,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   /// sets the language to use when returning three word addresses
   /// - Parameters:
+=======
+  
+  /// sets the language to use when returning three word addresses
+  /// - Parameters:
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
   ///     - language: a ISO two letter language code
   public func set(language l: String) {
     autoSuggestViewController.autoSuggestDataSource.language = l
@@ -207,7 +262,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       if autoSuggestViewController.supportsVoice() {
         if voiceIconView == nil {
           self.voiceIconView = W3WVoiceIconView(frame: CGRect(origin: .zero, size: CGSize(width: self.frame.height, height: self.frame.height)))
+<<<<<<< HEAD
           self.voiceIconView.set(padding: self.frame.size.height * 0.2)
+=======
+          self.voiceIconView.set(padding: min(self.frame.size.height * 0.2, W3WSettings.componentsIconPadding))
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
           self.voiceIconView.tapped = { self.autoSuggestViewController.showMicrophone() }
           DispatchQueue.main.async {
             self.updateIcons()
@@ -256,7 +315,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     if checkView == nil {
       DispatchQueue.main.async {
         self.checkView = W3WCheckIconView()
+<<<<<<< HEAD
         self.checkView.set(padding: self.frame.size.height * 0.2)
+=======
+        self.checkView.set(padding: min(self.frame.size.height * 0.2, W3WSettings.componentsIconPadding))
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
         self.checkView.isHidden = true
         //iconsView.add(left: checkView)
         self.updateIcons()
@@ -392,7 +455,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   public func update(selected: W3WSuggestion) {
     if let words = selected.words {
       update(text: W3WAddress.ensureLeadingSlashes(words))
+<<<<<<< HEAD
       suggestionSelected(selected)
+=======
+      onSuggestionSelected(selected)
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
       textChanged(words)
       dismissKeyboard()
       DispatchQueue.main.async {
@@ -530,7 +597,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       if autoSuggestViewController.autoSuggestDataSource.is3wa(text: words) {
         DispatchQueue.main.async {
           if self.autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: words) {
-            self.suggestionSelected(W3WApiSuggestion(words: words))
+            self.onSuggestionSelected(W3WApiSuggestion(words: words))
             self.textChanged(words)
             self.resignFirstResponder()
             self.autoSuggestViewController.hideSuggestions()
@@ -545,3 +612,5 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
 }
+
+#endif

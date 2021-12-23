@@ -4,10 +4,14 @@
 //
 //  Created by Dave Duprey on 04/07/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
 import W3WSwiftApi
+#if canImport(w3w)
+import w3w
+#endif
 
 
 /// protocol for talking to the tableview and providing it with updates and data
@@ -149,7 +153,20 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   /// do initial set up
   func configure() {    
     // set up the debouncer as to not call autosuggest too rapidly
+<<<<<<< HEAD
     suggestionsDebouncer = W3WTextDebouncer(delay: 1.0, handler: { text in self.updateSuggestions(text: text) })
+=======
+    var delay = 1.0
+    
+    // faster delay if the SDK is being used instead of the API
+    #if canImport(w3w)
+    if w3w is What3Words {
+      delay = 0.1
+    }
+    #endif
+
+    suggestionsDebouncer = W3WTextDebouncer(delay: delay, handler: { text in self.updateSuggestions(text: text) })
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
   }
 
   
@@ -225,6 +242,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   
   /// checks if input looks like a 3 word address or not
+  @available(*, deprecated, message: "Use api.didYouMean(text:) or sdk.didYouMean(text:) instead")
   func isAlmost3wa(text: String) -> Bool {
 
     let regex = try! NSRegularExpression(pattern:W3WSettings.regex_loose_match, options: [])
@@ -319,7 +337,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       }
       
     // if the text is not a 3wa but close to one, we call to put up a 'did you mean' notice to the user
-    } else if isAlmost3wa(text: text) {
+    } else if w3w?.didYouMean(text: text) ?? false {
       let fixedText = make3waFromAlmost3wa(text: text)
       w3w?.autosuggest(text: fixedText, options: options) { suggestions, error in
         self.addToKnownAddressList(suggestions: suggestions)
@@ -570,3 +588,4 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
 }
 
 
+#endif

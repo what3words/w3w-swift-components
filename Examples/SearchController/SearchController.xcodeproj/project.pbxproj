@@ -116,7 +116,7 @@
 			);
 			mainGroup = 015BBA02255ED9E600B8674B;
 			packageReferences = (
-				01F0C1BD25C9AA4000BA600D /* XCRemoteSwiftPackageReference "w3w-swift-components" */,
+				01F0C1BD25C9AA4000BA600D /* XCRemoteSwiftPackageReference "." */,
 			);
 			productRefGroup = 015BBA0C255ED9E600B8674B /* Products */;
 			projectDirPath = "";
@@ -294,8 +294,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YC9564MTQY;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SearchController/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -303,6 +303,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.what3words.SearchController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -313,8 +314,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YC9564MTQY;
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SearchController/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -322,6 +323,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.what3words.SearchController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -351,9 +353,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		01F0C1BD25C9AA4000BA600D /* XCRemoteSwiftPackageReference "w3w-swift-components" */ = {
+		01F0C1BD25C9AA4000BA600D /* XCRemoteSwiftPackageReference "." */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "../../";
+			repositoryURL = ../../;
 			requirement = {
 				branch = master;
 				kind = branch;
@@ -364,7 +366,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		01F0C1BE25C9AA4000BA600D /* W3WSwiftComponents */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 01F0C1BD25C9AA4000BA600D /* XCRemoteSwiftPackageReference "w3w-swift-components" */;
+			package = 01F0C1BD25C9AA4000BA600D /* XCRemoteSwiftPackageReference "." */;
 			productName = W3WSwiftComponents;
 		};
 /* End XCSwiftPackageProductDependency section */

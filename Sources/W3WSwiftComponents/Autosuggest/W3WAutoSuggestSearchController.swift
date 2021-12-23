@@ -5,6 +5,8 @@
 //  Created by Dave Duprey on 04/07/2020.
 //
 
+#if !os(macOS)
+
 import Foundation
 import UIKit
 import W3WSwiftApi
@@ -15,6 +17,9 @@ import W3WSwiftApi
 open class W3WAutoSuggestSearchController: UISearchController, UISearchTextFieldDelegate, UISearchBarDelegate, UISearchControllerDelegate, UISearchResultsUpdating, W3AutoSuggestResultsViewControllerDelegate, W3WAutoSuggestTextFieldProtocol {
   
   /// callback for when the user choses a suggestion
+  lazy public var onSuggestionSelected: W3WSuggestionResponse = { suggestion in self.suggestionSelected(suggestion) }
+  
+  /// To be DEPRECIATED: use onSuggestionSelected instead - old callback for when the user choses a suggestion, to be depreciate
   public var suggestionSelected: W3WSuggestionResponse = { _ in }
   
   /// if freeFormText is enabled, this will be called everytime the text field is edited
@@ -84,6 +89,17 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
     autoSuggestViewController.set(options: options)
   }
 
+  
+  /// intelligently changes the text in the field, adjusting icons to suit
+  /// - Parameters:
+  ///     - displayText: the text to display
+  public func set(display: W3WSuggestion?) {
+    if let suggestion = display {
+      let t = W3WFormatter.ensureSlashes(text: suggestion.words)
+      searchBar.text = t?.string
+    }
+  }
+  
 
   /// sets the language to use when returning three word addresses
   /// - Parameters:
@@ -238,7 +254,6 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   public func update(suggestions: [W3WSuggestion]) {
     if let suggestion = suggestions.first as? W3WVoiceSuggestion {
       if let words = suggestion.words {
-        //self.searchBar.text = words
         update(text: words)
       }
     }
@@ -251,7 +266,11 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   public func update(selected: W3WSuggestion) {
     if let words = selected.words {
       update(text: W3WAddress.ensureLeadingSlashes(words))
+<<<<<<< HEAD
       suggestionSelected(selected)
+=======
+      onSuggestionSelected(selected)
+>>>>>>> 43a11ffcb92ed6131dad6b872343efea08bb7986
       textChanged(words)
       DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
         self.isActive = false
@@ -332,7 +351,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
         if autoSuggestViewController.autoSuggestDataSource.is3wa(text: words) {
           DispatchQueue.main.async {
             if self.autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: words) {
-              self.suggestionSelected(W3WApiSuggestion(words: words))
+              self.onSuggestionSelected(W3WApiSuggestion(words: words))
               self.textChanged(words)
             }
           }
@@ -407,6 +426,12 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   }
   
   
+  public func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+    //print(searchBar.text)
+    //searchBar.text = "///v.v.v"
+  }
+  
+  
   // MARK: UISearchController Delegate
   
   public func didPresentSearchController(_ searchController: UISearchController) {
@@ -434,3 +459,4 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
 }
 
 
+#endif

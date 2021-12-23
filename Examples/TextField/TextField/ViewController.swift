@@ -51,8 +51,10 @@ class ViewController: UIViewController {
     // turn on voice support
     textField.set(voice: true)
     textField.set(language: "en")
-    textField.suggestionSelected = { suggestion in
-        print("User chose:", suggestion.words ?? "")
+
+    // assign a code block to execute when the user has selected an address
+    textField.onSuggestionSelected = { suggestion in
+      print("User chose:", suggestion.words ?? "")
     }
       
 
@@ -65,11 +67,12 @@ class ViewController: UIViewController {
     view.addSubview(textField)
   }
 
-    /// display an error using a UIAlertController, error messages conform to CustomStringConvertible
-    func showError(error: Error) {
-        let alert = UIAlertController(title: "Error", message: String(describing: error), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-        DispatchQueue.main.async { self.present(alert, animated: true) }
+  func showError(error: Error) {
+    DispatchQueue.main.async {
+      let alert = UIAlertController(title: "Error", message: String(describing: error), preferredStyle: .alert)
+      alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+      self.present(alert, animated: true)
     }
+  }
 }
 
