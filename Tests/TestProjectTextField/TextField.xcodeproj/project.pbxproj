@@ -532,7 +532,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = ../../;
 			requirement = {
-				branch = staging;
+				branch = "dd-watchOS";
 				kind = branch;
 			};
 		};
