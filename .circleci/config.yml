@@ -10,9 +10,9 @@ jobs: # a basic unit of work in a run
       - run:
           name: Run Unit Tests  # we must build the package's tests as an iOS exectuable, and output the profile data, then send that to sonar. Also, a kluge was required to get the apikey in place
           command: |-
-            for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
             brew install sonar-scanner
             ./.circleci/getkey.sh
+            for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
             xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' -enableCodeCoverage YES -derivedDataPath .build
             PROFDATA_FILE=$(find . -name '*.profdata')
             xcrun llvm-cov show .build/Build/Products/Debug-iphonesimulator/w3w-swift-componentsTests.xctest/w3w-swift-componentsTests -instr-profile $PROFDATA_FILE > .build/cov.txt
