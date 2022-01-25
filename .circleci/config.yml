@@ -17,8 +17,8 @@ jobs: # a basic unit of work in a run
             PROFDATA_FILE=$(find . -name '*.profdata')
             xcrun llvm-cov show .build/Build/Products/Debug-iphonesimulator/w3w-swift-componentsTests.xctest/w3w-swift-componentsTests -instr-profile $PROFDATA_FILE > .build/cov.txt
             sonar-scanner -Dsonar.projectKey=what3words_w3w-swift-components -Dsonar.organization=what3words -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN -Dsonar.sources=Sources -Dsonar.swift.coverage.reportPath=.build/cov.txt
-#            cd Tests/TestProjectTextField
-#            xcodebuild -project TextField.xcodeproj -scheme TextField -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' APIKEY=$APIKEY test
+            cd Tests/TestProjectTextField
+            xcodebuild -project TextField.xcodeproj -scheme TextField -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' APIKEY=$APIKEY test
           
 workflows:
   version: 2
