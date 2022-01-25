@@ -13,7 +13,7 @@
 		010ED15325700DFE009386EE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 010ED15125700DFE009386EE /* Main.storyboard */; };
 		010ED15525700E00009386EE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 010ED15425700E00009386EE /* Assets.xcassets */; };
 		010ED15825700E00009386EE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 010ED15625700E00009386EE /* LaunchScreen.storyboard */; };
-		01F0C1B725C9A81200BA600D /* W3WSwiftComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 01F0C1B625C9A81200BA600D /* W3WSwiftComponents */; };
+		01CB050027A03331007723AC /* W3WSwiftComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 01CB04FF27A03331007723AC /* W3WSwiftComponents */; };
 		072746CA26EBBD5F006429F9 /* TextFieldUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 072746C926EBBD5F006429F9 /* TextFieldUITests.swift */; };
 		079EA688273151BC00657054 /* ClippingSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079EA687273151BC00657054 /* ClippingSettings.swift */; };
 		079EA68E273C0F1900657054 /* ClippingType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 079EA68B2735780E00657054 /* ClippingType.swift */; };
@@ -44,6 +44,7 @@
 		010ED15425700E00009386EE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		010ED15725700E00009386EE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		010ED15925700E00009386EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		01CB04FD27A0326C007723AC /* w3w-swift-components */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "w3w-swift-components"; path = ../..; sourceTree = "<group>"; };
 		072746C726EBBD5F006429F9 /* TextFieldUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextFieldUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		072746C926EBBD5F006429F9 /* TextFieldUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldUITests.swift; sourceTree = "<group>"; };
 		072746CB26EBBD5F006429F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -62,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				01F0C1B725C9A81200BA600D /* W3WSwiftComponents in Frameworks */,
+				01CB050027A03331007723AC /* W3WSwiftComponents in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,9 +80,11 @@
 		010ED13F25700DFE009386EE = {
 			isa = PBXGroup;
 			children = (
+				01CB04FC27A0326C007723AC /* Packages */,
 				010ED14A25700DFE009386EE /* TextField */,
 				072746C826EBBD5F006429F9 /* TextFieldUITests */,
 				010ED14925700DFE009386EE /* Products */,
+				01CB04FE27A03331007723AC /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -109,6 +112,21 @@
 				07F4C436273D882C00617BE6 /* TestSettings.swift */,
 			);
 			path = TextField;
+			sourceTree = "<group>";
+		};
+		01CB04FC27A0326C007723AC /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				01CB04FD27A0326C007723AC /* w3w-swift-components */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		01CB04FE27A03331007723AC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		072746C826EBBD5F006429F9 /* TextFieldUITests */ = {
@@ -158,7 +176,7 @@
 			);
 			name = TextField;
 			packageProductDependencies = (
-				01F0C1B625C9A81200BA600D /* W3WSwiftComponents */,
+				01CB04FF27A03331007723AC /* W3WSwiftComponents */,
 			);
 			productName = TextField;
 			productReference = 010ED14825700DFE009386EE /* TextField.app */;
@@ -210,7 +228,6 @@
 			);
 			mainGroup = 010ED13F25700DFE009386EE;
 			packageReferences = (
-				01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "." */,
 			);
 			productRefGroup = 010ED14925700DFE009386EE /* Products */;
 			projectDirPath = "";
@@ -529,21 +546,9 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "." */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = ../../;
-			requirement = {
-				branch = "dd-watchOS";
-				kind = branch;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
-		01F0C1B625C9A81200BA600D /* W3WSwiftComponents */ = {
+		01CB04FF27A03331007723AC /* W3WSwiftComponents */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 01F0C1B525C9A81200BA600D /* XCRemoteSwiftPackageReference "." */;
 			productName = W3WSwiftComponents;
 		};
 /* End XCSwiftPackageProductDependency section */
