@@ -116,7 +116,7 @@
 			);
 			mainGroup = 01DCFBF327302F6A00ADA990;
 			packageReferences = (
-				01DCFC162730312600ADA990 /* XCRemoteSwiftPackageReference "w3w-swift-components" */,
+				01DCFC162730312600ADA990 /* XCRemoteSwiftPackageReference "." */,
 			);
 			productRefGroup = 01DCFBFD27302F6A00ADA990 /* Products */;
 			projectDirPath = "";
@@ -351,11 +351,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		01DCFC162730312600ADA990 /* XCRemoteSwiftPackageReference "w3w-swift-components" */ = {
+		01DCFC162730312600ADA990 /* XCRemoteSwiftPackageReference "." */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "../..";
+			repositoryURL = ../..;
 			requirement = {
-				branch = staging;
+				branch = master;
 				kind = branch;
 			};
 		};
@@ -364,7 +364,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		01DCFC172730312600ADA990 /* W3WSwiftComponents */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 01DCFC162730312600ADA990 /* XCRemoteSwiftPackageReference "w3w-swift-components" */;
+			package = 01DCFC162730312600ADA990 /* XCRemoteSwiftPackageReference "." */;
 			productName = W3WSwiftComponents;
 		};
 /* End XCSwiftPackageProductDependency section */
