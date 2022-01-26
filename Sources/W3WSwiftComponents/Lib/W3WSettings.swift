@@ -109,6 +109,7 @@ public extension W3WSettings {
   static let componentsLogoSize           = CGFloat(64.0)
   static let componentsTextFieldWidth     = CGFloat(300.0)
   static let componentsTextFieldHeight    = CGFloat(48.0)
+  static let systemFontSizeForWatchOS     = CGFloat(12.0)
 
   // display text
   static let componentsPlaceholderText    = diviseTranslation(tag: "input_hint",              backup: "e.g. ///index.home.raft")

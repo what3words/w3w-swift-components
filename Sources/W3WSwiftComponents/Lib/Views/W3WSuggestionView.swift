@@ -4,7 +4,7 @@
 //
 //  Created by Dave Duprey on 04/05/2021.
 //
-#if !os(macOS)
+#if !os(macOS) && !os(watchOS)
 
 import UIKit
 import W3WSwiftApi

@@ -15,6 +15,7 @@ import UIKit
 // MARK: UIView
 
 
+#if !os(watchOS)
 extension UIView {
   var w3wParentViewController: UIViewController? {
     var parentResponder: UIResponder? = self
@@ -27,7 +28,7 @@ extension UIView {
     return nil
   }
 }
-
+#endif
 
 // MARK: UIColor
 

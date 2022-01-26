@@ -46,7 +46,7 @@ final class w3w_swift_componentsTests: XCTestCase {
   }
   
   
-  #if !os(macOS)
+  #if !os(macOS) && !os(watchOS)
 
   
   func testTextfield() {
