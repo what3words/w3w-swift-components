@@ -204,7 +204,6 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
 
   /// decide whether or not allow the touch event through.  denied if it is on a subview 
   public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
-    print(type(of: touch.view))
     if isNotPArtOfTheMap(view: touch.view) {
       return false
     } else {

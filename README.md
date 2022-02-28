@@ -10,10 +10,40 @@ For information on using this package with Objective-C read [this](https://githu
 
 If you are upgrading from any version 1.x.x, see the [upgrade guide](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/UpgradeFromV1.md).
 
-Compatibility
--------------
+#### Compatibility
 
 These components work with **iOS 9.0** or higher.
+
+<a name="installation"></a>
+Installation
+---------------------
+
+
+#### Authentication
+To use this library you’ll need a what3words API key, which can be signed up for [here](https://what3words.com/select-plan).  If you wish to use the Voice API calls then you must add a Voice API plan to your [account](https://accounts.what3words.com/billing).
+
+#### Swift Package Manager
+
+You can install with [Swift Package Manager](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) by adding the URL below to Swift Packages under your project settings:
+
+```
+https://github.com/what3words/w3w-swift-components.git
+```
+
+Import the libraries:
+
+```swift
+import W3WSwiftApi
+import W3WSwiftComponents
+import CoreLocation
+```
+
+
+#### Note:
+
+If you are using the Voice API on device, you should include Microphone permissions in your Info.plist:
+
+<img src="Documentation/plist2.png" width="75%">
 
 
 Components
@@ -47,6 +77,8 @@ This also conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any ad
 <a name="maphelper"></a>
 Map Helper
 -------------------
+Map Helper allows you to easily integrate what3words map features into an existing map.
+
 `W3WMapHelper` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/map.md](./Documentation/map.md)
 
 An iOS UIKit example project can be found at [Examples/MapHelper/MapHelper.xcodeproj](Examples/MapHelper/MapHelper.xcodeproj)
@@ -99,37 +131,6 @@ If you already have a map in your application then you will want to use `W3WMapH
 
 If you have no map in your app and want to quickly include one with some default behaviours then this one might be for you.
 
-
-<a name="installation"></a>
-Installation
----------------------
-
-
-#### Authentication
-To use this library you’ll need a what3words API key, which can be signed up for [here](https://what3words.com/select-plan).  If you wish to use the Voice API calls then you must add a Voice API plan to your [account](https://accounts.what3words.com/billing).
-
-#### Swift Package Manager
-
-You can install with [Swift Package Manager](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) by adding the URL below to Swift Packages under your project settings:
-
-```
-https://github.com/what3words/w3w-swift-components.git
-```
-
-Import the libraries:
-
-```swift
-import W3WSwiftApi
-import W3WSwiftComponents
-import CoreLocation
-```
-
-
-#### Note:
-
-If you are using the Voice API on device, you should include Microphone permissions in your Info.plist:
-
-<img src="Documentation/plist2.png" width="75%">
 
 
 System Settings

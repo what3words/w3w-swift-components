@@ -36,7 +36,7 @@ Show will place an annotation on the map, if the map is zoomed in, it will appea
 
 The first is the location, this can be a what3words address as a `String`, or a `W3WSuggestion`, `W3WSquare`, or a `CLLocatioinCorrdinate2D`.  
 
-Note that if you pass in a `String`, or `W3WSuggestion`, a call to `convertToCoordinates` will be made automatically to get the coordinates, and this will count towards your acount quota.  This parameter can also be an array of any of the above mentioned types.
+Note that if you pass in a `String`, or `W3WSuggestion`, a call to `convertToCoordinates` will be made automatically to get the coordinates, and this will count towards your account quota.  This parameter can also be an array of any of the above mentioned types.
 
 The second optional parameter is called `camera` and it indicates how to move the map view.  The choices are:
 
@@ -58,7 +58,7 @@ map.show(["filled.count.soap", "index.home.raft"], camera: .center)
 
 ### hide()
 
-This will hide an annotation that was previousply placed on the map.  It takes one parameter and like `show()`, it can be a what3words address as a `String`, or a `W3WSuggestion`, `W3WSquare`, or a `CLLocatioinCorrdinate2D`, or arrays of those types.
+This will hide an annotation that was previously placed on the map.  It takes one parameter and like `show()`, it can be a what3words address as a `String`, or a `W3WSuggestion`, `W3WSquare`, or a `CLLocatioinCorrdinate2D`, or arrays of those types.
 
 **examples**
 
@@ -86,16 +86,16 @@ map.hideAll()
 
 ### set(zoomInPointsPerSquare: CGFloat)
 
-This will set how near the `show(twa, camera: .zoom)` calls will zoom.
+This will set how near the `show("filled.count.soap", camera: .zoom)` calls will zoom.
 
-`zoomInPointsPerSquare` is the size of squares in points when .zoom is used in a show() call.  (points being 1x, 2x, 3x a pixeldepending on which device you are using and if it has a "retina" dispaly.
+`zoomInPointsPerSquare` is the size of squares in points when .zoom is used in a show() call.  (points being 1x, 2x, 3x a pixel depending on which device you are using and if it has a "retina" display.
 
 
 ------------
 
 ### getMapAnnotationView(annotation: MKAnnotation) -> MKAnnotationView?
 
-If the annotion is a what3words one, this gets a renderer, otherwise it returns nil.
+If the annotation is a what3words one, this gets a renderer, otherwise it returns nil.
 
 If you are using `W3WMapHelper` then this is typically called in your `MKMapViewDelegate`'s call: `mapView(_, viewFor: MKAnnotation)`
 
