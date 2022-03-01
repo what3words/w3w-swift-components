@@ -5,7 +5,7 @@ The AutoSuggest Components
 Overview
 --------
 
-This document covers `W3WAutoSuggestTextField` and `W3WAutoSuggestSearchController`, because they both conform to our `W3WAutoSuggestTextFieldProtocol` for returning any addresses the user choses, as well as to set options.
+This document covers `W3WAutoSuggestTextField` and `W3WAutoSuggestSearchController`. Because they both conform to our `W3WAutoSuggestTextFieldProtocol` they both have basically the same interface.
 
 <img src="autosuggest.png" width="250">
 
