@@ -52,6 +52,7 @@ Components
 ### AutoSuggest Text Field
 
 <img src="Documentation/Autosuggest/autosuggest.png" width="200" style="float: right; padding: 16px;">
+
 Full documentation can be found at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
 
 
@@ -65,6 +66,7 @@ This conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any address
 
 ### AutoSuggest Search Controller
 <img src="Documentation/Autosuggest/searchcontroller.png" width="200"  style="float: right; padding: 16px;">
+
 Full documentation can be found  at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
 
 
@@ -79,7 +81,7 @@ Map Helper
 -------------------
 Map Helper allows you to easily integrate what3words map features into an existing map.
 
-`W3WMapHelper` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
+`W3WMapHelper` conforms to `W3WMapViewProtocol`.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 An iOS UIKit example project can be found at [Examples/MapHelper/MapHelper.xcodeproj](Examples/MapHelper/MapHelper.xcodeproj)
 
@@ -94,6 +96,7 @@ If your app already has a ViewController that has a map, `W3WMapHelper` provides
 Map View
 --------
 <img src="Documentation/Map/map.png" width="100"  style="float: right; padding: 16px;">
+
 `W3WMapView` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 An iOS UIKit example project can be found at [Examples/MapView/MapView.xcodeproj](Examples/MapView/MapView.xcodeproj)
