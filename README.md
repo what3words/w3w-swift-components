@@ -119,6 +119,7 @@ The better approach would be to use `W3WMapHelper` which is designed to fit nice
 Map Component
 -------------
 <img src="Documentation/Map/mapcomponent.png" width="100"  style="float: right; padding: 16px;">
+
 `W3WMapViewController` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 The iOS UIKit example project can be found at [Examples/MapComponent/MapComponent.xcodeproj](Examples/MapComponent/MapComponent.xcodeproj)
