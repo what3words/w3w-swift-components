@@ -5,13 +5,15 @@ Overview
 --------
 <img src="map.png" width="140" style="float: right; padding: 16px;">
 
-This document covers the functions available in any `W3WMapViewProtocol` conforming class.  
+This document covers the functions available in all what3words map components. 
 
-The `W3WMapHelper`, `W3WMapView` and `W3WMapViewController` classes all do conform to `W3WMapViewProtocol`.
+These functions are defined in the `W3WMapViewProtocol` protocol.  
 
-`W3WMapView` is a `MKMapView`, and `W3WMapViewController` is a `UIViewController` which provides a simple interactive map which can return `W3WSuggestion`s on user selection.  `W3WMapHelper` conforms to `MkMapViewDelegate` and is designed to be an easy way to get what3words functionality into you existing map view.
+The `W3WMapHelper`, `W3WMapView` and `W3WMapViewController` classes all conform to `W3WMapViewProtocol`.
 
-These components depend on [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper).
+`W3WMapView` is a `MKMapView`, and `W3WMapViewController` is a `UIViewController` which provides a simple interactive map which can return `W3WSuggestion`s on user selection.  `W3WMapHelper` conforms to `MkMapViewDelegate` and is designed to be an easy way to get what3words functionality into your existing map view.
+
+These components depend on [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper) for common what3words type definitions. 
 
 Reference
 ---------
@@ -32,17 +34,21 @@ map.set(language: "fr") // set default language to French
 
 Show will place an annotation on the map, if the map is zoomed in, it will appear as a square, and if zoomed out it shows as a what3words annotation icon.
 
-`show(:camera)` takes two parameters.
+`show(:camera)` takes one required parameter, and three optional ones.
 
 The first is the location, this can be a what3words address as a `String`, or a `W3WSuggestion`, `W3WSquare`, or a `CLLocatioinCorrdinate2D`.  
 
 Note that if you pass in a `String`, or `W3WSuggestion`, a call to `convertToCoordinates` will be made automatically to get the coordinates, and this will count towards your account quota.  This parameter can also be an array of any of the above mentioned types.
 
-The second optional parameter is called `camera` and it indicates how to move the map view.  The choices are:
+The second and optional parameter is called `camera` and it indicates how to move the map view.  The choices are:
 
 * `.zoom` - zooms the map in to the location right around the square
 * `.center` - adjusts the map's center so that the location is in the center, but does not zoom in
 * `.none` - this leaves the mapView showing the same area it was showing before the call
+
+The third and optional parameter is `color` which takes a `UIColor` color for the annotation.  This defaults to what3words brand's red.
+
+The forth and optional parameter is the type of annotation that will be drawn.  The choices are `.pin` or `.circle`.  Defaults to `.circle`
 
 **examples**
 
@@ -52,6 +58,8 @@ map.show(square, camera: .zoom)
 map.show("filled.count.soap", style: .pin)
 
 map.show(["filled.count.soap", "index.home.raft"], camera: .center)
+
+map.show(["filled.count.soap", "index.home.raft"], color: .blue, camera: .center)
 ```
 
 ----------------

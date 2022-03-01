@@ -17,7 +17,7 @@ Other than the differences of the base classes, these both have the same interfa
 TLDR
 ----
 
-Too long? Don't want to read? Jump to the [example at the end of this document](#tldr), or go to the [Objective-C tutorial](ObjectiveCTutorial.md) document.
+Too long? Don't want to read? Jump to the [example at the end of this document](#tldrex), or go to the [Objective-C tutorial](ObjectiveCTutorial.md) document.
 
 
 Installation
@@ -114,7 +114,7 @@ W3WObjcOptions *options = [[W3WObjcOptions alloc] init];
 ```
 
 
-<a name="tldr"></a>
+<a name="tldrex"></a>
 ### Example
 
 Here is an example of presenting a W3WObjcAutoSuggestTextField in UIViewcontroller's viewDidLoad:

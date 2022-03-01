@@ -32,7 +32,7 @@ https://github.com/what3words/w3w-swift-components.git
 
 Xcode should now automatically install `w3w-swift-components`, and `w3w-swift-wrapper`
 
-<img src="swiftpm.png" width="640" style="padding: 16px;">
+<img src="../Images/swiftpm.png" width="640" style="padding: 16px;">
 
 
 #### Write Code
@@ -83,7 +83,7 @@ Add the following to `viewDidLoad()`:
 
 Give the app a run; type 'filled.count.soa' into the text field, and you should see something like this:
 
-<img src="phone.png" style="padding: 16px;">
+<img src="../Images/phone.png" style="padding: 16px;">
 
 If you get an error, check that you used your own API key.
 

@@ -14,7 +14,9 @@ These components depend on [what3words swift wrapper](https://github.com/what3wo
 TLDR
 ----
 
-Too long? Don't want to read? Jump to a comprehensive [example here](#tldr).
+Too long? Don't want to read? Jump to a comprehensive [example here](#tldrex).
+
+A step by step tutorial for putting `W3WAutoSuggestTextField` into your app can be found [here](tutorial-textfield.md)
 
 
 Example Projects
@@ -33,7 +35,7 @@ An iOS UIKit example embedding a W3WAutoSuggestSearchController in a UINavigatio
 Usage
 ------------
 
-### Initialize
+### Initialise
 
 Two text components are provided:
 
@@ -72,10 +74,6 @@ let sdk = What3Words(dataPath: "/path/to/w3w-data")
 textField.set(sdk)
 ```
 
-**Note:** For the SDK to work, it needs a little more code. Use `w3w-swift-components-sdk` instead of this package. `w3w-swift-components-sdk` will include this as a dependancy but add some code to bridge to the SDK.
-
-[https://github.com/what3words/w3w-swift-components-sdk](https://github.com/what3words/w3w-swift-components-sdk)
-
 More information about our SDK can be found [here](https://developer.what3words.com/enterprise-suite/mobile-offline-sdk).
 
 ### Deploy
@@ -108,7 +106,7 @@ textField.onSuggestionSelected = { suggestion in
 
 You may set any of the autosuggest options for these text fields.  If you use voice search, then these options will be automatically applied to that as well.
 
-You may specify options as an array of `W3WOption`, or using the `W3WOptions` factory: 
+You may specify options as an array of `W3WOption`, or using the `W3WOptions` builder: 
 
 ```
 let options = [
@@ -117,7 +115,7 @@ let options = [
 ]
 ```
 ```    
-let options = W3WOptions().focus(CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1)).clipToCountry("GB")
+let options = W3WOptions().clipToCountry("GB").focus(CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1))
 ```
 
 Either way, you can set them like this:
@@ -126,11 +124,11 @@ Either way, you can set them like this:
 textField.set(options: options)
 ```
 
-We strongy suggest you at least use the focus option, especailly for voice, to help autosuggest rank results more accurately.
+We **strongly suggest** that you use the **focus option**, especially for voice, to help autosuggest rank results more accurately.
 
 Documentation and examples using options in Swift can be found in [Documentation/options.md](options.md)
 
-<a name="tldr"></a>
+<a name="tldrex"></a>
 Example Code Snippets
 ---------------------
 

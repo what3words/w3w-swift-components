@@ -4,7 +4,7 @@
 Overview
 --------
 
-You may set autosuggest options for a number of what3words components including `W3WAutoSuggestTextField`, `W3WAutoSuggestSearchController`, and any other w3w components that satify the `W3WOptionAcceptorProtocol` protocol.
+You may set autosuggest options for a number of what3words components including `W3WAutoSuggestTextField`, `W3WAutoSuggestSearchController`, and any other w3w components that satisfy the `W3WOptionAcceptorProtocol` protocol.
 
 If you use voice search, then these options will be automatically applied to that as well.
 
@@ -49,7 +49,7 @@ Here are the case values of W3WOption:
 focus(CLLocationCoordinate2D)
 ----------------
 
-We strongy suggest usage of at least the focus option, especailly for voice, to help autosuggest rank results more accurately.  
+We strongly suggest usage of at least the focus option, especially for voice, to help autosuggest rank results more accurately.  
 
 The what3words system was designed with this in mind keeping similar sounding addresses as far apart as possible in order to reduce error of misunderstanding by humans and computers.
 

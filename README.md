@@ -6,9 +6,9 @@ Overview
 
 A Swift library for what3words UI components. These depend on the [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper).
 
-For information on using this package with Objective-C read [this](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/ObjectiveC.md)
+For information on using this package with Objective-C read [this](./Documentation/ObjectiveC/ObjectiveC.md)
 
-If you are upgrading from any version 1.x.x, see the [upgrade guide](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/UpgradeFromV1.md).
+If you are upgrading from any version 1.x.x, see the [upgrade guide](./Documentation/PreviousVersions/UpgradeFromV1.md).
 
 #### Compatibility
 
@@ -43,7 +43,7 @@ import CoreLocation
 
 If you are using the Voice API on device, you should include Microphone permissions in your Info.plist:
 
-<img src="Documentation/plist2.png" width="75%">
+<img src="Documentation/Images/plist2.png" width="75%">
 
 
 Components
@@ -51,8 +51,8 @@ Components
 
 ### AutoSuggest Text Field
 
-<img src="Documentation/autosuggest.png" width="200" style="float: right; padding: 16px;">
-Full documentation can be found at [Documentation/autosuggest.md](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/autosuggest.md).
+<img src="Documentation/Autosuggest/autosuggest.png" width="200" style="float: right; padding: 16px;">
+Full documentation can be found at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
 
 
 An iOS UIKit example project can be found at [Examples/TextField/TextField.xcodeproj](Examples/TextField/TextField.xcodeproj)
@@ -64,8 +64,8 @@ This conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any address
 ---------------------- 
 
 ### AutoSuggest Search Controller
-<img src="Documentation/searchcontroller.png" width="200"  style="float: right; padding: 16px;">
-Full documentation can be found  at [Documentation/autosuggest.md](https://github.com/what3words/w3w-swift-components/blob/master/Documentation/autosuggest.md).
+<img src="Documentation/Autosuggest/searchcontroller.png" width="200"  style="float: right; padding: 16px;">
+Full documentation can be found  at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
 
 
 An iOS UIKit example project can be found at [Examples/TextField/TextField.xcodeproj](Examples/TextField/TextField.xcodeproj)
@@ -79,7 +79,7 @@ Map Helper
 -------------------
 Map Helper allows you to easily integrate what3words map features into an existing map.
 
-`W3WMapHelper` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/map.md](./Documentation/map.md)
+`W3WMapHelper` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 An iOS UIKit example project can be found at [Examples/MapHelper/MapHelper.xcodeproj](Examples/MapHelper/MapHelper.xcodeproj)
 
@@ -93,8 +93,8 @@ If your app already has a ViewController that has a map, `W3WMapHelper` provides
 <a name="mapview"></a>
 Map View
 --------
-<img src="Documentation/map.png" width="100"  style="float: right; padding: 16px;">
-`W3WMapView` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/map.md](./Documentation/map.md)
+<img src="Documentation/Map/map.png" width="100"  style="float: right; padding: 16px;">
+`W3WMapView` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 An iOS UIKit example project can be found at [Examples/MapView/MapView.xcodeproj](Examples/MapView/MapView.xcodeproj)
 
@@ -107,7 +107,7 @@ We created `W3WMapView` as a quick and dirty way to quickly get what3words funct
 
 Simply replace your MKMapView with W3WMapView, and your app should behave the same as before except it will draw what3words grid lines, and have some new functions available, like `show("filled.count.soap")`. 
 
-It's derived from `MKMapView` but Apple does not reccomend deriving new objects from MKMapView presumably because it's interface could change in the future, so view this as a quick and dirty way to get the functionality into your app. 
+It's derived from `MKMapView` but Apple does not recommend deriving new objects from MKMapView presumably because it's interface could change in the future, so view this as a quick and dirty way to get the functionality into your app. 
 
 The better approach would be to use `W3WMapHelper` which is designed to fit nicely into your `MKMapViewDelegate` conforming class, presumably a `UIViewController`.
 
@@ -115,8 +115,8 @@ The better approach would be to use `W3WMapHelper` which is designed to fit nice
 <a name="mapviewcontroller"></a>
 Map Component
 -------------
-<img src="Documentation/mapcomponent.png" width="100"  style="float: right; padding: 16px;">
-`W3WMapViewController` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/map.md](./Documentation/map.md)
+<img src="Documentation/Map/mapcomponent.png" width="100"  style="float: right; padding: 16px;">
+`W3WMapViewController` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 The iOS UIKit example project can be found at [Examples/MapComponent/MapComponent.xcodeproj](Examples/MapComponent/MapComponent.xcodeproj)
 
@@ -133,8 +133,8 @@ If you have no map in your app and want to quickly include one with some default
 
 
 
-System Settings
----------------
+Settings
+--------
 
 #### Measurements
 
@@ -143,4 +143,10 @@ The measurement system in these components are set to the user's preference or l
 ```swift
 W3WSettings.measurement = .metric
 ```
+
+#### Localizations
+
+The W3WAutosuggest components have been translated into about 50 languages, and `Localizable.strings` files for these are in the Resources of this package.  In order for them to work, as with any iOS localisation settings, be sure to add the languages you want to use in your project settings under **Info** -> **Localizations**.
+
+
 

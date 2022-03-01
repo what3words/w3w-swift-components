@@ -11,7 +11,7 @@ import MapKit
 import W3WSwiftApi
 
 
-public protocol W3WMapViewProtocol: AnyObject, W3WMapKitCompatibility { //}: W3WMapGrid, W3WMapPins, W3WMapSquares {
+public protocol W3WMapViewProtocol: AnyObject, W3WMapKitCompatibility, W3WMapProtocol {
   var w3wMapView: MKMapView { get }
   var w3wMapData:W3WMapData? { get set }
 
@@ -23,7 +23,7 @@ public protocol W3WMapViewProtocol: AnyObject, W3WMapKitCompatibility { //}: W3W
 
 extension W3WMapViewProtocol {
   
-  
+  /// set the language to use for three word addresses when they need to be looked up
   public func set(language: String) {
     w3wMapData?.set(language: language)
   }

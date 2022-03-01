@@ -5,7 +5,7 @@ Overview
 
 This is a tutorial for using `W3WObjcAutoSuggestTextField`.
 
-<img src="autosuggest.png" width="250">
+<img src="../Autosuggest/autosuggest.png" width="250">
 
 `W3WObjcAutoSuggestTextField` is derived from `UITextField`
 
@@ -33,7 +33,7 @@ https://github.com/what3words/w3w-swift-components.git
 
 Xcode should now automatically install `w3w-swift-components`, and `w3w-swift-api`
 
-<img src="swiftpm.png" width="640" style="padding: 16px;">
+<img src="../Images/swiftpm.png" width="640" style="padding: 16px;">
 
 #### Write Code
 
@@ -88,7 +88,7 @@ Add the following to your view controller's `-(void)viewDidLoad`:
 
 Give the app a run; type 'filled.count.soa' into the text field, and you should see:
 
-<img src="phone.png" style="padding: 16px;">
+<img src="../Images/phone.png" style="padding: 16px;">
 
 If you get an error, check that you used your own API key.
 
