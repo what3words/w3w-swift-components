@@ -54,7 +54,7 @@ class W3WSubviewManager {
     }
     
     //DispatchQueue.main.async {
-    UIView.animate(withDuration: 0.3, animations: {
+    UIView.animate(withDuration: 0.03, animations: {
 
       var yLine = insets.top // W3WSettings.uiIndent * 2.0 + insets.top
       
@@ -95,7 +95,7 @@ class W3WSubviewManager {
         if !subView.isHidden {
           var width = view.frame.size.width - W3WSettings.uiIndent * 4.0 - insets.left - insets.right
           if view.frame.width > view.frame.height {
-            width = view.frame.size.height - (W3WSettings.uiIndent * 4.0)
+            width = min(view.frame.size.width / 2.0, view.frame.size.height - (W3WSettings.uiIndent * 4.0))
           }
           subView.frame = CGRect(x: W3WSettings.uiIndent * 2.0 + insets.left, y: yLine, width: width, height: 40.0)
         }

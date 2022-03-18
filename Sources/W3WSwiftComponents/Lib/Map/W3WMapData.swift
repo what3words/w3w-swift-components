@@ -22,14 +22,8 @@ public struct W3WMapData {
   @available(iOS 13, *)
   lazy var gridRenderer: W3WMapGridRenderer? = nil
   
-//  /// allows other things like button s to be placed on the map
-//  var subViews = W3WSubviewManager()
-  
   /// highighted individual squares on the map
   var squares = [W3WSquare]()
-  
-  /// renderer for squares
-  //var squaresRenderer: W3WMapSquaresRenderer? = nil
   
   /// the service to get the grid line data from
   var w3w: W3WProtocolV3?
