@@ -16,12 +16,11 @@ import W3WSwiftApi
 
 
 open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, W3WMapViewProtocol {
-  
 
   /// called when the user taps a square in the map
   public var onSquareSelected: (W3WSquare) -> () = { _ in }
   
-  /// called when the user taps a square in the map
+  /// called when the user taps a square that has a marker added to it
   public var onMarkerSelected: (W3WSquare) -> () = { _ in }
   
   /// returns the error enum for any error that occurs
@@ -60,7 +59,7 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
     w3wMapView.delegate = mapHelper
     
     // if a marker was tapped
-    mapHelper?.onMarkerTapped = { square in
+    mapHelper?.onMarkerSelected = { square in
       self.onMarkerSelected(square)
     }
     

@@ -19,7 +19,7 @@ public class W3WMapHelper: NSObject, W3WMapViewProtocol, MKMapViewDelegate {
   public var onError: W3WMapErrorResponse = { _ in }
   
   /// called when an annotation is tapped
-  public var onMarkerTapped: (W3WSquare) -> () = { _ in }
+  public var onMarkerSelected: (W3WSquare) -> () = { _ in }
 
   
   public var overlays: [MKOverlay] {
@@ -126,7 +126,7 @@ public class W3WMapHelper: NSObject, W3WMapViewProtocol, MKMapViewDelegate {
   public func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
     if let markerView = view.annotation as? W3WAnnotation {
       if let square = markerView.square {
-        onMarkerTapped(square)
+        onMarkerSelected(square)
       }
     }
   }

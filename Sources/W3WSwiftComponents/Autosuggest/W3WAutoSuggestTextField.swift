@@ -132,8 +132,10 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   public func set(display: W3WSuggestion?) {
     if let suggestion = display {
       let t = W3WFormatter.ensureSlashes(text: suggestion.words)
-      text = t?.string
-      autoSuggestViewController.hideSuggestions()
+      DispatchQueue.main.async {
+        self.text = t?.string
+        self.autoSuggestViewController.hideSuggestions()
+      }
     }
   }
   

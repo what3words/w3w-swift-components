@@ -355,7 +355,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = ../..;
 			requirement = {
-				branch = master;
+				branch = "dd-renaming";
 				kind = branch;
 			};
 		};
