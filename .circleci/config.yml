@@ -2,7 +2,6 @@ version: 2.1
 
 jobs: # a basic unit of work in a run
   test: # your job name
-    circleci_ip_ranges: true
     macos:
       xcode: 13.2.1 # version of Xcode
     steps:
