@@ -50,11 +50,11 @@ class ViewController: UIViewController, MKMapViewDelegate {
     mapView.delegate = self
     
     // show a square on the map
-    mapHelper.show("filled.count.soap")
+    mapHelper.addMarker(at: "filled.count.soap")
 
     // other things to try instead
-    //mapHelper.show("filled.count.soap", camera: .center)
-    //mapHelper.show("daring.lion.race", camera: .none, color: .blue, style: .pin)
+    //mapHelper.addMarker(at: "filled.count.soap", camera: .center)
+    //mapHelper.addMarker(at: "daring.lion.race", camera: .none, color: .blue)
 
   }
   

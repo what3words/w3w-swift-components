@@ -108,7 +108,7 @@ let mapview = W3WMapView(api)
 
 We created `W3WMapView` as a quick and dirty way to quickly get what3words functionality into your app.  
 
-Simply replace your MKMapView with W3WMapView, and your app should behave the same as before except it will draw what3words grid lines, and have some new functions available, like `show("filled.count.soap")`. 
+Simply replace your MKMapView with W3WMapView, and your app should behave the same as before except it will draw what3words grid lines, and have some new functions available, like `addMarker(at: "filled.count.soap")`. 
 
 It's derived from `MKMapView` but Apple does not recommend deriving new objects from MKMapView presumably because it's interface could change in the future, so view this as a quick and dirty way to get the functionality into your app. 
 

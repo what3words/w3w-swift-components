@@ -35,13 +35,13 @@ class ViewController: W3WMapViewController {
     
     // when an autosuggest suggestion is selected from the text field, show it on the map and clear previous selections
     textField.onSuggestionSelected = { suggestion in
-      self.hideAll()
-      self.show(suggestion, camera: .zoom)
+      self.removeAllMarkers()
+      self.addMarker(at: suggestion, camera: .zoom)
     }
     
     // when a point on the map is touched, highlight that square, and put it's word into the text field
     self.onSquareSelected = { square in
-      self.show(square, camera: .center)
+      self.addMarker(at: square, camera: .center)
       textField.set(display: square)
     }
     
@@ -52,7 +52,7 @@ class ViewController: W3WMapViewController {
     // if the is an error then put it into an alert
     onError = { error in self.showError(error: error) }
     
-    show("filled.count.soap", camera: .zoom)
+    addMarker(at: "filled.count.soap", camera: .zoom)
   }
   
   

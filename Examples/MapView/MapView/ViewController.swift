@@ -15,7 +15,7 @@ import W3WSwiftComponents
 /// what3words functionality into your app.  Simply replace your
 /// MKMapView with W3WMapView, and your app should behave the same
 /// as before except it will draw what3words grid lines, and have
-/// some new functions available, like `show("filled.count.soap")`.
+/// some new functions available, like `addMarker(at: "filled.count.soap").
 /// Apple does not reccomend deriving new objects from MKMapView
 /// as it's interface could change in the future, so view this as a
 /// quick and dirty way to get the functionality into your app. The
@@ -41,19 +41,21 @@ class ViewController: UIViewController {
     mapView.onError = { error in self.showError(error: error) }
     
     // show a square on the map
-    mapView.show("filled.count.soap", camera: .zoom)
+    mapView.addMarker(at: "filled.count.soap", camera: .zoom)
     
     // try these ones too!
-    //mapView.show(["filled.count.soap", "digits.return.object"])
-    //mapView.show(["input.caring.brain", "snitch.straw.coaching", "graphics.swam.winded"])
+    //mapView.addMarker(at: ["filled.count.soap", "digits.return.object"])
+    //mapView.addMarker(at: ["input.caring.brain", "snitch.straw.coaching", "graphics.swam.winded"])
     
     // Or, show the results of an autosuggest call:
     //api.autosuggest(text: "filled.count.r", options: [W3WOption.clipToCountry("GB"), W3WOption.numberOfResults(25)]) { suggestions, error in
-    //  if let e = error {
-    //    self.showError(error: e)
-    //  }
+    //  DispatchQueue.main.async {
+    //    if let e = error {
+    //      self.showError(error: e)
+    //    }
     //
-    //  self.mapView.show(suggestions)
+    //    self.mapView.addMarker(at: suggestions)
+    //  }
     //}
   }
   

@@ -424,9 +424,11 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   func highlightCellOnTextMatch() {
     DispatchQueue.main.async {
       if let words = self.delegate?.getCurrentText() {
-        for cell in self.tableView.visibleCells {
-          if let c = cell as? W3WSuggestionTableViewCell {
-            c.set(highlight: W3WAddress.equal(w1: c.suggestion?.words ?? "", w2: words)) //c.suggestion?.words == words)
+        if self.autoSuggestDataSource.suggestions.count > 0 {
+          for cell in self.tableView.visibleCells {
+            if let c = cell as? W3WSuggestionTableViewCell {
+              c.set(highlight: W3WAddress.equal(w1: c.suggestion?.words ?? "", w2: words)) //c.suggestion?.words == words)
+            }
           }
         }
       }

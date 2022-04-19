@@ -30,13 +30,13 @@ map.set(language: "fr") // set default language to French
 
 ----------------
 
-### show(_, camera: W3WCenterAndZoom, color: UIColor?, style: W3WMarkerStyle)
+### addMarker(at: _, camera: W3WCenterAndZoom, color: UIColor?, style: W3WMarkerStyle)
 
 Show will place an annotation on the map, if the map is zoomed in, it will appear as a square, and if zoomed out it shows as a what3words annotation icon.
 
-`show(:camera)` takes one required parameter, and three optional ones.
+`addMarker(at:camera:color)` takes one required parameter, and two optional ones.
 
-The first is the location, this can be a what3words address as a `String`, or a `W3WSuggestion`, `W3WSquare`, or a `CLLocatioinCorrdinate2D`.  
+The first is the location, this can be a what3words address as a `String`, or a `W3WSuggestion`, `W3WSquare`, or a `CLLocatioinCorrdinate2D`, or it can be an array of any of those.  
 
 Note that if you pass in a `String`, or `W3WSuggestion`, a call to `convertToCoordinates` will be made automatically to get the coordinates, and this will count towards your account quota.  This parameter can also be an array of any of the above mentioned types.
 
@@ -48,18 +48,16 @@ The second and optional parameter is called `camera` and it indicates how to mov
 
 The third and optional parameter is `color` which takes a `UIColor` color for the annotation.  This defaults to what3words brand's red.
 
-The forth and optional parameter is the type of annotation that will be drawn.  The choices are `.pin` or `.circle`.  Defaults to `.circle`
-
 **examples**
 
 ```
-map.show(square, camera: .zoom)
+map.addMarker(at:square, camera: .zoom)
 
-map.show("filled.count.soap", style: .pin)
+map.addMarker(at:"filled.count.soap", style: .pin)
 
-map.show(["filled.count.soap", "index.home.raft"], camera: .center)
+map.addMarker(at:["filled.count.soap", "index.home.raft"], camera: .center)
 
-map.show(["filled.count.soap", "index.home.raft"], color: .blue, camera: .center)
+map.addMarker(at:["filled.count.soap", "index.home.raft"], color: .blue, camera: .center)
 ```
 
 ----------------
@@ -71,30 +69,30 @@ This will hide an annotation that was previously placed on the map.  It takes on
 **examples**
 
 ```
-map.hide(square)
+map.removeMarker(at: square)
 
-map.hide("filled.count.soap")
+map.removeMarker(at: "filled.count.soap")
 
-map.hide(["filled.count.soap", "index.home.raft"])
+map.removeMarker(at: ["filled.count.soap", "index.home.raft"])
 ```
 
 ----------------
 
-### hideAll()
+### removeAllMarkers()
 
 This will remove all what3words annotations, and squares from the map.
 
 **examples**
 
 ```
-map.hideAll()
+map.removeAllMarkers()
 ```
 
 ----------------
 
 ### set(zoomInPointsPerSquare: CGFloat)
 
-This will set how near the `show("filled.count.soap", camera: .zoom)` calls will zoom.
+This will set how near the `addMarker(at: "filled.count.soap", camera: .zoom)` calls will zoom.
 
 `zoomInPointsPerSquare` is the size of squares in points when .zoom is used in a show() call.  (points being 1x, 2x, 3x a pixel depending on which device you are using and if it has a "retina" display.
 
