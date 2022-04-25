@@ -49,8 +49,8 @@ public protocol W3WMapProtocol {
   // remove what3words annotations from the map if they are present
   func removeAllMarkers()
   
-  // find a marker by it's coordinates and return it if it exists in the map
-  func findMarker(by coordinates: CLLocationCoordinate2D) -> W3WSquare?
+  // COMING SOON: find a marker by it's coordinates and return it if it exists in the map
+  //func findMarker(by coordinates: CLLocationCoordinate2D) -> W3WSquare?
   
   // sets the size of a square after .zoom is used in a show() call
   func set(zoomInPointsPerSquare: CGFloat)

@@ -96,7 +96,32 @@ final class w3w_swift_componentsTests: XCTestCase {
     
     waitForExpectations(timeout: 10.0, handler: nil)
   }
+
   
+  
+  func testMapController() {
+    let expectation = self.expectation(description: "W3W Map Component")
+    
+    let map = W3WMapViewController(api)
+    
+    map.onError = { error in
+      XCTAssertNil(error)
+      print("Error: ", error)
+    }
+    
+    let twa = "filled.count.soap"
+    map.addMarker(at: twa)
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+      let markers = map.getAllMarkers()
+      XCTAssertTrue(markers.count == 1)
+      XCTAssertTrue(markers.first?.words == twa)
+      expectation.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10.0, handler: nil)
+  }
+
 
   #endif
   

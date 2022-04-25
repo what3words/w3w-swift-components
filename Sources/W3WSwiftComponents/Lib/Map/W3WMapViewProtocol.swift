@@ -520,20 +520,23 @@ extension W3WMapViewProtocol {
     return nil
   }
   
-  
-  public func findMarker(by coordinates: CLLocationCoordinate2D) -> W3WSquare? {
-    for annotation in annotations {
-      if let a = annotation as? W3WAnnotation {
-        if let mapCoords = a.square?.coordinates {
-          if coordinates.latitude == mapCoords.latitude && coordinates.longitude == mapCoords.longitude {
-            return a.square
-          }
-        }
-      }
-    }
-    
-    return nil
-  }
+
+//  COMING SOON
+//  public func findMarker(by coordinates: CLLocationCoordinate2D) -> W3WSquare? {
+//    for annotation in annotations {
+//      if let a = annotation as? W3WAnnotation {
+//        if let mapCoords = a.square?.coordinates {
+//          w3wMapData?.w3w?.convertTo3wa(coordinates: coordinates, language: w3wMapData?.language ?? "en") { square, error in
+//            if square?.coordinates?.latitude == mapCoords.latitude && square?.coordinates?.longitude == mapCoords.longitude {
+//              return a.square
+//            }
+//          }
+//        }
+//      }
+//    }
+//
+//    return nil
+//  }
   
 
   
