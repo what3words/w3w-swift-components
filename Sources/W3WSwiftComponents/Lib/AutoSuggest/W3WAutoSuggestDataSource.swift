@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 04/07/2020.
 //
+#if !os(macOS) && !os(watchOS)
 
 import Foundation
 import UIKit
@@ -237,6 +238,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   
   /// checks if input looks like a 3 word address or not
+  @available(*, deprecated, message: "Use api.didYouMean(text:) or sdk.didYouMean(text:) instead")
   func isAlmost3wa(text: String) -> Bool {
 
     let regex = try! NSRegularExpression(pattern:W3WSettings.regex_loose_match, options: [])
@@ -331,7 +333,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       }
       
     // if the text is not a 3wa but close to one, we call to put up a 'did you mean' notice to the user
-    } else if isAlmost3wa(text: text) {
+    } else if w3w?.didYouMean(text: text) ?? false {
       let fixedText = make3waFromAlmost3wa(text: text)
       w3w?.autosuggest(text: fixedText, options: options) { suggestions, error in
         self.addToKnownAddressList(suggestions: suggestions)
@@ -582,3 +584,4 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
 }
 
 
+#endif

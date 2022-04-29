@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 04/07/2020.
 //
+#if !os(macOS) && !os(watchOS)
 
 import Foundation
 import UIKit
@@ -16,8 +17,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   // MARK: Vars
   
   /// callback for when the user choses a suggestion
-  public var suggestionSelected: W3WSuggestionResponse = { _ in }
+  lazy public var onSuggestionSelected: W3WSuggestionResponse = { suggestion in self.suggestionSelected(suggestion) }
 
+  /// To be DEPRECIATED: use onSelected instead - old callback for when the user choses a suggestion, to be depreciate
+  public var suggestionSelected: W3WSuggestionResponse = { _ in }
+  
   /// if freeFormText is enabled, this will be called everytime the text field is edited
   public var textChanged: W3WTextChangedResponse = { _ in }
 
@@ -121,6 +125,20 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     autoSuggestViewController.set(options: options)
   }
 
+  
+  /// intelligently changes the text in the field, adjusting icons to suit
+  /// - Parameters:
+  ///     - displayText: the text to display
+  public func set(display: W3WSuggestion?) {
+    if let suggestion = display {
+      let t = W3WFormatter.ensureSlashes(text: suggestion.words)
+      DispatchQueue.main.async {
+        self.text = t?.string
+        self.autoSuggestViewController.hideSuggestions()
+      }
+    }
+  }
+  
 
   /// set the color of the text in all AutosuggestTextFields globally
   /// - Parameters:
@@ -392,7 +410,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   public func update(selected: W3WSuggestion) {
     if let words = selected.words {
       update(text: W3WAddress.ensureLeadingSlashes(words))
-      suggestionSelected(selected)
+      onSuggestionSelected(selected)
       textChanged(words)
       dismissKeyboard()
       DispatchQueue.main.async {
@@ -530,7 +548,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       if autoSuggestViewController.autoSuggestDataSource.is3wa(text: words) {
         DispatchQueue.main.async {
           if self.autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: words) {
-            self.suggestionSelected(W3WApiSuggestion(words: words))
+            self.onSuggestionSelected(W3WApiSuggestion(words: words))
             self.textChanged(words)
             self.resignFirstResponder()
             self.autoSuggestViewController.hideSuggestions()
@@ -545,3 +563,5 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
 }
+
+#endif

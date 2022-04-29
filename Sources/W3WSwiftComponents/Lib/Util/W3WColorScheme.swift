@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 19/07/2021.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -21,7 +22,7 @@ typealias W3WColorPalette = Dictionary<String, Dictionary<W3WColourMode, UIColor
 
 
 /// contains a colourpalette for an app and hard coded w3w brand color values
-struct W3WColorScheme {
+public struct W3WColorScheme {
   
   /// default colour scheme
   var colors: W3WColorPalette = ["black" : [.light:.black, .dark:.white], "white" : [.light : .white, .dark:.white]]
@@ -59,11 +60,35 @@ struct W3WColorScheme {
   
   // will be used for dark mode - not quite ready yet
   static var colourMode: W3WColourMode {
+#if !os(watchOS)
     if #available(iOS 12, *) {
        return UIScreen.main.traitCollection.userInterfaceStyle == .light ? W3WColourMode.light : W3WColourMode.dark
     } else {
       return W3WColourMode.light
     }
+#else
+    return W3WColourMode.light
+#endif
+  }
+ 
+  
+  static public func isLight(colour: UIColor, threshold: Float = 0.5) -> Bool {
+    let originalCGColor = colour.cgColor
+    
+    // Now we need to convert it to the RGB colorspace. UIColor.white / UIColor.black are greyscale and not RGB.
+    // If you don't do this then you will crash when accessing components index 2 below when evaluating greyscale colors.
+    let rgbCgColor = originalCGColor.converted(to: CGColorSpaceCreateDeviceRGB(), intent: .defaultIntent, options: nil)
+    guard let components = rgbCgColor?.components else {
+      return false
+    }
+    guard components.count >= 3 else {
+      return false
+    }
+    
+    let brightness = Float(((components[0] * 299) + (components[1] * 587) + (components[2] * 114)) / 1000)
+    return (brightness > threshold)
   }
   
 }
+
+#endif

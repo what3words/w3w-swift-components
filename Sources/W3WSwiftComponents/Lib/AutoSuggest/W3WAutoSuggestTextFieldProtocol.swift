@@ -15,7 +15,8 @@ public typealias W3WAutoSuggestTextFieldErrorResponse = (W3WAutosuggestComponent
 
 /// interface for text field type components
 public protocol W3WAutoSuggestTextFieldProtocol: AnyObject, W3WOptionAcceptorProtocol {
-  var suggestionSelected: W3WSuggestionResponse { get set }
+  var onSuggestionSelected: W3WSuggestionResponse { get set }
+  var suggestionSelected: W3WSuggestionResponse { get set }  /// DEPRECIATED: use onSuggestionSelected instead - old callback for when the user choses a suggestion, to be depreciate
   var textChanged: W3WTextChangedResponse { get set }
   var onError: W3WAutoSuggestTextFieldErrorResponse { get set }
   func set(_ w3w: W3WProtocolV3, language: String)
@@ -23,10 +24,9 @@ public protocol W3WAutoSuggestTextFieldProtocol: AnyObject, W3WOptionAcceptorPro
   func set(allowInvalid3wa: Bool)
   func set(language l: String)
   func set(voice: Bool)
+  func set(display: W3WSuggestion?)
   
   /// NOTE: this causes the component to use the converToCoordinates call, which may count against your quota
   func set(includeCoordinates: Bool)
 }
-
-
 

@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 29/09/2020.
 //
+#if !os(macOS)
 
 import Foundation
 import UIKit
@@ -65,9 +66,17 @@ class W3WFormatter {
       }
     } else {
       if weight == .semibold {
+        #if os(watchOS)
+        font = UIFont.systemFont(ofSize: W3WSettings.systemFontSizeForWatchOS, weight: .semibold)
+        #else
         font = UIFont.systemFont(ofSize: UIFont.systemFontSize, weight: .semibold)
+        #endif
       } else {
+        #if os(watchOS)
+        font = UIFont.systemFont(ofSize: W3WSettings.systemFontSizeForWatchOS, weight: .regular)
+        #else
         font = UIFont.systemFont(ofSize: UIFont.systemFontSize, weight: .regular)
+        #endif
       }
     }
 
@@ -133,3 +142,6 @@ class W3WFormatter {
   }
 
 }
+
+
+#endif

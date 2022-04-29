@@ -5,9 +5,12 @@
 //  Created by Dave Duprey on 29/09/2020.
 //
 
+import Foundation
 import W3WSwiftApi
-import UIKit
 
+#if !os(macOS)
+import UIKit
+#endif
 
 /// mertic imperial or default from the system
 public enum W3WMesurementSystem {
@@ -25,8 +28,10 @@ public extension W3WSettings {
   static var measurement = W3WMesurementSystem.system
   static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? W3WSettings.defaultLanguage) == Locale.LanguageDirection.leftToRight)
   
-  // MARK:- Colours
-  
+  // MARK: Colours
+
+  #if !os(macOS)
+
   static internal var colorPalette:W3WColorPalette =
     [
       "SlashesColor"        : [.light: W3WColorScheme.w3wRed],
@@ -59,7 +64,8 @@ public extension W3WSettings {
       
       "MapGridColor"        : [.light: W3WColorScheme.w3wSupportMediumGrey,   .dark: W3WColorScheme.w3wSupportMediumGrey],
       "MapSquareColor"      : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wSupportLightGrey],
-      "MapPinColor"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wRed]
+      "MapPinColor"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wRed],
+      "MapCircleColor"      : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wRed]
     ]
 
   
@@ -88,6 +94,7 @@ public extension W3WSettings {
     }
   }
   
+  #endif
   
   // MARK: Text
   
@@ -102,12 +109,47 @@ public extension W3WSettings {
   static let componentsLogoSize           = CGFloat(64.0)
   static let componentsTextFieldWidth     = CGFloat(300.0)
   static let componentsTextFieldHeight    = CGFloat(48.0)
+  static let systemFontSizeForWatchOS     = CGFloat(12.0)
 
   // display text
-  static let componentsPlaceholderText    = NSLocalizedString("input_hint",               bundle: Bundle.module, comment: "e.g. ///lock.spout.radar")
-  static let componentsNearFormatText     = NSLocalizedString("near",                     bundle: Bundle.module, comment: "near %@")  // used to say NSLocalizedString("near %@", comment: "near %@"), but we need translations for this
-  static let technicalErrorText           = NSLocalizedString("error_message", 	          bundle: Bundle.module, comment: "There was some technical problem")
-  static let apiErrorText                 = NSLocalizedString("invalid_address_message",  bundle: Bundle.module, comment: "The API didn't have an answer for the given input")
-  static let didYouMeanText               = NSLocalizedString("correction_message",       bundle: Bundle.module, comment: "Asks if the user meant to write a different addres that is presented below this text")
+  static let componentsPlaceholderText    = diviseTranslation(tag: "input_hint",              backup: "e.g. ///index.home.raft")
+  static let componentsNearFormatText     = diviseTranslation(tag: "near",                    backup: "near ${PARAM}")
+  static let technicalErrorText           = diviseTranslation(tag: "error_message",           backup: "An error occurred. Please try later.")
+  static let apiErrorText                 = diviseTranslation(tag: "invalid_address_message", backup: "No valid what3words address found")
+  static let didYouMeanText               = diviseTranslation(tag: "correction_message",      backup: "Did you mean?")
+
+  static func diviseTranslation(tag: String, backup: String) -> String {
+    var translation = NSLocalizedString(tag, bundle: Bundle.module, comment: backup)
+    
+    // near is a special case, if a translation is not available then we drop 'near' and just return the value, usually 'nearestPlace'
+    if translation == "near" {
+      translation = "${PARAM}"
+      
+    // if the translation is missing then use the default
+    } else if translation == tag {
+      translation = backup
+    }
+    
+    return translation.replacingOccurrences(of: "${PARAM}", with: "%@")
+  }
+  
+  
+  // MARK: Geometry
+
+  static var uiIndent             = CGFloat(8.0)
+  static let pinSize   = CGFloat(40.0)
+  static let pinOffset = CGFloat(5.0)
+  static let mapSquareLineThickness = CGFloat(2.0)
+  static let mapGridLineThickness    = CGFloat(0.5)
+  
+  
+  // MARK: Geography
+  
+  static let mapDefaultZoomPointsPerSquare          = CGFloat(32.0)
+  static let mapGridInvisibleAtPointsPerSquare      = CGFloat(11.0)
+  static let mapGridOpaqueAtPointsPerSquare         = CGFloat(11.001)
+  static let mapAnnotationTransitionPointsPerSquare = CGFloat(12.0)
+  
+
   
 }

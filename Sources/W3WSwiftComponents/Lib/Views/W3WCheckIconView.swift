@@ -5,6 +5,7 @@
 //  Created by Dave Duprey on 07/02/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
+#if !os(macOS) && !os(watchOS)
 
 import UIKit
 import W3WSwiftApi
@@ -59,3 +60,4 @@ public class W3WCheckIconView: W3WDrawingView {
   
 }
 
+#endif

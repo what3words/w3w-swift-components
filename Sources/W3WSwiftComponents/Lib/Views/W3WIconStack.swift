@@ -5,6 +5,7 @@
 //  Created by Dave Duprey on 05/10/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
+#if !os(macOS) && !os(watchOS)
 
 import UIKit
 
@@ -98,3 +99,5 @@ class W3WIconStack: UIView {
   
   
 }
+
+#endif

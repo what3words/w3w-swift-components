@@ -5,6 +5,8 @@
 //  Created by Lshiva on 17/05/2020.
 //  Copyright © 2020 what3words. All rights reserved.
 //
+#if !os(macOS)
+
 
 import Foundation
 import UIKit
@@ -13,6 +15,7 @@ import UIKit
 // MARK: UIView
 
 
+#if !os(watchOS)
 extension UIView {
   var w3wParentViewController: UIViewController? {
     var parentResponder: UIResponder? = self
@@ -25,7 +28,7 @@ extension UIView {
     return nil
   }
 }
-
+#endif
 
 // MARK: UIColor
 
@@ -84,3 +87,5 @@ public extension NSAttributedString {
   
 }
 
+
+#endif

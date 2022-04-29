@@ -4,11 +4,11 @@
 //
 //  Created by Dave Duprey on 04/07/2020.
 //
+#if !os(macOS) && !os(watchOS)
 
 import Foundation
 import UIKit
 import W3WSwiftApi
-//import W3WSwiftComponents
 
 
 /// protocol for talking to the textfield, either a W3WAutosuggestTextField, or W3WAutosuggestSearcController at this point
@@ -424,9 +424,11 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   func highlightCellOnTextMatch() {
     DispatchQueue.main.async {
       if let words = self.delegate?.getCurrentText() {
-        for cell in self.tableView.visibleCells {
-          if let c = cell as? W3WSuggestionTableViewCell {
-            c.set(highlight: W3WAddress.equal(w1: c.suggestion?.words ?? "", w2: words)) //c.suggestion?.words == words)
+        if self.autoSuggestDataSource.suggestions.count > 0 {
+          for cell in self.tableView.visibleCells {
+            if let c = cell as? W3WSuggestionTableViewCell {
+              c.set(highlight: W3WAddress.equal(w1: c.suggestion?.words ?? "", w2: words)) //c.suggestion?.words == words)
+            }
           }
         }
       }
@@ -687,3 +689,4 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
 }
 
 
+#endif

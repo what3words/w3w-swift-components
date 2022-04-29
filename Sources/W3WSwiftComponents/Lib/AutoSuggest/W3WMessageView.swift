@@ -4,6 +4,7 @@
 //
 //  Created by Dave Duprey on 11/08/2021.
 //
+#if !os(macOS) && !os(watchOS)
 
 import Foundation
 import UIKit
@@ -54,3 +55,5 @@ class W3WMessageView: UIView {
   
   
 }
+
+#endif

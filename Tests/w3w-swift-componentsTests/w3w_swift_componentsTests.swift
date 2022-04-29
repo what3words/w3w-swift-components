@@ -1,6 +1,7 @@
 import XCTest
 @testable import W3WSwiftComponents
 import W3WSwiftApi
+import CoreLocation
 
 final class w3w_swift_componentsTests: XCTestCase {
   
@@ -11,12 +12,41 @@ final class w3w_swift_componentsTests: XCTestCase {
     
     if let apikey = ProcessInfo.processInfo.environment["APIKEY"] {
       api = What3WordsV3(apiKey: apikey)
+    } else if let apikey = getApikeyFromFile() {
+      api = What3WordsV3(apiKey: apikey)
     } else {
       print("Environment variable APIKEY must be set")
       abort()
     }
   }
+
   
+  func getApikeyFromFile() -> String? {
+    var apikey: String? = nil
+    
+    let url = URL(fileURLWithPath: "/tmp/key.txt")
+    if let key = try? String(contentsOf: url, encoding: .utf8) {
+      apikey = key.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    return apikey
+  }
+  
+  
+  func testApi() {
+    let expectation = self.expectation(description: "Convert To 3wa")
+    api.convertTo3wa(coordinates: CLLocationCoordinate2D(latitude: 51.521238, longitude: -0.203607), language: "en") { (place, error) in
+      
+      XCTAssertEqual(place?.words, "index.home.raft")
+      XCTAssertNil(error)
+      
+      expectation.fulfill()
+    }
+    waitForExpectations(timeout: 3.0, handler: nil)
+  }
+  
+  
+  #if !os(macOS) && !os(watchOS)
 
   
   func testTextfield() {
@@ -25,6 +55,11 @@ final class w3w_swift_componentsTests: XCTestCase {
     let vc = UIViewController()
     let field = W3WAutoSuggestTextField(api)
     vc.view.addSubview(field)
+    
+    field.onError = { error in
+      XCTAssertNil(error)
+      print("Error: ", error)
+    }
     
     let twa = "filled.count.soa"
     _ = field.textField(field, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: twa)
@@ -45,6 +80,11 @@ final class w3w_swift_componentsTests: XCTestCase {
     let field = W3WAutoSuggestSearchController()
     field.set(api)
     
+    field.onError = { error in
+      XCTAssertNil(error)
+      print("Error: ", error)
+    }
+
     let twa = "filled.count.soa"
     _ = field.searchBar(field.searchBar, shouldChangeTextIn: NSRange(location: 0, length: 0), replacementText: twa)
     
@@ -56,6 +96,33 @@ final class w3w_swift_componentsTests: XCTestCase {
     
     waitForExpectations(timeout: 10.0, handler: nil)
   }
-  
 
+  
+  
+  func testMapController() {
+    let expectation = self.expectation(description: "W3W Map Component")
+    
+    let map = W3WMapViewController(api)
+    
+    map.onError = { error in
+      XCTAssertNil(error)
+      print("Error: ", error)
+    }
+    
+    let twa = "filled.count.soap"
+    map.addMarker(at: twa)
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+      let markers = map.getAllMarkers()
+      XCTAssertTrue(markers.count == 1)
+      XCTAssertTrue(markers.first?.words == twa)
+      expectation.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10.0, handler: nil)
+  }
+
+
+  #endif
+  
 }

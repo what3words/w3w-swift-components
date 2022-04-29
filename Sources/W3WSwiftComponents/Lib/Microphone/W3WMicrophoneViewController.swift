@@ -5,6 +5,7 @@
 //  Created by Dave Duprey on 13/07/2020.
 //  Copyright © 2020 Dave Duprey. All rights reserved.
 //
+#if !os(macOS) && !os(watchOS)
 
 import UIKit
 import W3WSwiftApi
@@ -307,3 +308,6 @@ open class W3WMicrophoneViewController: UIViewController {
   }
   
 }
+
+
+#endif

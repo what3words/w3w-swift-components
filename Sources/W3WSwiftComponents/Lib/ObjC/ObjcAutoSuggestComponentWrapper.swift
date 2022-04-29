@@ -9,6 +9,7 @@
 //
 //  Created by Dave Duprey on 24/03/2021.
 //
+#if !os(macOS) && !os(watchOS)
 
 import Foundation
 import UIKit
@@ -50,7 +51,7 @@ public class W3WObjcAutoSuggestTextField: W3WAutoSuggestTextField {
   
   /// Sets a closure that gets called when the user selects an address
   public func setSuggestionCallback(_ callback: @escaping (W3WObjcSuggestion) -> ()) {
-    self.suggestionSelected = { suggestion in
+    self.onSuggestionSelected = { suggestion in
       let s = W3WObjcSuggestion(suggestion: suggestion)
       callback(s)
     }
@@ -109,7 +110,7 @@ public class W3WObjcAutoSuggestSearchController: W3WAutoSuggestSearchController 
 
   /// Sets a closure that gets called when the user selects an address
   public func setSuggestionCallback(_ callback: @escaping (W3WObjcSuggestion) -> ()) {
-    self.suggestionSelected = { suggestion in
+    self.onSuggestionSelected = { suggestion in
       let s = W3WObjcSuggestion(suggestion: suggestion)
       callback(s)
     }
@@ -135,3 +136,5 @@ public class W3WObjcAutoSuggestSearchController: W3WAutoSuggestSearchController 
 
 }
 
+
+#endif

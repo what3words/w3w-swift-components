@@ -3,15 +3,23 @@ version: 2.1
 jobs: # a basic unit of work in a run
   test: # your job name
     macos:
-      xcode: 12.2.0 # version of Xcode
+      xcode: 13.2.1 # version of Xcode
     steps:
       - checkout  # pull down code from
       - run:
-          name: Run Unit Tests  # xcode's 'swift test' doesn't yet allow specifying iOS only, and this package does not work on macOS, so all we do here for the time being is build the app to check it at least can compile.  
+          name: Run Unit Tests  # we must build the package's tests as an iOS exectuable, and output the profile data, then send that to sonar. Also, a kluge was required to get the apikey in place
           command: |-
             for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip; ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
-            xcodebuild -scheme w3w-swift-components -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
-            #xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11'
+            brew install sonar-scanner
+            ./.circleci/getkey.sh
+            xcodebuild -scheme w3w-swift-components test -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' -enableCodeCoverage YES -derivedDataPath .build
+            PROFDATA_FILE=$(find . -name '*.profdata')
+            xcrun llvm-cov show .build/Build/Products/Debug-iphonesimulator/w3w-swift-componentsTests.xctest/w3w-swift-componentsTests -instr-profile $PROFDATA_FILE > .build/cov.txt
+            sonar-scanner -Dsonar.projectKey=what3words_w3w-swift-components -Dsonar.organization=what3words -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN -Dsonar.sources=Sources -Dsonar.swift.coverage.reportPath=.build/cov.txt
+            cd Tests/TestProjectTextField
+            xcodebuild -project TextField.xcodeproj -scheme TextField -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' APIKEY=$APIKEY test
+            cd ../../Tests/TestProjectMap
+            xcodebuild -project TestProjectMap.xcodeproj -scheme TestProjectMap -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' APIKEY=$APIKEY test
           
 workflows:
   version: 2
