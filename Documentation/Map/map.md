@@ -62,7 +62,7 @@ map.addMarker(at:["filled.count.soap", "index.home.raft"], color: .blue, camera:
 
 ----------------
 
-### hide()
+### removeMarker(at:)
 
 This will hide an annotation that was previously placed on the map.  It takes one parameter and like `show()`, it can be a what3words address as a `String`, or a `W3WSuggestion`, `W3WSquare`, or a `CLLocatioinCorrdinate2D`, or arrays of those types.
 

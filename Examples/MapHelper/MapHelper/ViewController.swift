@@ -75,7 +75,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
   }
   
   
-  /// Tells the delegate that the region displayed by the map view is about to change.
+  /// Tells the delegate that the region displayed by the map view is about to change, this can be omited as it is called just before a move, and it might be overkill.
   public func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
     mapHelper.updateMap() // Updates the map view with annotations and lines
   }
