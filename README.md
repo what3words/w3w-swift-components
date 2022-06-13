@@ -4,15 +4,19 @@
 Overview
 --------
 
-A Swift library for what3words UI components. These depend on the [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper).
+A Swift library for what3words UI components. This Swift Components Package provides a straightforward way to add what3word interface functionality your app such as autosuggest text fields, map views, or what3words grid lines into your app.
 
-For information on using this package with Objective-C read [this](./Documentation/ObjectiveC/ObjectiveC.md)
+It includes:
 
-If you are upgrading from any version 1.x.x, see the [upgrade guide](./Documentation/PreviousVersions/UpgradeFromV1.md).
+* An Autosuggest Component available as a UITextField, or UISearchController
+* Map Components providing straightforward ways to include what3words squares on your MKMapView, or a full featured map view controller.
 
-#### Compatibility
+#### Notes
 
-These components work with **iOS 9.0** or higher.
+* These components work with **iOS 9.0** or higher.
+* This package depends on the [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper).
+* For information on using this package with Objective-C read [this](./Documentation/ObjectiveC/ObjectiveC.md).  
+* If you are upgrading from any version 1.x.x, see the [upgrade guide](./Documentation/PreviousVersions/UpgradeFromV1.md).
 
 <a name="installation"></a>
 Installation
@@ -53,28 +57,22 @@ Components
 
 <img src="Documentation/Autosuggest/autosuggest.png" width="200" style="float: right; padding: 16px;">
 
-Full documentation can be found at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
-
+The `W3WAutoSuggestTextField` is a `UITextField` that will suggest three word addresses as the user enters text. Optionally, there is a voice recognition option.
 
 An iOS UIKit example project can be found at [Examples/TextField/TextField.xcodeproj](Examples/TextField/TextField.xcodeproj)
 
-`W3WAutoSuggestTextField` is a `UITextField` that will suggest three word addresses as the user types.  
-
-This conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any addresses the user choses, as well as to set options.
+This conforms to our `W3WAutoSuggestTextFieldProtocol`.  As such, the interface is documented at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
 
 ---------------------- 
 
 ### AutoSuggest Search Controller
 <img src="Documentation/Autosuggest/searchcontroller.png" width="200"  style="float: right; padding: 16px;">
 
-Full documentation can be found  at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
+The `W3WAutoSuggestSearchController` is a `UISearchController` that will suggest three word addresses as the user enters text. This allows embedding this functionality in things such as`UINavigationController`. Optionally, there is a voice recognition option.
 
+An iOS UIKit example project can be found at [Examples/SearchController/SearchController.xcodeproj](Examples/SearchController/SearchController.xcodeproj)
 
-An iOS UIKit example project can be found at [Examples/TextField/TextField.xcodeproj](Examples/TextField/TextField.xcodeproj)
-
-`W3WAutoSuggestSearchController` is a `UISearchController` that will suggest three word addresses as the user types.  This allows embedding this functionality in things such as`UINavigationController` and `MKMap`
-
-This also conforms to our `W3WAutoSuggestTextFieldProtocol` for returning any addresses the user choses, as well as to set options.
+This conforms to our `W3WAutoSuggestTextFieldProtocol`.  As such, the interface is documented at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
 
 <a name="maphelper"></a>
 Map Helper
