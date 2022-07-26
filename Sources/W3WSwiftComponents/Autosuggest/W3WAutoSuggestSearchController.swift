@@ -75,7 +75,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   ///     - language: a ISO two letter language code
   public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
     autoSuggestViewController.set(w3w)
-    configure()
+    position()
     
     // this can affect voice ability, reset the voice icon
     set(voice: voiceEnabled)
@@ -156,7 +156,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
 
   
   /// makes nessesary initialization, called by init()s
-  func configure() {
+  func position() {
     autoSuggestViewController.delegate = self
     set(options: [W3WOption.voiceLanguage(language)])
     isActive = true
@@ -387,7 +387,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   }
   
   
-  func startVoice() {
+  public func startVoice() {
     self.isActive = true
     DispatchQueue.main.async {
       self.resignFirstResponder()

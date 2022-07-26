@@ -41,7 +41,7 @@ public extension W3WSettings {
       "ErrorBackground"     : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wSecondaryCoral],
       "WarningTextColor"    : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wDarkBlue],
       "WarningBackground"   : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wSecondaryCoral],
-      "BorderColor"         : [.light: W3WColorScheme.w3wSupportMediumGrey],
+      "BorderColor"         : [.light: W3WColorScheme.w3wSupportMediumGrey,   .dark: W3WColorScheme.w3wBlack],
       "SeparatorColor"      : [.light: W3WColorScheme.w3wSupportLightGrey,    .dark: W3WColorScheme.w3wSupportMediumGrey],
       "MicTextSecondary"    : [.light: W3WColorScheme.w3wSupportMediumGrey],
       "MicShadow"           : [.light: W3WColorScheme.w3wSupportDarkGrey],

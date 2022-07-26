@@ -76,7 +76,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   func set(w3w: W3WProtocolV3) {
     self.w3w = w3w
-    configure()
+    position()
     
     if let w3wApi = w3w as? What3WordsV3 {
       let headerValue = "what3words-Swift/" + W3WSettings.W3WSwiftComponentsVersion + " " + figureOutVersionInfo()
@@ -151,7 +151,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
 
 
   /// do initial set up
-  func configure() {    
+  func position() {    
     // set up the debouncer as to not call autosuggest too rapidly
     var delay = 1.0
     

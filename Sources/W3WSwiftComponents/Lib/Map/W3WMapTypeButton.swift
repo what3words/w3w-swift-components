@@ -22,23 +22,23 @@ public class W3WMapTypeButton: UIButton {
   public init(action: @escaping (MKMapType) -> ()) {
     super.init(frame: CGRect(origin: .zero, size: CGSize(width: 60.0, height: 60.0)))
     tapped = action
-    configure()
+    position()
   }
   
   
   public init() {
     super.init(frame: CGRect(origin: .zero, size: CGSize(width: 60.0, height: 60.0)))
-    configure()
+    position()
   }
   
   
   public required init?(coder: NSCoder) {
     super.init(coder: coder)
-    configure()
+    position()
   }
   
   
-  func configure() {
+  func position() {
     //layer.borderColor   = W3WSettings.color(named: "MapSquareColor").cgColor
     //layer.borderWidth    = 2.0
     layer.cornerRadius    = 30.0

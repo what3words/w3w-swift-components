@@ -66,6 +66,9 @@ public protocol W3WMapPins: AnyObject, W3WMapKitCompatibility {  // MKMapView {
 }
 
 
+#endif
+
+
 public enum W3WCenterAndZoom {
   case center
   case zoom
@@ -79,5 +82,3 @@ public enum W3WMarkerStyle {
   case circle
 }
 
-
-#endif

@@ -56,7 +56,7 @@ open class W3WDrawingView: UIView {
   // MARK: Accessors
 
 
-  func set(padding: CGFloat) {
+  public func set(padding: CGFloat) {
     insets = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
   }
   

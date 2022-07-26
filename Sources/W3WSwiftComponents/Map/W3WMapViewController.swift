@@ -257,7 +257,7 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
   }
 
   
-  override public func viewWillLayoutSubviews() {
+  override open func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews()
     updateGeometry()
   }

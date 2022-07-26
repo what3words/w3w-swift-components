@@ -69,7 +69,11 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     super.viewWillAppear(animated)
     
     tableView.separatorInset = UIEdgeInsets(top: 0.0, left: 0.0, bottom: 0.0, right: 0.0)
+    #if targetEnvironment(macCatalyst)
+    tableView.separatorStyle = .singleLine
+    #else
     tableView.separatorStyle = .singleLineEtched
+    #endif
     tableView.layer.borderWidth = 1.0
     updateColours()
   }
