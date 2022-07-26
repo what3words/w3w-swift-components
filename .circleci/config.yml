@@ -26,6 +26,6 @@ workflows:
   test_build:
     jobs:
       - test
-          filters:
-            tags:
-              only: /^v.*/
+        filters:
+          tags:
+            only: /^v.*/
