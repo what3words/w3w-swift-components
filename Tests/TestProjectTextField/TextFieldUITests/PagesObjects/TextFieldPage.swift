@@ -32,19 +32,19 @@ class TextFieldPage : BasePage
     
     func areSuggestionresultsPresent() -> Bool
     {
-        return searchResultContainers.firstMatch.waitForExistence(timeout: 2)
+        return searchResultContainers.firstMatch.waitForExistence(timeout: 4)
     }
     
     func selectResult(_ address : String)
     {
         var addressToSelect : XCUIElement = results[address]
-        XCTAssertTrue(addressToSelect.waitForExistence(timeout: 2))
+        XCTAssertTrue(addressToSelect.waitForExistence(timeout: 4))
         addressToSelect.tap()
     }
     
     func waitForDidYouMean() -> TextFieldPage
     {
-        XCTAssertTrue(app.staticTexts["Did you mean?"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.staticTexts["Did you mean?"].waitForExistence(timeout: 4))
         return self
     }
     
