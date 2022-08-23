@@ -338,7 +338,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       w3w?.autosuggest(text: fixedText, options: options) { suggestions, error in
         self.addToKnownAddressList(suggestions: suggestions)
         if let words = suggestions?.first?.words {
-          if words == fixedText {
+          if words.lowercased() == fixedText.lowercased() {
             self.delegate?.update(didYouMean: words)
             self.update(suggestions: [W3WSuggestion]())
           }

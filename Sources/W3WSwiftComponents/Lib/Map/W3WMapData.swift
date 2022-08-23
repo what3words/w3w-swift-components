@@ -11,17 +11,30 @@ import MapKit
 import W3WSwiftApi
 
 
-//@available(iOS 13, *)
 public struct W3WMapData {
   
-  /// MapKit class that hold the graphical lines
+  /// MapKit class that holds the graphical lines
+  /// This ridiculous construct is a workaround for an issue
+  /// Xcode 14 brought around using @available with stored
+  /// properties.  So, we use a computed property instead
   @available(iOS 13, *)
-  lazy var gridLines: W3WMapGridLines? = nil
+  var gridLines: W3WMapGridLines? {
+    get { return gridLinePointer as? W3WMapGridLines }
+    set { gridLinePointer = newValue }
+  }
+  var gridLinePointer: Any? = nil
   
   /// renderer for grid lines
+  /// This ridiculous construct is a workaround for an issue
+  /// Xcode 14 brought around using @available with stored
+  /// properties.  So, we use a computed property instead
   @available(iOS 13, *)
-  lazy var gridRenderer: W3WMapGridRenderer? = nil
-  
+  var gridRenderer: W3WMapGridRenderer? {
+    get { return gridRendererPointer as? W3WMapGridRenderer }
+    set { gridRendererPointer = newValue }
+  }
+  var gridRendererPointer: Any? = nil
+
   /// highighted individual squares on the map
   var squares = [W3WSquare]()
   

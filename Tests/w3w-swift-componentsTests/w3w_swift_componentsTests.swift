@@ -74,6 +74,56 @@ final class w3w_swift_componentsTests: XCTestCase {
   }
   
   
+  func testTextfieldDidYouMean() {
+    let expectation = self.expectation(description: "W3W Components")
+    
+    let vc = UIViewController()
+    let field = W3WAutoSuggestTextField(api)
+    vc.view.addSubview(field)
+    
+    field.onError = { error in
+      XCTAssertNil(error)
+      print("Error: ", error)
+    }
+    
+    let twa = "filled count soap"
+    _ = field.textField(field, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: twa)
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+      XCTAssertTrue(field.autoSuggestViewController.autoSuggestDataSource.suggestions.count == 0)
+      XCTAssertTrue(field.autoSuggestViewController.didYouMeanView?.hintLabel?.text == "///filled.count.soap")
+      expectation.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10.0, handler: nil)
+  }
+  
+  
+  func testTextfieldDidYouMeanCapitals() {
+    let expectation = self.expectation(description: "W3W Components")
+    
+    let vc = UIViewController()
+    let field = W3WAutoSuggestTextField(api)
+    vc.view.addSubview(field)
+    
+    field.onError = { error in
+      XCTAssertNil(error)
+      print("Error: ", error)
+    }
+    
+    let twa = "Filled count soap"
+    _ = field.textField(field, shouldChangeCharactersIn: NSRange(location: 0, length: 0), replacementString: twa)
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
+      XCTAssertTrue(field.autoSuggestViewController.autoSuggestDataSource.suggestions.count == 0)
+      XCTAssertTrue(field.autoSuggestViewController.didYouMeanView?.hintLabel?.text == "///filled.count.soap")
+      expectation.fulfill()
+    }
+    
+    waitForExpectations(timeout: 10.0, handler: nil)
+  }
+
+  
   func testSearchController() {
     let expectation = self.expectation(description: "W3W Components")
     

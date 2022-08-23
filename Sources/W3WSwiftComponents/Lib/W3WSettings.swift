@@ -22,7 +22,7 @@ public enum W3WMesurementSystem {
 
 public extension W3WSettings {
 
-  static let W3WSwiftComponentsVersion = "2.3.0"
+  static let W3WSwiftComponentsVersion = "2.3.1"
   
   // mutable settings
   static var measurement = W3WMesurementSystem.system

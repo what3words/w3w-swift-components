@@ -76,22 +76,33 @@ class TextFieldUITests : BaseTest {
     func testRussianAddressesAreReturnedWhenClippingToRussia() throws {
     try searchAndSelectAddress(address : "liked.shopper.remotes", clipping : "CountryRU")
     }
-    
-    func testDidYouMean() throws {
-            let clipping : String =  "NoClipping"
-            let address : String  = "crazy palace moral"
-            app.launchEnvironment[TextFieldUITests.clippingSettings] = clipping
-            app.launch()
-            let textFieldPage = TextFieldPage(app : app)
-        XCTAssertEqual(textFieldPage.enterAddress(address)
-                        .waitForDidYouMean()
-                        .didYouMeanAddressField().label, "///crazy.palace.moral")
-        textFieldPage.didYouMeanAddressField().tap()
-        assertValue(textFieldPage.textfield, "crazy.palace.moral")
-        
-    
-    }
-    
+  
+  func testDidYouMean() throws {
+    let clipping : String =  "NoClipping"
+    let address : String  = "crazy palace moral"
+    app.launchEnvironment[TextFieldUITests.clippingSettings] = clipping
+    app.launch()
+    let textFieldPage = TextFieldPage(app : app)
+    XCTAssertEqual(textFieldPage.enterAddress(address)
+      .waitForDidYouMean()
+      .didYouMeanAddressField().label, "///crazy.palace.moral")
+    textFieldPage.didYouMeanAddressField().tap()
+    assertValue(textFieldPage.textfield, "crazy.palace.moral")
+  }
+  
+  func testDidYouMeanCapitalLetters() throws {
+    let clipping : String =  "NoClipping"
+    let address : String  = "Crazy palace moral"
+    app.launchEnvironment[TextFieldUITests.clippingSettings] = clipping
+    app.launch()
+    let textFieldPage = TextFieldPage(app : app)
+    XCTAssertEqual(textFieldPage.enterAddress(address)
+      .waitForDidYouMean()
+      .didYouMeanAddressField().label, "///crazy.palace.moral")
+    textFieldPage.didYouMeanAddressField().tap()
+    assertValue(textFieldPage.textfield, "crazy.palace.moral")
+  }
+
     func testPreferLandSetToFalse() throws {
         app.launchEnvironment[TextFieldUITests.clippingSettings] = "PreferLandOff"
         app.launch()
