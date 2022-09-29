@@ -513,28 +513,13 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
       }
     }
     
-    // only W3WAutoSuggestTextField can showMicrophoneInTextField() for now
-    if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
-      if showMicInTextField { //}, #available(iOS 13.0, *) {
-        showMicrophoneInTextField()
-      } else {
-        showMicInOverlay()
-      }
-    } else {
-      // W3WAutoSuggestSearchController can not showMicrophoneInTextField() yet
-      showMicInOverlay()
-    }
-    
+    showMicInOverlay()
   }
   
   
   //
   func showMicInOverlay() {
-    if UIDevice.current.userInterfaceIdiom == .pad {
-      showMicrophoneForiPad()
-    } else {
       showMicrophoneForiPhone()
-    }
   }
   
   
@@ -564,7 +549,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
         if let mic = self.microphoneViewController {
           if let textFieldView = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
             mic.set(tinyMode: true)
-            let sizeFactor = CGFloat(3.0)
+            let sizeFactor = CGFloat(2.0)
             mic.view.frame = CGRect(x: 0.0, y: 0.0, width: textFieldView.frame.height * sizeFactor, height: textFieldView.frame.height * sizeFactor)
 
             // find the location of the mic and place the inut animation there

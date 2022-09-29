@@ -59,7 +59,7 @@ public extension W3WSettings {
       "HintTextColor"       : [.light: W3WColorScheme.w3wDarkBlue,            .dark: W3WColorScheme.w3wWhite],
       "HintTopLine"         : [.light: W3WColorScheme.w3wDarkBlue,            .dark: .clear],
       "MicOnColor"          : [.light: W3WColorScheme.w3wRed,                 .dark: W3WColorScheme.w3wRed],
-      "MicOffColor"         : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wWhite],
+      "MicOffColor"         : [.light: W3WColorScheme.w3wWhite,               .dark: W3WColorScheme.w3wDarkBlue],
       "VoiceIconColor"      : [.light: W3WColorScheme.w3wBlack,               .dark: W3WColorScheme.w3wWhite],
       
       "MapGridColor"        : [.light: W3WColorScheme.w3wSupportMediumGrey,   .dark: W3WColorScheme.w3wSupportMediumGrey],

@@ -149,8 +149,10 @@ open class W3WMicrophoneViewController: UIViewController {
     logoImage.frame = CGRect(x: 0.0, y: 0.0, width: W3WSettings.componentsLogoSize, height: W3WSettings.componentsLogoSize)
     
     if tinyMode {
+      microphoneView.filled = true
       tinyModeSetup()
     } else {
+      microphoneView.filled = true
       largeModeSetup()
     }
     
@@ -270,14 +272,8 @@ open class W3WMicrophoneViewController: UIViewController {
 
   /// only shows the logo if there is space
   func placeLogo() {
-    // don't show logo if it will be patially covered
-    let bottomOfLogo = CGPoint(x: view.frame.size.width / 2.0, y: view.frame.size.height - W3WSettings.componentsLogoSize * 1.5)
-    if view == view.hitTest(bottomOfLogo, with: nil) && view.frame.contains(bottomOfLogo) {
-      logoImage.isHidden = false
-      logoImage.center = CGPoint(x: view.frame.size.width / 2.0, y: view.frame.size.height - W3WSettings.componentsLogoSize * 1.5)
-    } else {
-      logoImage.isHidden = true
-    }
+    logoImage.center = CGPoint(x: view.center.x, y: (view.frame.size.height + (microphoneView?.frame.maxY ?? view.center.y)) / 2.0)
+    logoImage.isHidden = false
   }
   
   

@@ -26,6 +26,9 @@ open class W3WMicrophoneView: W3WVoiceIconView {
   /// speed of the animation
   public var framesPerSecond = 30.0
   
+  /// use filled instread of outline for the icon
+  public var filled = false
+  
   /// current volume shown in size of halo
   var volume:CGFloat        = 0.0
   
@@ -43,7 +46,6 @@ open class W3WMicrophoneView: W3WVoiceIconView {
   
   /// timer to use to animate the fan getting larger or smaller inbetween calls to setVolume()
   var animationTimer: Timer?
-  
   
   
   public init(microphone: W3WMicrophone?) {
@@ -210,11 +212,15 @@ open class W3WMicrophoneView: W3WVoiceIconView {
     let fanSpread = volumeToFanSpread()
     
     // draw the four circles and the icon on top
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.9, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.2) : W3WSettings.color(named: "MicOffColor"))
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.6, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.3) : W3WSettings.color(named: "MicOffColor"))
-    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.3, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.4) : W3WSettings.color(named: "MicOffColor"))
-    circle(centre: centre, radius: radius, colour: engaged ? W3WSettings.color(named: "MicOnColor") : W3WSettings.color(named: "MicOffColor"))
-    voiceIcon(centre: centre, radius: radius / 2.2, colour: engaged ? W3WSettings.color(named: "MicOffColor") : W3WSettings.color(named: "MicOnColor"))
+    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.6, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.08) : W3WSettings.color(named: "MicOffColor"))
+    circle(centre: centre, radius: radius + fanRoom * fanSpread * 0.3, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.08) : W3WSettings.color(named: "MicOffColor"))
+    circle(centre: centre, radius: radius, colour: engaged ? W3WSettings.color(named: "MicOnColor").withAlphaComponent(0.16) : W3WSettings.color(named: "MicOffColor"))
+    
+    if filled {
+      voiceIcon(centre: centre, radius: radius / 2.2, colour: W3WSettings.color(named: "MicOnColor"), filled: filled)
+    } else {
+      voiceIcon(centre: centre, radius: radius / 2.2, colour: engaged ? W3WSettings.color(named: "MicOffColor") : W3WSettings.color(named: "MicOnColor"), filled: filled)
+    }
   }
   
   
