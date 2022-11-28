@@ -343,6 +343,8 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     if !(didYouMeanView?.isHidden ?? true) {
       didYouMeanView?.frame = self.delegate?.errorLocation(preferedHeight: self.cellHeight) ?? CGRect.zero
     }
+    
+    positionMicrophoneForiPhone()
   }
   
   
@@ -519,7 +521,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   //
   func showMicInOverlay() {
-      showMicrophoneForiPhone()
+    showMicrophoneForiPhone()
   }
   
   
@@ -613,12 +615,37 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   }
   
   
-  func hideMicrophone() {
-    if UIDevice.current.userInterfaceIdiom == .pad {
-      hideMicrophoneForiPad()
-    } else {
-      hideMicrophoneForiPhone()
+  func positionMicrophoneForiPhone() {
+    if isShowingMicrophone {
+      if let parent = delegate?.getParentView().w3wParentViewController {
+        
+        var height = CGFloat(parent.view.frame.size.width)
+        var endingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height - height)
+        var viewSize = CGSize(width: parent.view.frame.size.width, height: height)
+        
+        if UIApplication.shared.statusBarOrientation == .landscapeLeft || UIApplication.shared.statusBarOrientation == .landscapeRight {
+          height = CGFloat(parent.view.frame.size.height * 0.8)
+          endingPoint = CGPoint(x: parent.view.frame.size.width * 0.25, y: parent.view.frame.size.height - height)
+          viewSize = CGSize(width: parent.view.frame.size.width / 2.0, height: height)
+        }
+        
+        if self.delegate?.getParentView().frame != nil {
+          UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
+            self.microphoneViewController?.view.frame = CGRect(origin: endingPoint, size: viewSize)
+          })
+        }
+      }
     }
+  }
+  
+  
+  func hideMicrophone() {
+    hideMicrophoneForiPhone()
+//    if UIDevice.current.userInterfaceIdiom == .pad {
+//      hideMicrophoneForiPad()
+//    } else {
+//      hideMicrophoneForiPhone()
+//    }
   }
   
   
