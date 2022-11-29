@@ -272,7 +272,7 @@ open class W3WMicrophoneViewController: UIViewController {
 
   /// only shows the logo if there is space
   func placeLogo() {
-    logoImage.center = CGPoint(x: view.center.x, y: (view.frame.size.height + (microphoneView?.frame.maxY ?? view.center.y)) / 2.0)
+    logoImage.center = CGPoint(x: self.view.frame.size.width / 2.0, y: (view.frame.size.height + (microphoneView?.frame.maxY ?? view.center.y)) / 2.0)
     logoImage.isHidden = false
   }
   

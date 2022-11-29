@@ -70,26 +70,37 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   public init() {
     super.init(frame: CGRect(origin: .zero, size: CGSize(width: W3WSettings.componentsTextFieldWidth, height: W3WSettings.componentsTextFieldHeight)))
-    self.delegate = self
+    configure()
   }
   
   
   public init(_ w3w: W3WProtocolV3, frame: CGRect? = nil) {
     super.init(frame: frame ?? CGRect(origin: .zero, size: CGSize(width: W3WSettings.componentsTextFieldWidth, height: W3WSettings.componentsTextFieldHeight)))
     set(w3w)
-    self.delegate = self
+    configure()
   }
   
   
   public override init(frame: CGRect) {
     super.init(frame: frame)
-    self.delegate = self
+    configure()
   }
   
   
   public required init?(coder: NSCoder) {
     super.init(coder: coder)
+    configure()
+  }
+  
+  
+  func configure() {
     self.delegate = self
+    NotificationCenter.default.addObserver(self, selector: #selector(updateGeometry), name: UIDevice.orientationDidChangeNotification, object: nil)
+  }
+  
+  
+  deinit {
+    NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
   }
   
   
@@ -288,10 +299,6 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     layer.borderWidth = 1.0
     layer.borderColor = W3WSettings.color(named: "BorderColor").cgColor
     
-//    DispatchQueue.main.async {
-//      self.voiceIconView?.frame = CGRect(x: self.iconPadding, y: self.iconPadding, width: self.iconSize, height: self.iconSize)
-//    }
-    
     if placeholder == nil {
       placeholder = W3WSettings.componentsPlaceholderText
     }
@@ -384,6 +391,15 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     updateIcons()
   }
   
+
+  @objc
+  func updateGeometry() {
+    DispatchQueue.main.asyncAfter(deadline: .now() + 0.03) { [weak self] in
+      self?.autoSuggestViewController.updateGeometry()
+      self?.autoSuggestViewController.tableView.layoutIfNeeded()
+      self?.autoSuggestViewController.tableView.layoutSubviews()
+    }
+  }
   
   
   // MARK: W3AutoSuggestDataSourceDelegate
@@ -474,7 +490,6 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
     if !allowInvalid3wa && !autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: text ?? "") {
       if !autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: text) {
         text = ""
-        //autoSuggestViewController.autoSuggestDataSource.updateSuggestions(text: "")
         autoSuggestViewController.updateSuggestions(text: "")
         autoSuggestViewController.autoSuggestDataSource.update(error: .noValidAdressFound)
       }

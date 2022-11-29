@@ -519,7 +519,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   }
   
   
-  //
+  // choose which way to show mic
   func showMicInOverlay() {
     showMicrophoneForiPhone()
   }
@@ -584,13 +584,13 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
         
         var height = CGFloat(parent.view.frame.size.width)
         var startingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height)
-        var endingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height - height)
+        //var endingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height - height)
         var viewSize = CGSize(width: parent.view.frame.size.width, height: height)
         
         if UIApplication.shared.statusBarOrientation == .landscapeLeft || UIApplication.shared.statusBarOrientation == .landscapeRight {
           height = CGFloat(parent.view.frame.size.height * 0.8)
           startingPoint = CGPoint(x: parent.view.frame.size.width * 0.25, y: parent.view.frame.size.height)
-          endingPoint = CGPoint(x: parent.view.frame.size.width * 0.25, y: parent.view.frame.size.height - height)
+          //endingPoint = CGPoint(x: parent.view.frame.size.width * 0.25, y: parent.view.frame.size.height - height)
           viewSize = CGSize(width: parent.view.frame.size.width / 2.0, height: height)
         }
         
@@ -603,7 +603,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
         if var parentFrame = self.delegate?.getParentView().frame {
           UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
             parentFrame.size.height = 300.0
-            self.microphoneViewController?.view.frame = CGRect(origin: endingPoint, size: viewSize)
+            self.microphoneViewController?.view.frame = self.microphoneFrame() // CGRect(origin: endingPoint, size: viewSize)
           }, completion: { (finish) -> Void in
             if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {
               datasource.startListening()
@@ -617,35 +617,51 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   func positionMicrophoneForiPhone() {
     if isShowingMicrophone {
-      if let parent = delegate?.getParentView().w3wParentViewController {
-        
-        var height = CGFloat(parent.view.frame.size.width)
-        var endingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height - height)
-        var viewSize = CGSize(width: parent.view.frame.size.width, height: height)
-        
+      UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
+        self.microphoneViewController?.view.frame = self.microphoneFrame()
+      })
+    }
+  }
+  
+  
+  func microphoneFrame() -> CGRect {
+    if let parent = delegate?.getParentView().w3wParentViewController {
+      return microphoneFrame(from: parent.view.frame)
+    } else {
+      return microphoneFrame(from: UIScreen.main.bounds)
+    }
+  }
+  
+  
+  func microphoneFrame(from: CGRect) -> CGRect {
+    var top    = from.height * 0.4
+    var side   = 0.0
+    
+    if from.width > 470.0 {
+      if UIDevice.current.userInterfaceIdiom == .phone {
+        side = (from.width - 300.0) / 2.0
         if UIApplication.shared.statusBarOrientation == .landscapeLeft || UIApplication.shared.statusBarOrientation == .landscapeRight {
-          height = CGFloat(parent.view.frame.size.height * 0.8)
-          endingPoint = CGPoint(x: parent.view.frame.size.width * 0.25, y: parent.view.frame.size.height - height)
-          viewSize = CGSize(width: parent.view.frame.size.width / 2.0, height: height)
+          top = from.height * 0.1
         }
-        
-        if self.delegate?.getParentView().frame != nil {
-          UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
-            self.microphoneViewController?.view.frame = CGRect(origin: endingPoint, size: viewSize)
-          })
+      } else {
+        if UIApplication.shared.statusBarOrientation == .landscapeLeft || UIApplication.shared.statusBarOrientation == .landscapeRight {
+          side = from.width / 4.0
+          top = from.height * 0.35
+        } else {
+          side = from.width / 8.0
         }
       }
     }
+
+    let frame = from.inset(by: UIEdgeInsets(top: top, left: side, bottom: 0.0, right: side))
+    print(top, side, from, frame)
+    
+    return frame
   }
   
   
   func hideMicrophone() {
     hideMicrophoneForiPhone()
-//    if UIDevice.current.userInterfaceIdiom == .pad {
-//      hideMicrophoneForiPad()
-//    } else {
-//      hideMicrophoneForiPhone()
-//    }
   }
   
   
