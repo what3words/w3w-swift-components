@@ -654,7 +654,6 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     }
 
     let frame = from.inset(by: UIEdgeInsets(top: top, left: side, bottom: 0.0, right: side))
-    print(top, side, from, frame)
     
     return frame
   }
