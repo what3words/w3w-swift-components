@@ -10,7 +10,7 @@ final class w3w_swift_componentsTests: XCTestCase {
   override func setUp() {
     super.setUp()
     
-    if let apikey = ProcessInfo.processInfo.environment["APIKEY"] {
+    if let apikey = ProcessInfo.processInfo.environment["PROD_API_KEY"] {
       api = What3WordsV3(apiKey: apikey)
     } else if let apikey = getApikeyFromFile() {
       api = What3WordsV3(apiKey: apikey)

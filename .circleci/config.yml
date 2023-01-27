@@ -17,9 +17,9 @@ jobs: # a basic unit of work in a run
             xcrun llvm-cov show .build/Build/Products/Debug-iphonesimulator/w3w-swift-componentsTests.xctest/w3w-swift-componentsTests -instr-profile $PROFDATA_FILE > .build/cov.txt
             sonar-scanner -Dsonar.projectKey=what3words_w3w-swift-components -Dsonar.organization=what3words -Dsonar.host.url=https://sonarcloud.io -Dsonar.token=$SONAR_TOKEN -Dsonar.sources=Sources -Dsonar.swift.coverage.reportPath=.build/cov.txt
             cd Tests/TestProjectTextField
-            xcodebuild -project TextField.xcodeproj -scheme TextField -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' APIKEY=$APIKEY test
+            xcodebuild -project TextField.xcodeproj -scheme TextField -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' PROD_API_KEY=$PROD_API_KEY test
             cd ../../Tests/TestProjectMap
-            xcodebuild -project TestProjectMap.xcodeproj -scheme TestProjectMap -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' APIKEY=$APIKEY test
+            xcodebuild -project TestProjectMap.xcodeproj -scheme TestProjectMap -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' PROD_API_KEY=$PROD_API_KEY test
           
 workflows:
   version: 2
@@ -29,3 +29,6 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+          context:
+            - org-global
+            - mobile

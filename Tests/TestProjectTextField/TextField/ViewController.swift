@@ -28,7 +28,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
     super.viewDidLoad()
 
-      if let apikey = ProcessInfo.processInfo.environment["APIKEY"] {
+      if let apikey = ProcessInfo.processInfo.environment["PROD_API_KEY"] {
         self.apiKey = apikey
       } else if let apikey = getApikeyFromFile() {
         self.apiKey = apikey
