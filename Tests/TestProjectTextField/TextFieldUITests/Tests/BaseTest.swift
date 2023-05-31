@@ -45,15 +45,27 @@ class BaseTest : XCTestCase
         XCTAssertFalse(textFieldPage.enterAddress(address)
             .areSuggestionresultsPresent())
     }
-    
-    func searchAndSelectAddress(address : String, clipping : String) throws
-    {
-        app.launchEnvironment[TextFieldUITests.clippingSettings] = clipping
-        app.launch()
-        let textFieldPage = TextFieldPage(app : app)
-        textFieldPage.enterAddress(address)
-                        .waitForReturnedMatches()
-                        .selectResult("///\(address)")
-        assertValue(textFieldPage.textfield, "///\(address)")
-    }
+  
+  func searchAndSelectAddress(address : String, clipping : String) throws
+  {
+  app.launchEnvironment[TextFieldUITests.clippingSettings] = clipping
+  app.launch()
+  let textFieldPage = TextFieldPage(app : app)
+  textFieldPage.enterAddress(address)
+    .waitForReturnedMatches()
+    .selectResult("///\(address)")
+  assertValue(textFieldPage.textfield, "///\(address)")
+  }
+  
+  func searchAndSelectAnyAddress(address : String, clipping : String = "NoClipping") throws
+  {
+  app.launchEnvironment[TextFieldUITests.clippingSettings] = clipping
+  app.launch()
+  let textFieldPage = TextFieldPage(app : app)
+  let worked = textFieldPage.enterAddress(address)
+    .waitForReturnedMatches()
+    .areSuggestionresultsPresent()
+  XCTAssertTrue(worked)
+  assertValue(textFieldPage.textfield, "///\(address)")
+  }
 }

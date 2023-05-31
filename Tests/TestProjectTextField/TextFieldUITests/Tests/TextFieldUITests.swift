@@ -119,5 +119,10 @@ class TextFieldUITests : BaseTest {
                         .waitForReturnedMatches().getReturnedAddresses().count, 5)
     }
     
+
+  func testSearchingforShortAddress() throws {
+    try searchAndSelectAnyAddress(address : "x.x.x")
+  }
+  
 }
 

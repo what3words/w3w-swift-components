@@ -162,7 +162,9 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     }
     #endif
 
-    suggestionsDebouncer = W3WTextDebouncer(delay: delay, handler: { text in self.updateSuggestions(text: text) })
+    suggestionsDebouncer = W3WTextDebouncer(delay: delay) { text in
+      self.updateSuggestions(text: text)
+    }
   }
 
   

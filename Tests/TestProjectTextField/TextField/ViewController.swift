@@ -15,15 +15,6 @@ import Foundation
 class ViewController: UIViewController {
     let testData = ClippingSettings()
   var apiKey: String = ""
-//    var apiKey: String {
-//          get {
-//              if let api = UserDefaults.standard.string(forKey: "ApiKey")
-//              {
-//                  return api
-//              }
-//              return ""
-//          }
-//      }
       
     override func viewDidLoad() {
     super.viewDidLoad()
