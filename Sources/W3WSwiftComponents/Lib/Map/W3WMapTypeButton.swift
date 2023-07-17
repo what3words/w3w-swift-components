@@ -58,9 +58,9 @@ public class W3WMapTypeButton: UIButton {
     self.mapType = mapType
     
     if mapType == .standard {
-      setImage(UIImage(named: "sateliteIcon.png", in: Bundle.module, compatibleWith: nil), for: .normal)
+      setImage(UIImage(named: "sateliteIcon.png", in: W3WBundle.module, compatibleWith: nil), for: .normal)
     } else {
-      setImage(UIImage(named: "mapIcon", in: Bundle.module, compatibleWith: nil), for: .normal)
+      setImage(UIImage(named: "mapIcon", in: W3WBundle.module, compatibleWith: nil), for: .normal)
     }
   }
   

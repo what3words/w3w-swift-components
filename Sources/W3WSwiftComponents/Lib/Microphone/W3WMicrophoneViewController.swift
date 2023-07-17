@@ -41,7 +41,7 @@ open class W3WMicrophoneViewController: UIViewController {
   var footerLabel: UILabel!
   
   /// what3words logo for bottom of large format
-  var logoImage = UIImageView(image: UIImage(named: "logo", in: Bundle.module, compatibleWith: nil))
+  var logoImage = UIImageView(image: UIImage(named: "logo", in: W3WBundle.module, compatibleWith: nil))
   
   /// keep track of if this is in an error state
   var errorState = false

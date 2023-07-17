@@ -119,7 +119,7 @@ public extension W3WSettings {
   static let didYouMeanText               = diviseTranslation(tag: "correction_message",      backup: "Did you mean?")
 
   static func diviseTranslation(tag: String, backup: String) -> String {
-    var translation = NSLocalizedString(tag, bundle: Bundle.module, comment: backup)
+    var translation = NSLocalizedString(tag, bundle: W3WBundle.module, comment: backup)
     
     // near is a special case, if a translation is not available then we drop 'near' and just return the value, usually 'nearestPlace'
     if translation == "near" {

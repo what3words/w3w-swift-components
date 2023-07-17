@@ -17,12 +17,12 @@ public class W3WFlags {
   static var water: UIImage? {
     get {
       #if os(iOS)
-      return UIImage(named: "flag.water", in: Bundle.module, compatibleWith: nil)
+      return UIImage(named: "flag.water", in: W3WBundle.module, compatibleWith: nil)
       #endif
 
       #if os(watchOS)
       if #available(watchOS 6.0, *) {
-        return UIImage(named: "flag.water", in: Bundle.module, with: nil)
+        return UIImage(named: "flag.water", in: W3WBundle.module, with: nil)
       } else {
         return UIImage()
       }

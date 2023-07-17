@@ -72,7 +72,11 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     #if targetEnvironment(macCatalyst)
     tableView.separatorStyle = .singleLine
     #else
-    tableView.separatorStyle = .singleLineEtched
+    if #available(iOS 11.0, *) {
+      tableView.separatorStyle = .singleLine
+    } else {
+      tableView.separatorStyle = .singleLineEtched
+    }
     #endif
     tableView.layer.borderWidth = 1.0
     updateColours()
