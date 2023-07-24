@@ -290,7 +290,6 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
   public func attach(searchController: W3WAutoSuggestSearchController) {
     if #available(iOS 11, *) {
       navigationItem.searchController = searchController
-      //self.navigationItem.titleView = searchController.searchBar
       searchController.isActive = true
       navigationItem.hidesSearchBarWhenScrolling = true
 

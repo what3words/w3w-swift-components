@@ -274,16 +274,10 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   func update(didYouMean: String) {
     DispatchQueue.main.async { [weak self] in
-      let frame = self?.delegate?.errorLocation(preferedHeight: self?.cellHeight ?? W3WSettings.componentsTableCellHeight) ?? CGRect.zero //.getParentView().frame ?? CGRect.zero
+      let frame = self?.delegate?.errorLocation(preferedHeight: self?.cellHeight ?? W3WSettings.componentsTableCellHeight) ?? .zero
       
       if self?.didYouMeanView == nil {
         self?.didYouMeanView = W3WHintView(frame: frame)
-
-        self?.didYouMeanView?.onTapped = {
-          self?.replace(text: didYouMean)
-          self?.didYouMeanView?.isHidden = true
-        }
-        
 
         // get the view
         if let parentView = self?.delegate?.getParentView() {
@@ -299,8 +293,16 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
         }
       }
 
+      // add the tap handler
+      self?.didYouMeanView?.onTapped = {
+        self?.replace(text: didYouMean)
+        self?.didYouMeanView?.isHidden = true
+        self?.autoSuggestDataSource.updateSuggestions(text: didYouMean)
+      }
+      
       if let dymv = self?.didYouMeanView {
-        dymv.frame = self?.delegate?.suggestionsLocation(preferedHeight: dymv.frame.height, spacing: 0.0) ?? .zero
+        //dymv.frame = self?.delegate?.suggestionsLocation(preferedHeight: dymv.frame.height, spacing: 0.0) ?? .zero
+        dymv.frame = self?.delegate?.errorLocation(preferedHeight: dymv.frame.height) ?? .zero
         dymv.isHidden = false
         dymv.set(title: W3WSettings.didYouMeanText, hint: W3WFormatter.ensureSlashes(text: didYouMean) ?? NSAttributedString())
       }
@@ -350,9 +352,13 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
       tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: min(CGFloat(((self.tableView.dataSource as? W3AutoSuggestDataSource)?.suggestions.count) ?? 0) * self.cellHeight, self.maxTableHeight), spacing: W3WSettings.componentsTableTopMargin) ?? CGRect.zero
     }
     
+    if !(errorView?.isHidden ?? true) {
+      errorView?.frame = self.delegate?.errorLocation(preferedHeight: errorView?.frame.height ?? 32.0) ?? CGRect.zero
+    }
+    
     // update the position of the hint view if visible
     if !(didYouMeanView?.isHidden ?? true) {
-      didYouMeanView?.frame = self.delegate?.errorLocation(preferedHeight: self.cellHeight) ?? CGRect.zero
+      didYouMeanView?.frame = self.delegate?.errorLocation(preferedHeight: didYouMeanView?.frame.height ?? self.cellHeight) ?? CGRect.zero
     }
     
     positionMicrophoneForiPhone()
@@ -499,9 +505,11 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
         
         // animate the exit of the suggestions view
         UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
+          self.tableView?.alpha = 0.0
           self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0, spacing: W3WSettings.componentsTableTopMargin) ?? CGRect.zero
         }, completion: { (didFinish) -> Void in
           self.tableView?.removeFromSuperview()
+          self.tableView?.alpha = 1.0
         })
       }
     }

@@ -291,7 +291,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   /// instructs the suggestions view on a good place to position itself
   public func suggestionsLocation(preferedHeight: CGFloat, spacing: CGFloat? = nil) -> CGRect {
-    let origin = self.view.frame.origin
+    let origin = CGPoint(x: self.view.frame.origin.x, y: self.view.frame.maxY)
     let size   = CGSize(width: self.searchBar.frame.size.width, height: preferedHeight)
     
     return CGRect(origin: origin, size: size)

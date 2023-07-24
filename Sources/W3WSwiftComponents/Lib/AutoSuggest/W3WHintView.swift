@@ -46,7 +46,7 @@ class W3WHintView: W3WMessageView {
   }
   
   
-  /// called when the user touches the center of the circle
+  /// called when the user touches the view
   @objc func tapHappened(recognizer: UITapGestureRecognizer) {
     onTapped()
   }
