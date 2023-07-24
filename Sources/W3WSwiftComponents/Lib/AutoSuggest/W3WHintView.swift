@@ -24,9 +24,10 @@ class W3WHintView: W3WMessageView {
   var titleLabel: UILabel? = UILabel(frame: CGRect(origin: .zero, size: CGSize(width: 1.0, height: 1.0)))
 
   
-  
   /// initialize the UI
   override func setupUI() {
+    super.setupUI()
+    
     if let l = titleLabel {
       addSubview(l)
     }

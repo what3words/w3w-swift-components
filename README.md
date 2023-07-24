@@ -42,6 +42,14 @@ import W3WSwiftComponents
 import CoreLocation
 ```
 
+#### CocoaPods
+
+You can use CocoaPods to install w3w-swift-components by adding it to the target in your Podfile:
+
+```
+pod 'W3WSwiftComponents'
+```
+
 
 #### Note:
 

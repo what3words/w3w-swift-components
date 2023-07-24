@@ -46,7 +46,11 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   /// indicates if the textfield should be cleared when user focus changes
   private var allowInvalid3wa = false
 
+  /// if set to true, component will not go into dark mode
   var disableDarkmode = false
+  
+  /// set this to true to allow placing the suggestions above the text field when it detects there is not enough room below to display it in the parent view
+  public var enableDisplayingAboveTextField = true
   
   /// this is the view controller for displaying the suggestions
   var autoSuggestViewController = W3WAutoSuggestResultsViewController()
@@ -253,10 +257,15 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
 
   
-     
+  /// ensures this view is infront of all sibling views, set to true if suggestions are appearing underneath other views
+  public func set(keepOnTop: Bool) {
+    self.autoSuggestViewController.keepOnTop = keepOnTop
+  }
+  
+  
   /// initializes the UI
   func confireuUI() {
-    clipsToBounds = true
+    clipsToBounds = false
     
     padding = UIEdgeInsets(top: 0.0, left: leftPadding, bottom: 0.0, right: rightPadding)
     
@@ -513,30 +522,79 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   /// instructs the suggestions view on a good place to position itself
-  public func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
-    var origin = frame.origin
-    origin.y += frame.size.height + W3WSettings.componentsTableTopMargin
+  open func suggestionsLocation(preferedHeight: CGFloat, spacing: CGFloat? = nil) -> CGRect {
+    let space = spacing ?? W3WSettings.componentsTableTopMargin
     
-    let size = CGSize(width: frame.size.width, height: preferedHeight)
-    
-    return CGRect(origin: origin, size: size)
+    if enableDisplayingAboveTextField && isTooCloseToBottom(spaceNeeded: space + preferedHeight) {
+      let origin = CGPoint(x: self.frame.minX, y: frame.origin.y - space - preferedHeight)
+      let size   = CGSize(width: frame.size.width, height: preferedHeight)
+      return CGRect(origin: origin, size: size)
+
+    } else {
+      let origin = CGPoint(x: self.frame.minX, y: self.frame.maxY + space)
+      let size   = CGSize(width: frame.size.width, height: preferedHeight)
+      return CGRect(origin: origin, size: size)
+    }
+  }
+  
+  
+  func isTooCloseToBottom(spaceNeeded: CGFloat) -> Bool {
+    if let parentView = superview {
+      
+      // check if enough room below
+      if spaceNeeded + frame.maxY > parentView.frame.height {
+        
+        // it is too close to the bottom, but is there enough room above?
+        if isTooCloseToTop(spaceNeeded: spaceNeeded) {
+          return false // no room below, but also no room above, we return false to allow default behaviour of placing view underneath
+          
+        } else {
+          return true // there is room above, and no room bleow
+        }
+        
+      } else {
+        return false // there is enough room below
+      }
+      
+    } else {
+      return false // can't find superview so ¯\_(ツ)_/¯
+    }
+  }
+  
+  
+  func isTooCloseToTop(spaceNeeded: CGFloat) -> Bool {
+    // check if enough room
+    if frame.minY - spaceNeeded < 0.0 {
+      return true // not enough room below
+      
+    } else {
+      return false // there is enough room below
+    }
   }
   
   
   /// tells the suggestions view a good place for the error notice
-  public func errorLocation(preferedHeight: CGFloat) -> CGRect {
-    var f = frame
-    f.origin.y += f.size.height
-    f.size.height = preferedHeight
-    
-    return f
+  open func errorLocation(preferedHeight: CGFloat) -> CGRect {
+    return suggestionsLocation(preferedHeight: preferedHeight, spacing: 0.0)
   }
   
 
+  /// tells the component to position the suggestion view
+  public func manageSuggestionView() -> Bool {
+    return true
+  }
+
   
   /// gives the suggestions view self's view so it can place itself on it
-  public func getParentView() -> UIView {
-    return self
+  open func getParentView() -> UIView {
+    if let sv = superview {
+      return sv
+
+    // this condition should throw, but it was introduced in version 2.4.0 so interface changes to public functions were ruled out
+    } else {
+      onError(W3WAutosuggestComponentError.superViewMissing)
+      return UIView()
+    }
   }
   
   

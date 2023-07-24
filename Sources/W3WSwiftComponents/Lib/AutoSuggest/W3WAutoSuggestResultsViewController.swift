@@ -13,7 +13,8 @@ import W3WSwiftApi
 
 /// protocol for talking to the textfield, either a W3WAutosuggestTextField, or W3WAutosuggestSearcController at this point
 public protocol W3AutoSuggestResultsViewControllerDelegate {
-  func suggestionsLocation(preferedHeight: CGFloat) -> CGRect
+  func manageSuggestionView() -> Bool
+  func suggestionsLocation(preferedHeight: CGFloat, spacing: CGFloat?) -> CGRect
   func errorLocation(preferedHeight: CGFloat) -> CGRect
   func getParentView() -> UIView
   func getCurrentText() -> String?
@@ -57,6 +58,9 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
 
   /// indicates if the microphone is showing
   var isShowingMicrophone  = false
+  
+  /// ensures this view is infront of all sibling views, set to true if suggestions are appearing underneath other views
+  var keepOnTop = false
   
   var cellHeight:CGFloat = W3WSettings.componentsTableCellHeight
   var maxTableHeight:CGFloat = W3WSettings.componentsMaxTableHeight
@@ -269,25 +273,37 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
 
   
   func update(didYouMean: String) {
-    DispatchQueue.main.async {
-      let frame = self.delegate?.errorLocation(preferedHeight: self.cellHeight) ?? CGRect.zero //.getParentView().frame ?? CGRect.zero
+    DispatchQueue.main.async { [weak self] in
+      let frame = self?.delegate?.errorLocation(preferedHeight: self?.cellHeight ?? W3WSettings.componentsTableCellHeight) ?? CGRect.zero //.getParentView().frame ?? CGRect.zero
       
-      if self.didYouMeanView == nil {
-        self.didYouMeanView = W3WHintView(frame: frame)
+      if self?.didYouMeanView == nil {
+        self?.didYouMeanView = W3WHintView(frame: frame)
 
-        self.didYouMeanView?.onTapped = {
-          self.replace(text: didYouMean)
-          self.didYouMeanView?.isHidden = true
+        self?.didYouMeanView?.onTapped = {
+          self?.replace(text: didYouMean)
+          self?.didYouMeanView?.isHidden = true
         }
         
-        let parent = self.getParentViewController()
-        if let v = self.didYouMeanView {
-          parent.view.insertSubview(v, belowSubview: parent.view)
+
+        // get the view
+        if let parentView = self?.delegate?.getParentView() {
+          if let dymv = self?.didYouMeanView {
+            // if it needs to be pushed to the front
+            if self?.keepOnTop ?? false {
+              parentView.bringSubviewToFront(dymv)
+            }
+            
+            // add to view
+            parentView.addSubview(dymv)
+          }
         }
       }
 
-      self.didYouMeanView?.isHidden = false
-      self.didYouMeanView?.set(title: W3WSettings.didYouMeanText, hint: W3WFormatter.ensureSlashes(text: didYouMean) ?? NSAttributedString())
+      if let dymv = self?.didYouMeanView {
+        dymv.frame = self?.delegate?.suggestionsLocation(preferedHeight: dymv.frame.height, spacing: 0.0) ?? .zero
+        dymv.isHidden = false
+        dymv.set(title: W3WSettings.didYouMeanText, hint: W3WFormatter.ensureSlashes(text: didYouMean) ?? NSAttributedString())
+      }
     }
   }
   
@@ -297,22 +313,13 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     delegate?.replace(text: text)
   }
   
+  
   //MARK: View Stuff
-  
-  
-  /// gets the parent's view controller for presenting the table, crashes the app if there is no parent
-  func getParentViewController() -> UIViewController {
-    let parent = delegate?.getParentView().w3wParentViewController
-    
-    assert(parent != nil, "W3AutoSuggestResultsViewControllerDelegate not assigned to W3AutoSuggestResultsViewController, or getParentViewController() is not returning a UIView!")
-    
-    return parent!
-  }
   
   
   /// returns the ideal location for the suggestioins table
   func getSuggestionTableOrigin() -> CGPoint {
-    return delegate?.suggestionsLocation(preferedHeight: 0.0).origin ?? CGPoint.zero
+    return delegate?.suggestionsLocation(preferedHeight: 0.0, spacing: W3WSettings.componentsTableTopMargin).origin ?? CGPoint.zero
   }
   
   
@@ -331,7 +338,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     
     if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
       DispatchQueue.main.async {
-        self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0) ?? CGRect.zero
+        self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0, spacing: W3WSettings.componentsTableTopMargin) ?? CGRect.zero
       }
     }
   }
@@ -340,7 +347,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   public func updateGeometry() {
     // update the postion of the tableview if this is a textfield
     if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
-      tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: min(CGFloat(((self.tableView.dataSource as? W3AutoSuggestDataSource)?.suggestions.count) ?? 0) * self.cellHeight, self.maxTableHeight)) ?? CGRect.zero
+      tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: min(CGFloat(((self.tableView.dataSource as? W3AutoSuggestDataSource)?.suggestions.count) ?? 0) * self.cellHeight, self.maxTableHeight), spacing: W3WSettings.componentsTableTopMargin) ?? CGRect.zero
     }
     
     // update the position of the hint view if visible
@@ -383,44 +390,52 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   /// shows a view contianing a text message
   func showNoticeView(message: NSAttributedString?, textColor: UIColor = W3WSettings.color(named: "ErrorTextColor"), backgroundColor: UIColor = W3WSettings.color(named: "ErrorBackground")) {
-    DispatchQueue.main.async {
-      let frame = self.delegate?.errorLocation(preferedHeight: 32.0) ?? CGRect.zero //.getParentView().frame ?? CGRect.zero
+    DispatchQueue.main.async { [weak self] in
+      let frame = self?.delegate?.errorLocation(preferedHeight: 32.0) ?? CGRect.zero
 
-      if self.errorView == nil {
-        self.errorView = W3WTextErrorView(frame: frame)
+      if self?.errorView == nil {
+        self?.errorView = W3WTextErrorView(frame: frame)
 
-        let parent = self.getParentViewController()
-        if let v = self.errorView {
-          parent.view.insertSubview(v, belowSubview: parent.view)
+        // get the view
+        if let parentView = self?.delegate?.getParentView() {
+          if let ev = self?.errorView {
+            // if it needs to be pushed to the front
+            if self?.keepOnTop ?? false {
+              parentView.bringSubviewToFront(ev)
+            }
+            
+            // add to view
+            parentView.addSubview(ev)
+          }
         }
       }
 
-      self.errorView?.frame = frame
-      self.errorView?.tintColor = textColor
-      self.errorView?.backgroundColor = backgroundColor
+      self?.errorView?.frame = frame
+      self?.errorView?.tintColor = textColor
+      self?.errorView?.backgroundColor = backgroundColor
 
       // if there is a message, unhide the view and make it transparent to begin with and animate it to opacity
       if let e = message {
-        self.errorView?.alpha = 0.0
-        self.errorView?.isHidden = false
+        self?.errorView?.alpha = 0.0
+        self?.errorView?.isHidden = false
         UIView.animate(withDuration: 0.5, animations: {
-          self.errorView?.set(error: e)
-          self.errorView?.alpha = 1.0
+          self?.errorView?.set(error: e)
+          self?.errorView?.alpha = 1.0
           
         // on completion of the animation, start a timer to make it dissapear
         }, completion: { value in
           DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
-            self.showNoticeView(message: nil)
+            self?.showNoticeView(message: nil)
           }
         })
         
       // if there is no message, then fade out, animating opacity to zero then hide the view upon completion
       } else {
-        self.errorView?.alpha = 1.0
+        self?.errorView?.alpha = 1.0
         UIView.animate(withDuration: 0.3, animations: {
-          self.errorView?.alpha = 0.0
+          self?.errorView?.alpha = 0.0
         }, completion: { value in
-          self.errorView?.isHidden = true
+          self?.errorView?.isHidden = true
         })
       }
     }
@@ -448,28 +463,27 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   /// show the suggestions view
   func showSuggestions() {
-
-    //set(error: NSAttributedString?(nil))
-
-    DispatchQueue.main.async {
-            
+    DispatchQueue.main.async { [unowned self] in
       self.tableView.reloadData()
-      
-      // this doesn't show suggestions for uisearchcontroller
-      if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
-        let parent = self.getParentViewController()
-        if let st = self.tableView {
-          parent.view.insertSubview(st, aboveSubview: parent.view)
-        }
+
+      // this checks is this object should manage suggestions view. For example uisearchcontroller manages the tableview itself
+      if self.delegate?.manageSuggestionView() ?? false {
         
-        if let _ = self.delegate?.getParentView().frame {
-          UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
-            self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: min(CGFloat(((self.tableView.dataSource as? W3AutoSuggestDataSource)?.suggestions.count) ?? 0) * self.cellHeight, self.maxTableHeight)) ?? CGRect.zero
-          }, completion: { (finish) -> Void in
-          })
+        // get the view
+        if let parentView = self.delegate?.getParentView() {
+          if let suggestionsView = self.tableView {
+            suggestionsView.frame = self.delegate?.suggestionsLocation(preferedHeight: min(CGFloat(((self.tableView.dataSource as? W3AutoSuggestDataSource)?.suggestions.count) ?? 0) * self.cellHeight, self.maxTableHeight), spacing: W3WSettings.componentsTableTopMargin) ?? CGRect.zero
+            
+            // if it needs to be pushed to the front
+            if self.keepOnTop {
+              parentView.bringSubviewToFront(suggestionsView)
+            }
+            
+            // add to view
+            parentView.addSubview(suggestionsView)
+          }
         }
       }
-      
     }
   }
   
@@ -480,9 +494,12 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     DispatchQueue.main.async {
       self.tableView.reloadData()
       
-      if let _ = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
+      // this checks is this object should manage suggestions view. For example uisearchcontroller manages the tableview itself
+      if self.delegate?.manageSuggestionView() ?? false {
+        
+        // animate the exit of the suggestions view
         UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
-          self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0) ?? CGRect.zero
+          self.tableView?.frame = self.delegate?.suggestionsLocation(preferedHeight: 0.0, spacing: W3WSettings.componentsTableTopMargin) ?? CGRect.zero
         }, completion: { (didFinish) -> Void in
           self.tableView?.removeFromSuperview()
         })
@@ -536,7 +553,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
         if let mic = self.microphoneViewController {
           let popover = UIPopoverPresentationController(presentedViewController: mic, presenting: self)
           popover.permittedArrowDirections = .up
-          popover.sourceView = self.getParentViewController().view
+          popover.sourceView = self.delegate?.getParentView()  // self.getParentViewController().view
           self.present(mic, animated: true) {
             if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {
               datasource.startListening()
@@ -547,72 +564,46 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     }
   }
   
-  
-  func showMicrophoneInTextField() {
-    DispatchQueue.main.async {
-      if !self.isShowingMicrophone {
-        self.isShowingMicrophone = true
-        if let mic = self.microphoneViewController {
-          if let textFieldView = self.delegate?.getParentView() as? W3WAutoSuggestTextField {
-            mic.set(tinyMode: true)
-            let sizeFactor = CGFloat(2.0)
-            mic.view.frame = CGRect(x: 0.0, y: 0.0, width: textFieldView.frame.height * sizeFactor, height: textFieldView.frame.height * sizeFactor)
-
-            // find the location of the mic and place the inut animation there
-            var micCenter = textFieldView.rightView?.center ?? CGPoint(x: textFieldView.frame.width - textFieldView.frame.height / 2.0, y: textFieldView.frame.height / 2.0)
-            if let c = textFieldView.icons?.centerOfMic(), let f = textFieldView.icons?.frame {
-              micCenter = CGPoint(x: c.x + f.origin.x, y: c.y + f.origin.y)
-            }
-            mic.view.center = micCenter
-            
-            textFieldView.clipsToBounds = true
-            textFieldView.addSubview(mic.view)
-            if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {
-              datasource.startListening()
-            }
-          }
-        }
-      }
-    }
-  }
-  
-  
+    
   func showMicrophoneForiPhone() {
-    DispatchQueue.main.async {
+    DispatchQueue.main.async { [unowned self] in
       
       if !self.isShowingMicrophone {
         self.isShowingMicrophone = true
-        //self.findParent()
         
-        let parent = self.getParentViewController()
-        
-        var height = CGFloat(parent.view.frame.size.width)
-        var startingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height)
-        //var endingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height - height)
-        var viewSize = CGSize(width: parent.view.frame.size.width, height: height)
-        
-        if UIApplication.shared.statusBarOrientation == .landscapeLeft || UIApplication.shared.statusBarOrientation == .landscapeRight {
-          height = CGFloat(parent.view.frame.size.height * 0.8)
-          startingPoint = CGPoint(x: parent.view.frame.size.width * 0.25, y: parent.view.frame.size.height)
-          //endingPoint = CGPoint(x: parent.view.frame.size.width * 0.25, y: parent.view.frame.size.height - height)
-          viewSize = CGSize(width: parent.view.frame.size.width / 2.0, height: height)
-        }
-        
-        if let mic = self.microphoneViewController {
-          self.microphoneViewController?.view.frame = CGRect(origin: startingPoint, size: viewSize)
-          mic.view.layer.cornerRadius = 8.0
-          parent.view.addSubview(mic.view)
-        }
-        
-        if var parentFrame = self.delegate?.getParentView().frame {
-          UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
-            parentFrame.size.height = 300.0
-            self.microphoneViewController?.view.frame = self.microphoneFrame() // CGRect(origin: endingPoint, size: viewSize)
-          }, completion: { (finish) -> Void in
-            if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {
-              datasource.startListening()
+        if let parent = self.delegate?.getParentView() {  //self.getParentViewController()
+          
+          var height = CGFloat(parent.frame.size.width)
+          var startingPoint = CGPoint(x: 0.0, y: parent.frame.size.height)
+          //var endingPoint = CGPoint(x: 0.0, y: parent.frame.size.height - height)
+          var viewSize = CGSize(width: parent.frame.size.width, height: height)
+          
+          if UIApplication.shared.statusBarOrientation == .landscapeLeft || UIApplication.shared.statusBarOrientation == .landscapeRight {
+            height = CGFloat(parent.frame.size.height * 0.8)
+            startingPoint = CGPoint(x: parent.frame.size.width * 0.25, y: parent.frame.size.height)
+            //endingPoint = CGPoint(x: parent.frame.size.width * 0.25, y: parent.frame.size.height - height)
+            viewSize = CGSize(width: parent.frame.size.width / 2.0, height: height)
+          }
+          
+          if let mic = self.microphoneViewController {
+            self.microphoneViewController?.view.frame = CGRect(origin: startingPoint, size: viewSize)
+            mic.view.layer.cornerRadius = 8.0
+            if keepOnTop {
+              parent.superview?.bringSubviewToFront(parent)
             }
-          })
+            parent.addSubview(mic.view)
+          }
+          
+          if var parentFrame = self.delegate?.getParentView().frame {
+            UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
+              parentFrame.size.height = 300.0
+              self.microphoneViewController?.view.frame = self.microphoneFrame() // CGRect(origin: endingPoint, size: viewSize)
+            }, completion: { (finish) -> Void in
+              if let datasource = self.tableView.dataSource as? W3AutoSuggestDataSource {
+                datasource.startListening()
+              }
+            })
+          }
         }
       }
     }
@@ -686,17 +677,18 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
     if self.isShowingMicrophone {
       self.isShowingMicrophone = false
       
-      DispatchQueue.main.async {
-        let parent = self.getParentViewController()
-        let height = CGFloat(parent.view.frame.size.width)
-        let endingPoint = CGPoint(x: 0.0, y: parent.view.frame.size.height)
-        let viewSize = CGSize(width: parent.view.frame.size.width, height: height)
-        
-        UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
-          self.microphoneViewController?.view.frame = CGRect(origin: endingPoint, size: viewSize)
-        }, completion: { (didFinish) -> Void in
-          self.microphoneViewController?.view.removeFromSuperview()
-        })
+      DispatchQueue.main.async { [unowned self] in
+        if let parent = self.delegate?.getParentView() {
+          let height = CGFloat(parent.frame.size.width)
+          let endingPoint = CGPoint(x: 0.0, y: parent.frame.size.height)
+          let viewSize = CGSize(width: parent.frame.size.width, height: height)
+          
+          UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.1, options: .curveEaseInOut, animations: { () -> Void in
+            self.microphoneViewController?.view.frame = CGRect(origin: endingPoint, size: viewSize)
+          }, completion: { (didFinish) -> Void in
+            self.microphoneViewController?.view.removeFromSuperview()
+          })
+        }
       }
     }
   }

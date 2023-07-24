@@ -39,13 +39,7 @@ public class W3WMapTypeButton: UIButton {
   
   
   func position() {
-    //layer.borderColor   = W3WSettings.color(named: "MapSquareColor").cgColor
-    //layer.borderWidth    = 2.0
     layer.cornerRadius    = 30.0
-    self.layer.shadowColor = UIColor.black.cgColor
-    self.layer.shadowOffset = CGSize(width: 1.0, height: 1.0)
-    self.layer.shadowRadius  = 1.0
-    self.layer.shadowOpacity  = 0.5
     self.layer.masksToBounds   = false;
     
     addTarget(self, action: #selector(buttonWasTapped), for: .touchUpInside)

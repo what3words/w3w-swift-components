@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'W3WSwiftComponents'
-  s.version          = '2.3.3'
+  s.version          = '2.4.0'
   s.summary          = 'A collection of UI components for what3words addresses'
   s.homepage         = 'https://github.com/what3words/w3w-swift-components'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }

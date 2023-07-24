@@ -290,7 +290,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   /// instructs the suggestions view on a good place to position itself
-  public func suggestionsLocation(preferedHeight: CGFloat) -> CGRect {
+  public func suggestionsLocation(preferedHeight: CGFloat, spacing: CGFloat? = nil) -> CGRect {
     let origin = self.view.frame.origin
     let size   = CGSize(width: self.searchBar.frame.size.width, height: preferedHeight)
     
@@ -313,6 +313,12 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
     return self.view
   }
   
+  
+  /// tells the component it doesn't need to manage the suggestions view
+  public func manageSuggestionView() -> Bool {
+    return false
+  }
+
   
   /// returns the text currently being displayed
   public func getCurrentText() -> String? {

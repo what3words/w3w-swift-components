@@ -13,6 +13,7 @@ import W3WSwiftApi
 public enum W3WAutosuggestComponentError : Error, CustomStringConvertible {
   case noLanguageChosen
   case noValidAdressFound
+  case superViewMissing
   case voiceApiError(error: W3WVoiceError)
   case apiError(error: W3WError)
   
@@ -20,6 +21,7 @@ public enum W3WAutosuggestComponentError : Error, CustomStringConvertible {
     switch self {
       case .noLanguageChosen:         return "No language option was provided to voice autosuggest call"
       case .noValidAdressFound:       return "No valid what3words address found"
+      case .superViewMissing:         return "Autosuggest must be a subview of another view"
       case .voiceApiError(let error): return String(describing: error)
       case .apiError(let error):      return String(describing: error)
     }
