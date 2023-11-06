@@ -67,8 +67,6 @@ Components
 
 The `W3WAutoSuggestTextField` is a `UITextField` that will suggest three word addresses as the user enters text. Optionally, there is a voice recognition option.
 
-An iOS UIKit example project can be found at [Examples/TextField/TextField.xcodeproj](Examples/TextField/TextField.xcodeproj)
-
 This conforms to our `W3WAutoSuggestTextFieldProtocol`.  As such, the interface is documented at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
 
 ---------------------- 
@@ -78,8 +76,6 @@ This conforms to our `W3WAutoSuggestTextFieldProtocol`.  As such, the interface 
 
 The `W3WAutoSuggestSearchController` is a `UISearchController` that will suggest three word addresses as the user enters text. This allows embedding this functionality in things such as`UINavigationController`. Optionally, there is a voice recognition option.
 
-An iOS UIKit example project can be found at [Examples/SearchController/SearchController.xcodeproj](Examples/SearchController/SearchController.xcodeproj)
-
 This conforms to our `W3WAutoSuggestTextFieldProtocol`.  As such, the interface is documented at [Documentation/Autosuggest/autosuggest.md](./Documentation/Autosuggest/autosuggest.md).
 
 <a name="maphelper"></a>
@@ -88,8 +84,6 @@ Map Helper
 Map Helper allows you to easily integrate what3words map features into an existing map.
 
 `W3WMapHelper` conforms to `W3WMapViewProtocol`.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
-
-An iOS UIKit example project can be found at [Examples/MapHelper/MapHelper.xcodeproj](Examples/MapHelper/MapHelper.xcodeproj)
 
 ```
 let api = What3WordsV3(apiKey: "YourApiKey")
@@ -104,8 +98,6 @@ Map View
 <img src="Documentation/Map/map.png" width="100"  style="float: right; padding: 16px;">
 
 `W3WMapView` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
-
-An iOS UIKit example project can be found at [Examples/MapView/MapView.xcodeproj](Examples/MapView/MapView.xcodeproj)
 
 ```
 let api = What3WordsV3(apiKey: "YourApiKey")
@@ -128,16 +120,12 @@ Map Component
 
 `W3WMapViewController` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
-The iOS UIKit example project can be found at [Examples/MapComponent/MapComponent.xcodeproj](Examples/MapComponent/MapComponent.xcodeproj)
-
 ```
 let api = What3WordsV3(apiKey: "YourApiKey")
 let vc = W3WMapViewController(api)
 ```
 
 This demonstrates `W3WMapViewController` which is a high level component that has easy to use what3words functionality.   
-
-If you already have a map in your application then you will want to use `W3WMapHelper` instead.  Find the example called [MapHelper](Examples/MapView/MapView.xcodeproj).  
 
 If you have no map in your app and want to quickly include one with some default behaviours then this one might be for you.
 
