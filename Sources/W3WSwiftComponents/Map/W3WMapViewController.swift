@@ -59,13 +59,13 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
     w3wMapView.delegate = mapHelper
     
     // if a marker was tapped
-    mapHelper?.onMarkerSelected = { square in
-      self.onMarkerSelected(square)
+    mapHelper?.onMarkerSelected = { [weak self] square in
+      self?.onMarkerSelected(square)
     }
     
     // forward any map helper errors to the owner of this object
-    mapHelper?.onError = { error in
-      self.onError(error)
+    mapHelper?.onError = { [weak self] error in
+      self?.onError(error)
     }
   }
 
