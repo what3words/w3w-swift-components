@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// continass functions for formatting three word addresses and comparing them

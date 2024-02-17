@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// specifies the different acceptible ways to accept W3WOption, anything conforming

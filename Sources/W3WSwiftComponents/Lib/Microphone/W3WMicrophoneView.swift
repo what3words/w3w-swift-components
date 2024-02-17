@@ -8,7 +8,7 @@
 #if !os(macOS) && !os(watchOS)
 
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 //import w3w_swift_voice_wrapper
 
 

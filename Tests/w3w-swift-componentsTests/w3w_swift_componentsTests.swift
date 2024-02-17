@@ -1,19 +1,20 @@
 import XCTest
 @testable import W3WSwiftComponents
 import W3WSwiftApi
+import W3WSwiftCore
 import CoreLocation
 
 final class w3w_swift_componentsTests: XCTestCase {
   
-  var api: What3WordsV3!
+  var api: What3WordsV4!
   
   override func setUp() {
     super.setUp()
     
     if let apikey = ProcessInfo.processInfo.environment["PROD_API_KEY"] {
-      api = What3WordsV3(apiKey: apikey)
+      api = What3WordsV4(apiKey: apikey)
     } else if let apikey = getApikeyFromFile() {
-      api = What3WordsV3(apiKey: apikey)
+      api = What3WordsV4(apiKey: apikey)
     } else {
       print("Environment variable APIKEY must be set")
       abort()
@@ -35,7 +36,7 @@ final class w3w_swift_componentsTests: XCTestCase {
   
   func testApi() {
     let expectation = self.expectation(description: "Convert To 3wa")
-    api.convertTo3wa(coordinates: CLLocationCoordinate2D(latitude: 51.521238, longitude: -0.203607), language: "en") { (place, error) in
+    api.convertTo3wa(coordinates: CLLocationCoordinate2D(latitude: 51.521238, longitude: -0.203607), language: W3WApiLanguage(code: "en")) { (place, error) in
       
       XCTAssertEqual(place?.words, "index.home.raft")
       XCTAssertNil(error)

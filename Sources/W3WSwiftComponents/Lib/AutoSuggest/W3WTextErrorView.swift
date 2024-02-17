@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// view to display an erro

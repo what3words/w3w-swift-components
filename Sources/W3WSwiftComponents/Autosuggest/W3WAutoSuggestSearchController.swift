@@ -9,6 +9,7 @@
 
 import Foundation
 import UIKit
+import W3WSwiftCore
 import W3WSwiftApi
 
 
@@ -29,7 +30,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   public var onError: W3WAutoSuggestTextFieldErrorResponse = { _ in }
   
   /// language to use
-  var language =  W3WApiLanguage.english.code // default language
+  var language: W3WLanguage =  W3WBaseLanguage.english // default language
 
   /// indicates if the textfield should allow only 3 word addresses or if it can allow any text
   private var freeformText = true
@@ -53,7 +54,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   @IBInspectable open var apiKey: String? {
     didSet {
       if let a = apiKey {
-        set(What3WordsV3(apiKey: a))
+        set(What3WordsV4(apiKey: a))
       }
     }
   }
@@ -73,7 +74,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// - Parameters:
   ///     - w3w: the what3words API or SDK
   ///     - language: a ISO two letter language code
-  public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
+  public func set(_ w3w: W3WProtocolV4, language: W3WLanguage = W3WSettings.defaultLanguage) {
     autoSuggestViewController.set(w3w)
     position()
     
@@ -104,7 +105,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   /// sets the language to use when returning three word addresses
   /// - Parameters:
   ///     - language: a ISO two letter language code
-  public func set(language l: String) {
+  public func set(language l: W3WLanguage) {
     language = l
     
     // this can affect voice ability, reset the voice icon
@@ -281,7 +282,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
   
   
   /// called when an error happens
-  public func update(error: W3WAutosuggestComponentError) {
+  public func update(error: W3WError) {
     onError(error)
   }
   
@@ -353,7 +354,7 @@ open class W3WAutoSuggestSearchController: UISearchController, UISearchTextField
         if autoSuggestViewController.autoSuggestDataSource.is3wa(text: words) {
           DispatchQueue.main.async {
             if self.autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: words) {
-              self.onSuggestionSelected(W3WApiSuggestion(words: words))
+              self.onSuggestionSelected(W3WBaseSuggestion(words: words))
               self.textChanged(words)
             }
           }

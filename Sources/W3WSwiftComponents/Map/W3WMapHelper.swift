@@ -8,7 +8,7 @@
 
 import Foundation
 import MapKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 public class W3WMapHelper: NSObject, W3WMapViewProtocol, MKMapViewDelegate {
@@ -49,7 +49,7 @@ public class W3WMapHelper: NSObject, W3WMapViewProtocol, MKMapViewDelegate {
   
   // MARK: W3WMapViewProtocol
 
-  public init(_ w3w: W3WProtocolV3, map: MKMapView, language: String = W3WSettings.defaultLanguage) {
+  public init(_ w3w: W3WProtocolV4, map: MKMapView, language: W3WLanguage = W3WSettings.defaultLanguage) {
     self.w3wMapView = map
     self.w3wMapData = W3WMapData(w3w, language: language)
   }

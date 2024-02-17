@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import W3WSwiftApi
+import W3WSwiftCore
 
 #if !os(macOS)
 import UIKit
@@ -26,7 +26,7 @@ public extension W3WSettings {
   
   // mutable settings
   static var measurement = W3WMesurementSystem.system
-  static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? W3WSettings.defaultLanguage) == Locale.LanguageDirection.leftToRight)
+  static var leftToRight = (NSLocale.characterDirection(forLanguage: NSLocale.preferredLanguages.first ?? W3WSettings.defaultLanguage.code) == Locale.LanguageDirection.leftToRight)
   
   // MARK: Colours
 

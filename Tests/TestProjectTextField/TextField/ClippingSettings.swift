@@ -8,7 +8,7 @@
 import Foundation
 import W3WSwiftComponents
 import CoreLocation
-import W3WSwiftApi
+import W3WSwiftCore
 
 class ClippingSettings
 {

@@ -7,7 +7,7 @@
 #if !os(macOS) && !os(watchOS)
 
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// displays a W3WSuggestion, W3WSuggestionViewProtocol does most the heavy lifting

@@ -8,7 +8,7 @@
 
 import Foundation
 import MapKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 public protocol W3WMapViewProtocol: AnyObject, W3WMapKitCompatibility, W3WMapProtocol {
@@ -24,7 +24,7 @@ public protocol W3WMapViewProtocol: AnyObject, W3WMapKitCompatibility, W3WMapPro
 extension W3WMapViewProtocol {
   
   /// set the language to use for three word addresses when they need to be looked up
-  public func set(language: String) {
+  public func set(language: W3WLanguage) {
     w3wMapData?.set(language: language)
   }
   
@@ -653,7 +653,7 @@ extension W3WMapViewProtocol {
     var boxes = [MKPolyline]()
     
     for square in w3wMapData?.squares ?? [] {
-      if let ne = square.northEastBounds, let sw = square.southWestBounds {
+      if let ne = square.bounds?.northEast, let sw = square.bounds?.southWest {
         let nw = CLLocationCoordinate2D(latitude: ne.latitude, longitude: sw.longitude)
         let se = CLLocationCoordinate2D(latitude: sw.latitude, longitude: ne.longitude)
         boxes.append(W3WMapSquareLines(coordinates: [nw, ne, se, sw, nw], count: 5))
@@ -756,7 +756,7 @@ extension W3WMapViewProtocol {
     var squares = [W3WSquare]()
     
     for suggestion in suggestions {
-      squares.append(W3WApiSquare(words: suggestion.words))
+      squares.append(W3WBaseSquare(words: suggestion.words))
     }
     
     return ensureSquaresHaveCoordinates(squares: squares)
@@ -767,7 +767,7 @@ extension W3WMapViewProtocol {
     var squares = [W3WSquare]()
     
     for word in words {
-      squares.append(W3WApiSquare(words: word))
+      squares.append(W3WBaseSquare(words: word))
     }
     
     return ensureSquaresHaveCoordinates(squares: squares)
@@ -778,7 +778,7 @@ extension W3WMapViewProtocol {
     var squares = [W3WSquare]()
     
     for coordinate in coordinates {
-      squares.append(W3WApiSquare(coordinates: coordinate))
+      squares.append(W3WBaseSquare(coordinates: coordinate))
     }
     
     return ensureSquaresHaveCoordinates(squares: squares)

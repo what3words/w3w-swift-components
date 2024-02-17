@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import MapKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 enum W3WFontWeight {

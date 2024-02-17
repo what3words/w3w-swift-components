@@ -9,7 +9,7 @@
 
 import Foundation
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 typealias W3WHintTapped = () ->()

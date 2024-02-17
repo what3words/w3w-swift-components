@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import W3WSwiftApi
+import W3WSwiftCore
 
 /// A text field, based on UITextField with a what3words autocomplete function
 @IBDesignable
@@ -32,7 +33,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   @IBInspectable open var apiKey: String? {
     didSet {
       if let a = apiKey {
-        set(What3WordsV3(apiKey: a))
+        set(What3WordsV4(apiKey: a))
       }
     }
   }
@@ -78,7 +79,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   }
   
   
-  public init(_ w3w: W3WProtocolV3, frame: CGRect? = nil) {
+  public init(_ w3w: W3WProtocolV4, frame: CGRect? = nil) {
     super.init(frame: frame ?? CGRect(origin: .zero, size: CGSize(width: W3WSettings.componentsTextFieldWidth, height: W3WSettings.componentsTextFieldHeight)))
     set(w3w)
     configure()
@@ -122,7 +123,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   /// - Parameters:
   ///     - w3w: the what3words API or SDK
   ///     - language: a ISO two letter language code
-  public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
+  public func set(_ w3w: W3WProtocolV4, language: W3WLanguage = W3WSettings.defaultLanguage) {
     autoSuggestViewController.delegate = self
     autoSuggestViewController.set(w3w)
     set(options: [W3WOption.voiceLanguage(autoSuggestViewController.autoSuggestDataSource.language)])
@@ -192,7 +193,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   /// sets the language to use when returning three word addresses
   /// - Parameters:
   ///     - language: a ISO two letter language code
-  public func set(language l: String) {
+  public func set(language l: W3WLanguage) {
     autoSuggestViewController.autoSuggestDataSource.language = l
     
     // this can affect voice ability, reset the voice icon
@@ -457,7 +458,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
   
   
   /// called when an error happens
-  public func update(error: W3WAutosuggestComponentError) {
+  public func update(error: W3WError) {
     onError(error)
   }
   
@@ -592,7 +593,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
 
     // this condition should throw, but it was introduced in version 2.4.0 so interface changes to public functions were ruled out
     } else {
-      onError(W3WAutosuggestComponentError.superViewMissing)
+      onError(W3WError.message("autosuggest textfield has no superview"))
       return UIView()
     }
   }
@@ -621,7 +622,7 @@ open class W3WAutoSuggestTextField: UITextField, UITextFieldDelegate, W3AutoSugg
       if autoSuggestViewController.autoSuggestDataSource.is3wa(text: words) {
         DispatchQueue.main.async {
           if self.autoSuggestViewController.autoSuggestDataSource.isInKnownAddressList(text: words) {
-            self.onSuggestionSelected(W3WApiSuggestion(words: words))
+            self.onSuggestionSelected(W3WBaseSuggestion(words: words))
             self.textChanged(words)
             self.resignFirstResponder()
             self.autoSuggestViewController.hideSuggestions()

@@ -7,7 +7,7 @@
 #if !os(macOS) && !os(watchOS)
 
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// layout and UI code for UIViews that display a three word address, such as W3WSuggestionTableViewCell and W3WSuggestionView
@@ -45,23 +45,23 @@ extension W3WSuggestionViewProtocol {
     wordsLabel?.attributedText = threeWordAddressText.withSlashes(fontSize: W3WSettings.componentsAddressTextSize, slashColor: W3WSettings.color(named: "SlashesColor"), weight: .semibold)
     
     if let place = suggestion.nearestPlace {
-      if (suggestion.language ?? "") == W3WSettings.defaultLanguage && !place.isEmpty {
-        nearestPlaceLabel?.text = String(format: W3WSettings.componentsNearFormatText, place)
-      } else {
+      //if (suggestion.language ?? "") == W3WSettings.defaultLanguage && !place.isEmpty {
+      //nearestPlaceLabel?.text = String(format: W3WSettings.componentsNearFormatText, place)
+      //} else {
         nearestPlaceLabel?.text = place
-      }
+      //}
     } else {
       nearestPlaceLabel?.text = ""
     }
     
     if let distance = suggestion.distanceToFocus {
-      distanceLabel?.text = W3WFormatter.distanceAsString(kilometers: distance)
+      distanceLabel?.text = W3WFormatter.distanceAsString(kilometers: distance.kilometers)
     } else {
       distanceLabel?.text = ""
     }
     
     if let code = suggestion.country {
-      if let i = W3WFlags.get(countryCode: code) {
+      if let i = W3WFlags.get(countryCode: code.code) {
         flagIcon?.image = i
       } else {
         flagIcon?.image = nil
@@ -242,7 +242,7 @@ extension W3WSuggestionViewProtocol {
   
   /// layout the elements
   func layoutContent() {
-    if (suggestion?.nearestPlace?.count ?? 0) > 0 || suggestion?.distanceToFocus != nil || suggestion?.country?.uppercased() == "ZZ"  {
+    if (suggestion?.nearestPlace?.count ?? 0) > 0 || suggestion?.distanceToFocus != nil || suggestion?.country?.code.uppercased() == "ZZ"  {
       layoutForTwoLinesOfText()
     } else {
       layoutForOneLineOfText()
@@ -297,7 +297,7 @@ extension W3WSuggestionViewProtocol {
 
     let y = space + height + internalSpace
     
-    if suggestion?.country?.uppercased() == "ZZ" {
+    if suggestion?.country?.code.uppercased() == "ZZ" {
       if let fi = flagIcon {
         if W3WSettings.leftToRight {
           fi.frame = CGRect(x: inset, y: y, width: secondHeight * 1.2, height: secondHeight * 1.2)

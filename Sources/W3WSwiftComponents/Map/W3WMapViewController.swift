@@ -9,7 +9,7 @@
 
 import UIKit
 import MapKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 // MARK:- W3WMapViewController
@@ -33,7 +33,7 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
   // MARK:- Init
   
   
-  public convenience init(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
+  public convenience init(_ w3w: W3WProtocolV4, language: W3WLanguage = W3WSettings.defaultLanguage) {
     self.init()
     set(w3w, language: language)
   }
@@ -52,7 +52,7 @@ open class W3WMapViewController: UIViewController, UIGestureRecognizerDelegate, 
 
   
   /// This must be called to allow the map to make what3words calls
-  public func set(_ w3w: W3WProtocolV3, language: String = W3WSettings.defaultLanguage) {
+  public func set(_ w3w: W3WProtocolV4, language: W3WLanguage = W3WSettings.defaultLanguage) {
     mapHelper = W3WMapHelper(w3w, map: w3wMapView, language: language)
     
     // let map helper take care of the delegate callbacks

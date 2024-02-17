@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// error response code block definition

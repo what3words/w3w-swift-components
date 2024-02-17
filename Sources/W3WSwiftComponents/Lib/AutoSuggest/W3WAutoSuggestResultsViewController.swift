@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// protocol for talking to the textfield, either a W3WAutosuggestTextField, or W3WAutosuggestSearcController at this point
@@ -20,7 +20,7 @@ public protocol W3AutoSuggestResultsViewControllerDelegate {
   func getCurrentText() -> String?
   func update(suggestions: [W3WSuggestion])
   func update(selected: W3WSuggestion)
-  func update(error: W3WAutosuggestComponentError)
+  func update(error: W3WError)
   func update(valid3wa: Bool)
   func replace(text: String)
 }
@@ -92,7 +92,7 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
 
   
   /// sets the API or SDK and initializes the datasource for making API calls and updating suggestions
-  public func set(_ w3w: W3WProtocolV3) {
+  public func set(_ w3w: W3WProtocolV4) {
     autoSuggestDataSource = W3AutoSuggestDataSource()
     autoSuggestDataSource.set(w3w: w3w)
     autoSuggestDataSource.delegate = self
@@ -246,18 +246,18 @@ public class W3WAutoSuggestResultsViewController: UITableViewController, W3WAuto
   
   
   /// called when an error is found
-  func update(error: W3WAutosuggestComponentError) {
+  func update(error: W3WError) {
     microphoneViewController?.set(engaged: false)
     microphoneViewController?.set(errorText: String(describing: error))
     
     // divide all possible errors into either technical problems, or an error about the input given to the API, the detailed W3WError enum can be obtained with the updateError closue of the main textfield class
     switch error {
-    case .apiError(let e):
-      if e == .invalidKey || e == .missingKey || e == .badConnection {
-        set(error: technicalErrorString)
-      } else {
-        set(error: apiErrorString)
-      }
+//    case .apiError(let e):
+//      if e == .invalidKey || e == .missingKey || e == .badConnection {
+//        set(error: technicalErrorString)
+//      } else {
+//        set(error: apiErrorString)
+//      }
     case .noValidAdressFound:
       set(error: apiErrorString)
     default:

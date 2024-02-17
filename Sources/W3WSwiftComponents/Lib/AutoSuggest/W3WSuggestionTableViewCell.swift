@@ -8,7 +8,7 @@
 #if !os(macOS) && !os(watchOS)
 
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// a UITableViewCell for displaying a W3WSuggestion, W3WSuggestionViewProtocol does all the heavy lifting

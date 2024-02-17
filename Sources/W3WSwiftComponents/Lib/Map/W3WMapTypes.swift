@@ -8,7 +8,7 @@
 
 import Foundation
 import MapKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// the map annotation for a three word square

@@ -5,14 +5,14 @@
 import Foundation
 import MapKit
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 /// A basic set of functions common to all W3W map objects
 public protocol W3WMapProtocol {
   
   // set the language to use for three word addresses when they need to be looked up
-  func set(language: String)
+  func set(language: W3WLanguage)
   
   // put a what3words annotation on the map showing the address
   func addMarker(at square: W3WSquare?, camera: W3WCenterAndZoom, color: UIColor?, completion: @escaping (W3WSquare?, W3WMapError?) -> ())

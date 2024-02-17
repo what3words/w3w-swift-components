@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 
 
 public enum W3WViewPlacement {

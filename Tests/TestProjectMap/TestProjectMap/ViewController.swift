@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import W3WSwiftApi
+import W3WSwiftCore
 import W3WSwiftComponents
 
 

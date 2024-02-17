@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import W3WSwiftCore
 import W3WSwiftApi
 #if canImport(w3w)
 import w3w
@@ -18,7 +19,7 @@ import w3w
 protocol W3WAutoSuggestDataSourceDelegate {
   func update(suggestions: [W3WSuggestion])
   func update(selected: W3WSuggestion)
-  func update(error: W3WAutosuggestComponentError)
+  func update(error: W3WError)
   func update(didYouMean: String)
   func update(valid3wa: Bool)
   func replace(text: String)
@@ -47,7 +48,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   var options = [W3WOption]()
   
   /// language to use
-  var language = W3WApiLanguage.english.code // default language
+  var language: W3WLanguage = W3WBaseLanguage(code: "en") // default language
   
   /// the languages supported by voice
   static var voiceLanguages: [W3WLanguage]? = nil
@@ -56,7 +57,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   var lastAutosuggestTextUsed = ""
 
   /// the API or SDK
-  var w3w: W3WProtocolV3?
+  var w3w: W3WProtocolV4?
 
   /// microphone for recording if we are using voice
   var microphone: W3WMicrophone!
@@ -74,13 +75,13 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   var disableDarkmode = false
   
   
-  func set(w3w: W3WProtocolV3) {
+  func set(w3w: W3WProtocolV4) {
     self.w3w = w3w
     position()
     
-    if let w3wApi = w3w as? What3WordsV3 {
+    if let w3wApi = w3w as? What3WordsV4 {
       let headerValue = "what3words-Swift/" + W3WSettings.W3WSwiftComponentsVersion + " " + figureOutVersionInfo()
-      w3wApi.set(customHeaders: ["X-W3W-AS-Component" : headerValue])
+      w3wApi.set(headers: ["X-W3W-AS-Component" : headerValue])
     }
   }
   
@@ -93,8 +94,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     
     // set the language if specified in the options.  it is passed as a parameter to autosuggest, and as an option, causing some confusion, but underscoreing to the programmer that it is obligitory
     for option in options {
-      if option.key() == W3WOptionKey.voiceLanguage {
-        language = option.asString()
+      if option.key() == "voice-language" {
+        language = W3WBaseLanguage(code: option.asString())
         break
       }
     }
@@ -109,8 +110,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       o.key() == option.key()
     })
     
-    if option.key() == W3WOptionKey.voiceLanguage {
-      language = option.asString()
+    if option.key() == "voice-language" {
+      language = W3WBaseLanguage(code: option.asString())
     }
     
     options.append(option)
@@ -187,7 +188,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
           let twa = String(u.suffix(from: i.upperBound)).removingPercentEncoding ?? ""
           if is3wa(text: twa) {
             delegate?.replace(text: W3WAddress.ensureLeadingSlashes(twa))
-            suggestionsDebouncer?.call(text: twa)
+            suggestionsDebouncer?.call(twa)
             checkForValid3wa(text: twa)
             return false
           }
@@ -201,7 +202,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       allowTypingToContinue = has3waCharacters(text: newText) || freeformText
 
       if allowTypingToContinue {
-        suggestionsDebouncer?.call(text: newText)
+        suggestionsDebouncer?.call(newText)
         checkForValid3wa(text: newText)
       }
     }
@@ -222,7 +223,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
       return false
     }
     
-    let regex = try! NSRegularExpression(pattern:W3WSettings.regex_3wa_characters, options: [])
+    let regex = try! NSRegularExpression(pattern: W3WRegex.regex_3wa_characters, options: [])
     let count = regex.numberOfMatches(in: text, options: [], range: NSRange(text.startIndex..<text.endIndex, in:text))
     if (count > 0) {
       return true
@@ -243,7 +244,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   @available(*, deprecated, message: "Use api.didYouMean(text:) or sdk.didYouMean(text:) instead")
   func isAlmost3wa(text: String) -> Bool {
 
-    let regex = try! NSRegularExpression(pattern:W3WSettings.regex_loose_match, options: [])
+    let regex = try! NSRegularExpression(pattern: W3WRegex.regex_loose_match, options: [])
     let count = regex.numberOfMatches(in: text, options: [], range: NSRange(text.startIndex..<text.endIndex, in:text))
     if (count > 0) {
       return true
@@ -256,7 +257,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   
   func make3waFromAlmost3wa(text: String) -> String {
-    let regex   = try! NSRegularExpression(pattern: W3WSettings.regex_3wa_word)
+    let regex   = try! NSRegularExpression(pattern: W3WRegex.regex_3wa_word)
     let matches = regex.matches(in: text, range: NSRange(text.startIndex..., in:text))
     
     var words = [String]()
@@ -365,11 +366,11 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   func supportsVoice() -> Bool {
     var voiceSupport = false
     
-    if let _ = w3w as? W3WVoice {
+    if let _ = w3w as? W3WVoiceProtocol {
       updateVoiceLanguageListIfNessesary()
 
       // if suppordes voice language list contains the current voice
-      if W3AutoSuggestDataSource.voiceLanguages?.contains(where: { language in return language.code == self.language }) ?? false {
+      if W3AutoSuggestDataSource.voiceLanguages?.contains(where: { language in return language.code == self.language.code }) ?? false {
         voiceSupport = true
       }
     }
@@ -388,7 +389,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
     }
 
     // if the API or SDK supports voice input
-    if let voiceapi = w3w as? W3WVoice {
+    if let voiceapi = w3w as? W3WVoiceProtocol {
       
       // call autosuggest with the audio stream from the microphone
       voiceapi.autosuggest(audio: microphone, language:language, options: options, callback: { suggestions, error in
@@ -420,8 +421,8 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   /// if this is voice capable, make sure we have a list of available languages, if we don't then block execution and go get one
   func updateVoiceLanguageListIfNessesary() {
-    if let w3wApi = w3w as? What3WordsV3 {
-      if let _ = w3w as? W3WVoice {
+    if let w3wApi = w3w as? What3WordsV4 {
+      if let _ = w3w as? W3WVoiceProtocol {
         if W3AutoSuggestDataSource.voiceLanguages == nil {
           let semaphore = DispatchSemaphore(value: 0) // use a semaphore to wait for the reply
             w3wApi.availableVoiceLanguages() { languages, error in
@@ -443,7 +444,7 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   /// inform the API that a user made a selection
   func log(selection: W3WSuggestion) {
     // if we are using the API, report activity
-    if let api = w3w as? What3WordsV3 {
+    if let api = w3w as? What3WordsV4 {
       
       // check if 'rank' is avilable in the suggestion
       if let s = selection as? W3WRanked {
@@ -468,18 +469,18 @@ class W3AutoSuggestDataSource: NSObject, UITableViewDataSource, W3WOptionAccepto
   
   /// called when the API reports an error
   func update(apiError: W3WError) {
-    update(error: W3WAutosuggestComponentError.apiError(error: apiError))
+    update(error: apiError)
   }
   
   
   /// called when the voice API reports an error
-  func update(voiceApiError: W3WVoiceError) {
-    update(error: W3WAutosuggestComponentError.voiceApiError(error: voiceApiError))
+  func update(voiceApiError: W3WError) {
+    update(error: voiceApiError)
   }
   
   
   /// called when this component reports an error
-  func update(error: W3WAutosuggestComponentError) {
+  func update(error: W3WError) {
     self.delegate?.update(error: error)
     
     if isListening() {
