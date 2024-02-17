@@ -13,7 +13,7 @@ It includes:
 
 #### Notes
 
-* These components work with **iOS 9.0** or higher.
+* These components work with iOS 12.0 or higher.
 * This package depends on the [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper) and [swift core](https://github.com/what3words/w3w-swift-core).
 * If you are upgrading from any version 1.x.x, see the [upgrade guide](./Documentation/PreviousVersions/UpgradeFromV1.md).
 
