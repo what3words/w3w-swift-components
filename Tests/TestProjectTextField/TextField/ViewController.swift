@@ -7,6 +7,7 @@
 
 import UIKit
 import W3WSwiftCore
+import W3WSwiftApi
 import W3WSwiftComponents
 import CoreLocation
 import Foundation
@@ -47,12 +48,12 @@ class ViewController: UIViewController {
     textField.accessibilityIdentifier = "w3wTextField"
                
     // assign the API to it
-    let api = What3WordsV3(apiKey: apiKey)
+    let api = What3WordsV4(apiKey: apiKey)
     textField.set(api)
     textField.set(options: clipppingOptions)
     // turn on voice support
     textField.set(voice: true)
-    textField.set(language: "en")
+      textField.set(language: W3WBaseLanguage(code: "en"))
 
     // assign a code block to execute when the user has selected an address
     textField.onSuggestionSelected = { suggestion in
@@ -71,6 +72,7 @@ class ViewController: UIViewController {
 
   func showError(error: Error) {
     DispatchQueue.main.async {
+      print(String(describing: error))
       let alert = UIAlertController(title: "Error", message: String(describing: error), preferredStyle: .alert)
       alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
       self.present(alert, animated: true)

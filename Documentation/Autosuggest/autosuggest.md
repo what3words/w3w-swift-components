@@ -26,11 +26,11 @@ There are examples of both in this package:
 
 #### W3WAutoSuggestTextField
 
-An iOS UIKit example embedding a W3WAutoSuggestTextFieldcan be found at: [Examples/TextField/TextField.xcodeproj](../Examples/TextField/TextField.xcodeproj)
+An iOS UIKit example called TextField embedding a W3WAutoSuggestTextField can be found in our [samples repository](https://github.com/what3words/w3w-swift-samples).
 
 #### W3WAutoSuggestSearchController
 
-An iOS UIKit example embedding a W3WAutoSuggestSearchController in a UINavigationController: [Examples/SearchController/SearchController.xcodeproj](../Examples/SearchController/SearchController.xcodeproj)
+An iOS UIKit example called SearchController embedding a W3WAutoSuggestSearchController can be found in our [samples repository](https://github.com/what3words/w3w-swift-samples).
 
 Usage
 ------------
@@ -110,12 +110,12 @@ You may specify options as an array of `W3WOption`, or using the `W3WOptions` bu
 
 ```
 let options = [
-  W3WOption.clipToCountry("GB"),
+  W3WOption.clipToCountry(W3WBaseCountry(code: "GB")),
   W3WOption.focus(CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1))
 ]
 ```
 ```    
-let options = W3WOptions().clipToCountry("GB").focus(CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1))
+let options = W3WOptions().clip(to: W3WBaseCountry(code: "GB")).focus(CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1))
 ```
 
 Either way, you can set them like this:
@@ -166,11 +166,11 @@ Both components conform to our `W3WAutoSuggestTextFieldProtocol` for returning a
 
 #### func set()  
 
-* `func set(_ w3w: W3WProtocolV3, language: String)` - Gives what3words to the component, in the form of either the API or the SDK.  `language` is a two letter language code.  If omitted, it will default to `"en"` (English).
+* `func set(_ w3w: W3WProtocolV3, language: W3WLanguage)` - Gives what3words to the component, in the form of either the API or the SDK.  `language` is a two letter language code.  If omitted, it will default to `"en"` (English).
 * `func set(includeCoordinates: Bool)` - This causes the component to use the converToCoordinates call to return coordinates with the results, which may count against your quota.  They are returned in as a W3WSquare which is a W3WSuggestion with coordinates included
 * `func set(freeformText: Bool)` - Setting this to `false` will disallow the user to type any characters except legal three word address characters.
 * `func set(allowInvalid3wa: Bool)` - `true` by default.  Setting this to false will stop the field from clearing when it looses focus.
-* `func set(language l: String)` - accepts a two letter language code
+* `func set(language l: W3WLanguage)` - accepts a language type
 * `func set(voice: Bool)` - turns voice recignition on or off
 * `func set(options: W3WOptions)` - sets [autosuggest options](options.md)
 * `func set(options: [W3WOption])` - sets [autosuggest options](options.md)

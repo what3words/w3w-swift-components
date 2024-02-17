@@ -18,14 +18,15 @@ These components depend on [what3words swift wrapper](https://github.com/what3wo
 Reference
 ---------
 
-### set(language: String)
+### set(language: W3WLanguage)
 
 Set language will set the default language for all the calls that the map makes to the API (or SDK if you use that instead).
 
 **examples**
 
 ```
-map.set(language: "fr") // set default language to French
+let french = W3WBaseLanguage(code: "fr")
+map.set(language: french) // set default language to French
 ```
 
 ----------------

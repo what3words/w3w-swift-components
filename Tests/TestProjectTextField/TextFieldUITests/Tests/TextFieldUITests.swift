@@ -64,9 +64,10 @@ class TextFieldUITests : BaseTest {
         app.launchEnvironment[TextFieldUITests.clippingSettings] = "Circle"
         app.launch()
         let textFieldPage = TextFieldPage(app : app)
-        XCTAssertEqual (textFieldPage.enterAddress("crazy.palace.moral")
-            .waitForReturnedMatches()
-            .getReturnedNearLocations()[0], "near Walthamstow, London")
+      let locations = textFieldPage.enterAddress("crazy.palace.moral")
+        .waitForReturnedMatches()
+        .getReturnedNearLocations()
+      XCTAssertEqual(locations.first, "near Walthamstow, London")
     }
     
     func testNonRussianLocationsArentReturnedWhenClipppinToRussia() throws {

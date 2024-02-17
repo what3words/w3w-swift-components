@@ -7,6 +7,7 @@
 
 import UIKit
 import W3WSwiftCore
+import W3WSwiftApi
 import W3WSwiftComponents
 
 
@@ -31,7 +32,7 @@ class ViewController: W3WMapViewController {
       abort()
     }
     
-    let api = What3WordsV3(apiKey: apiKey)
+    let api = What3WordsV4(apiKey: apiKey)
     
     // give the map access to the API
     set(api)

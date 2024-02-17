@@ -14,8 +14,7 @@ It includes:
 #### Notes
 
 * These components work with **iOS 9.0** or higher.
-* This package depends on the [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper).
-* For information on using this package with Objective-C read [this](./Documentation/ObjectiveC/ObjectiveC.md).  
+* This package depends on the [what3words swift wrapper](https://github.com/what3words/w3w-swift-wrapper) and [swift core](https://github.com/what3words/w3w-swift-core).
 * If you are upgrading from any version 1.x.x, see the [upgrade guide](./Documentation/PreviousVersions/UpgradeFromV1.md).
 
 <a name="installation"></a>
@@ -42,15 +41,6 @@ import W3WSwiftComponents
 import CoreLocation
 ```
 
-#### CocoaPods
-
-You can use CocoaPods to install w3w-swift-components by adding it to the target in your Podfile:
-
-```
-pod 'W3WSwiftComponents'
-```
-
-
 #### Note:
 
 If you are using the Voice API on device, you should include Microphone permissions in your Info.plist:
@@ -63,7 +53,7 @@ Components
 
 ### AutoSuggest Text Field
 
-<img src="Documentation/Autosuggest/autosuggest.png" width="200" style="float: right; padding: 16px;">
+<img src="Documentation/Autosuggest/autosuggest.png" width="200" align="right" style="float: right; padding: 16px;">
 
 The `W3WAutoSuggestTextField` is a `UITextField` that will suggest three word addresses as the user enters text. Optionally, there is a voice recognition option.
 
@@ -86,7 +76,7 @@ Map Helper allows you to easily integrate what3words map features into an existi
 `W3WMapHelper` conforms to `W3WMapViewProtocol`.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 ```
-let api = What3WordsV3(apiKey: "YourApiKey")
+let api = What3WordsV4(apiKey: "YourApiKey")
 let mapHelper = W3WMapHelper(api, map: yourMKMapView)
 ```
 
@@ -100,7 +90,7 @@ Map View
 `W3WMapView` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 ```
-let api = What3WordsV3(apiKey: "YourApiKey")
+let api = What3WordsV4(apiKey: "YourApiKey")
 let mapview = W3WMapView(api)
 ```
 
@@ -121,7 +111,7 @@ Map Component
 `W3WMapViewController` conforms to `W3WMapViewProtocol `.  A function reference  for it can be found at [Documentation/Map/map.md](./Documentation/Map/map.md)
 
 ```
-let api = What3WordsV3(apiKey: "YourApiKey")
+let api = What3WordsV4(apiKey: "YourApiKey")
 let vc = W3WMapViewController(api)
 ```
 

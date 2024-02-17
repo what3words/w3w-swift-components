@@ -15,14 +15,14 @@ You may specify options as an array of `W3WOption`, or using the `W3WOptions` bu
 
 ```
 let options = [
-  W3WOption.clipToCountry("GB"),
+  W3WOption.clip(to: W3WBaseCountry(code: "GB")),
   W3WOption.focus(CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1))
 ]
 ```
 Or:
 
 ```    
-let options = W3WOptions().focus(CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1)).clipToCountry("GB")
+let options = W3WOptions().focus(CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1)).clip(to: W3WBaseCountry(code: "GB"))
 ```
 
 Set()
@@ -31,11 +31,11 @@ Set()
 Whether you choose an option array or the builder pattern, you can set them like this:
 
 ```
-w3wComponent.set(options: [W3WOption.clipToCountry("GB")])
+w3wComponent.set(options: [W3WOption.clip(to: W3WBaseCountry(code: "GB"))])
 ```
 
 ```
-w3wComponent.set(options: W3WOption.clipToCountry("GB"))
+w3wComponent.set(options: W3WOption.clip(to: W3WBaseCountry(code: "GB")))
 ```
 
 Every call to `set(options:)` *resets* all the options.  This is a `set()` and not an `add()` function.
@@ -60,15 +60,15 @@ let coords = CLLocationCoordinate2D(latitude: 50.0, longitude: 0.1)
 w3wComponent.set(options: W3WOption.focus(coords))
 ```
 
-clipToCountry(String) / clipToCountries([String])
+clipToCountry(W3WCountry) / clipToCountries([W3WCountry])
 ----------------
 Filter results by country.  You can choose more than on country also:
 
 ```
-w3wComponent.set(options: [W3WOption.clipToCountry("GB")])
+w3wComponent.set(options: [W3WOption.clip(to: W3WBaseCountry(code: "GB"))])
 ```
 ```
-w3wComponent.set(options: [W3WOption.clipToCountries(["GB", "CA", "NZ", "AU"])])
+w3wComponent.set(options: [W3WOption.clipToCountries(W3WBaseCountries(countries: [gb, ca, nz, au])])
 ```
 
 clipToCircle(center:CLLocationCoordinate2D, radius: Double)
@@ -103,17 +103,17 @@ let p2 = CLLocationCoordinate2D(latitude: 51.535589, longitude: -0.168336)
 let p3 = CLLocationCoordinate2D(latitude: 51.402153, longitude: -0.075661)
 w3wComponent.set(options: [W3WOption.clipToPolygon([p0, p1, p2, p3, p1])])
 ```
-language(String)
+language(W3WLanguage)
 ----------------
-Ask for results in a particulalr language.  Language must be an ISO 639-1 2 letter code, such as 'en' or 'fr'.
+Ask for results in a particulalr language.  Language object must be instantiated with an ISO 639-1 2 letter code, such as 'en' or 'fr'.
 
 ```
 w3wComponent.set(options: [W3WOption.language("fr")])
 ```
 
-voiceLanguage(String)
+voiceLanguage(W3WLanguage)
 ----------------
-Ask for results from the voice API in a particulalr language.  Language must be an ISO 639-1 2 letter code, such as 'en' or 'fr'.
+Ask for results from the voice API in a particulalr language.  Language object must be instantiated with an ISO 639-1 2 letter code, such as 'en' or 'fr'.
 
 ```
 w3wComponent.set(options: [W3WOption.voiceLanguage("ar")])

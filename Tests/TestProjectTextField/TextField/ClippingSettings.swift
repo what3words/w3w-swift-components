@@ -57,7 +57,7 @@ class ClippingSettings
     
     func getCountryOption(_ coutryCode : String) -> W3WOption
     {
-        return W3WOption.clipToCountry(coutryCode)
+        return W3WOption.clipToCountry(W3WBaseCountry(code: coutryCode))
     }
 
     func getCircleClipping()  -> W3WOption

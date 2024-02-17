@@ -23,7 +23,7 @@ class ErrorScenarios: BaseTest  {
         app.launch()
         let textFieldPage = TextFieldPage(app : app)
         XCTAssertEqual(textFieldPage.enterAddress("jazz.silver.bagels")
-                        .errorMessage.label, "BadClipToCoutnry:  Countries are specified by uppercase ISO 3166-1 alpha-2 country codes, such as US,CA")
+                        .errorMessage.label, "400: Countries are specified as a comma separated list of uppercase ISO 3166-1 alpha-2 country codes, such as US,CA")
     }
 
     override func tearDownWithError() throws {
